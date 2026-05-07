@@ -36,6 +36,17 @@ public class Usuario {
     @Column(nullable = false)
     private Boolean eliminado;
 
+    @Column(length = 50)
+    private String nivelAcceso;
+
+    @Column(length = 500)
+    private String permisos;
+
+    @Column(length = 120)
+    private String modificadoPor;
+
+    private LocalDateTime fechaModificacionAcceso;
+
     @Column(nullable = false)
     private LocalDateTime fechaRegistro;
 }
