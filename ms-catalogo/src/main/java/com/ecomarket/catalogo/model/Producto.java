@@ -1,6 +1,10 @@
 package com.ecomarket.catalogo.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "productos")
@@ -8,20 +12,63 @@ public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idProducto;
 
+    @NotBlank
+    @Column(nullable = false, unique = true)
+    private String sku;
+
+    @NotBlank
+    @Column(nullable = false)
     private String nombre;
-    private String descripcion;
-    private Double precio;
-    private Boolean esEcologico; // Esto es lo que pide la HU-6
 
-    // Getters y Setters
-    public Long getId() {
-        return id;
+    @NotNull
+    @DecimalMin("0.0")
+    @Column(nullable = false)
+    private Double precio;
+
+    @Column(length = 1000)
+    private String descripcion;
+
+    @Column(length = 1000)
+    private String descripcionEcologica;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EstadoProducto estado = EstadoProducto.PUBLICADO;
+
+    @ManyToOne
+    @JoinColumn(name = "id_categoria")
+    private Categoria categoria;
+
+    private LocalDateTime fechaCreacion;
+    private LocalDateTime fechaActualizacion;
+
+    @PrePersist
+    public void prePersist() {
+        this.fechaCreacion = LocalDateTime.now();
+        this.fechaActualizacion = LocalDateTime.now();
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @PreUpdate
+    public void preUpdate() {
+        this.fechaActualizacion = LocalDateTime.now();
+    }
+
+    public Long getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(Long idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
     }
 
     public String getNombre() {
@@ -32,14 +79,6 @@ public class Producto {
         this.nombre = nombre;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
     public Double getPrecio() {
         return precio;
     }
@@ -48,11 +87,43 @@ public class Producto {
         this.precio = precio;
     }
 
-    public Boolean getEsEcologico() {
-        return esEcologico;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setEsEcologico(Boolean esEcologico) {
-        this.esEcologico = esEcologico;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getDescripcionEcologica() {
+        return descripcionEcologica;
+    }
+
+    public void setDescripcionEcologica(String descripcionEcologica) {
+        this.descripcionEcologica = descripcionEcologica;
+    }
+
+    public EstadoProducto getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoProducto estado) {
+        this.estado = estado;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
+
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public LocalDateTime getFechaActualizacion() {
+        return fechaActualizacion;
     }
 }

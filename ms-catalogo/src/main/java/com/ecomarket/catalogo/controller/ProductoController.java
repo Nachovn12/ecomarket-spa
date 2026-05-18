@@ -5,8 +5,11 @@ import com.ecomarket.catalogo.service.CatalogoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,51 +17,93 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/api/productos")
+@RequestMapping("/productos")
 public class ProductoController {
 
     @Autowired
     private CatalogoService catalogoService;
 
-    // Crear un producto (HU-49)
     @PostMapping
-    public Producto crear(@RequestBody Producto producto) {
-        return catalogoService.guardar(producto);
+    public ResponseEntity<EntityModel<Producto>> crear(@Valid @RequestBody Producto producto) {
+        Producto guardado = catalogoService.guardarProducto(producto);
+        return new ResponseEntity<>(ensamblarResource(guardado), HttpStatus.CREATED);
     }
 
-    // Listar todos los productos (HU-49 - Read)
     @GetMapping
-    public List<Producto> listarTodos() {
-        return catalogoService.obtenerTodos();
+    public ResponseEntity<CollectionModel<EntityModel<Producto>>> listarTodos() {
+        List<Producto> productos = catalogoService.obtenerTodosProductos();
+        return ResponseEntity.ok(ensamblarCollection(productos));
     }
 
-    // Buscar un producto por ID (HU-49 - Read)
     @GetMapping("/{id}")
-    public Producto buscarPorId(@PathVariable Long id) {
-        return catalogoService.obtenerPorId(id);
+    public ResponseEntity<EntityModel<Producto>> buscarPorId(@PathVariable Long id) {
+        return catalogoService.obtenerProductoPorId(id)
+                .map(producto -> ResponseEntity.ok(ensamblarResource(producto)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    // Actualizar un producto (HU-49 - Update)
     @PutMapping("/{id}")
-    public Producto actualizar(@PathVariable Long id, @RequestBody Producto producto) {
-        return catalogoService.actualizar(id, producto);
+    public ResponseEntity<EntityModel<Producto>> actualizar(@PathVariable Long id,
+            @Valid @RequestBody Producto producto) {
+        if (!catalogoService.obtenerProductoPorId(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        producto.setIdProducto(id);
+        Producto actualizado = catalogoService.guardarProducto(producto);
+        return ResponseEntity.ok(ensamblarResource(actualizado));
     }
 
-    // Eliminar un producto (HU-49 - Delete)
     @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
-        catalogoService.eliminar(id);
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        if (!catalogoService.obtenerProductoPorId(id).isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        catalogoService.eliminarProducto(id);
+        return ResponseEntity.noContent().build();
     }
 
-    // Buscar productos ecológicos con HATEOAS (HU-6)
-    @GetMapping("/ecologicos")
-    public CollectionModel<EntityModel<Producto>> buscarEcologicos() {
-        List<EntityModel<Producto>> productos = catalogoService.buscarProductosEcologicos().stream()
-                .map(producto -> EntityModel.of(producto,
-                        linkTo(methodOn(ProductoController.class).buscarEcologicos()).withSelfRel()))
-                .collect(Collectors.toList());
+    // --- BÚSQUEDAS (HU-6) ---
+    @GetMapping("/buscar")
+    public ResponseEntity<CollectionModel<EntityModel<Producto>>> buscar(
+            @RequestParam(required = false) String palabraClave,
+            @RequestParam(required = false) Long idCategoria,
+            @RequestParam(required = false) Double precioMinimo,
+            @RequestParam(required = false) Double precioMaximo) {
 
-        return CollectionModel.of(productos,
-                linkTo(methodOn(ProductoController.class).buscarEcologicos()).withSelfRel());
+        List<Producto> resultados;
+
+        if (palabraClave != null) {
+            resultados = catalogoService.buscarPorPalabraClave(palabraClave);
+        } else if (idCategoria != null) {
+            resultados = catalogoService.buscarPorCategoria(idCategoria);
+        } else if (precioMinimo != null && precioMaximo != null) {
+            resultados = catalogoService.buscarPorPrecio(precioMinimo, precioMaximo);
+        } else {
+            resultados = catalogoService.obtenerTodosProductos();
+        }
+
+        return ResponseEntity.ok(ensamblarCollection(resultados));
+    }
+
+    @GetMapping("/ecologicos")
+    public ResponseEntity<CollectionModel<EntityModel<Producto>>> buscarEcologicos(
+            @RequestParam(defaultValue = "biodegradable") String atributoEcologico) {
+        List<Producto> resultados = catalogoService.buscarEcologicos(atributoEcologico);
+        return ResponseEntity.ok(ensamblarCollection(resultados));
+    }
+
+    // --- MÉTODOS AUXILIARES PARA HATEOAS ---
+    private EntityModel<Producto> ensamblarResource(Producto producto) {
+        return EntityModel.of(producto,
+                linkTo(methodOn(ProductoController.class).buscarPorId(producto.getIdProducto())).withSelfRel(),
+                linkTo(methodOn(ProductoController.class).listarTodos()).withRel("productos"));
+    }
+
+    private CollectionModel<EntityModel<Producto>> ensamblarCollection(List<Producto> productos) {
+        List<EntityModel<Producto>> productosResource = productos.stream()
+                .map(this::ensamblarResource)
+                .collect(Collectors.toList());
+        return CollectionModel.of(productosResource,
+                linkTo(methodOn(ProductoController.class).listarTodos()).withSelfRel());
     }
 }
