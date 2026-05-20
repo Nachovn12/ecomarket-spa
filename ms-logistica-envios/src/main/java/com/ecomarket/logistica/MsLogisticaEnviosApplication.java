@@ -5,9 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class MsLogisticaEnviosApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(MsLogisticaEnviosApplication.class, args);
-	}
-
+    public static void main(String[] args) {
+        SpringApplication.run(MsLogisticaEnviosApplication.class, args);
+    }
 }
