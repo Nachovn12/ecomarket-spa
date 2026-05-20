@@ -1,4 +1,4 @@
-﻿# Flujo Git - EcoMarket SPA
+# Flujo Git - EcoMarket SPA
 
 ## Ramas principales
 

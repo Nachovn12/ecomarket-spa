@@ -1,4 +1,4 @@
-﻿# EcoMarket SPA - Proyecto de Microservicios
+# EcoMarket SPA - Proyecto de Microservicios
 
 Proyecto académico de Desarrollo Fullstack I orientado a la migración de EcoMarket SPA desde un sistema monolítico hacia una arquitectura basada en microservicios.
 

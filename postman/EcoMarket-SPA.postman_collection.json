@@ -1,0 +1,806 @@
+{
+  "info": {
+    "name": "EcoMarket SPA - Colección Principal",
+    "description": "Colección principal para validar endpoints REST de EcoMarket SPA mediante API Gateway.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "00 - API Gateway",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/actuator/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "01 - MS Usuarios e Identidad",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"correo\": \"cliente@ecomarket.cl\",\n  \"password\": \"Password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Registrar cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cliente EcoMarket\",\n  \"correo\": \"cliente@ecomarket.cl\",\n  \"password\": \"Password123\",\n  \"direccionEnvio\": \"Barrio Lastarria, Santiago\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/usuarios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar usuarios",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/usuarios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar usuario",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Cliente Actualizado\",\n  \"correo\": \"cliente.actualizado@ecomarket.cl\",\n  \"direccionEnvio\": \"Valdivia Centro\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/usuarios/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "usuarios",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - MS Catálogo",
+      "item": [
+        {
+          "name": "Listar productos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/productos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "productos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear producto",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sku\": \"ECO-SHAMPOO-001\",\n  \"nombre\": \"Shampoo sólido ecológico\",\n  \"precio\": 4990,\n  \"descripcion\": \"Producto ecológico sin envase plástico\",\n  \"descripcionEcologica\": \"Libre de plástico y biodegradable\",\n  \"idCategoria\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/productos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "productos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Ver detalle de producto",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/productos/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "productos",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar categorías",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/categorias",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "categorias"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Registrar reseña",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idProducto\": 1,\n  \"idCliente\": 1,\n  \"calificacion\": 5,\n  \"comentario\": \"Producto ecológico recomendado\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/productos/1/resenas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "productos",
+                "1",
+                "resenas"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - MS Inventario y Abastecimiento",
+      "item": [
+        {
+          "name": "Consultar inventario",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/inventario?idProducto=1&idTienda=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "inventario"
+              ],
+              "query": [
+                {
+                  "key": "idProducto",
+                  "value": "1"
+                },
+                {
+                  "key": "idTienda",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Agregar producto al inventario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idProducto\": 1,\n  \"idTienda\": 1,\n  \"stockDisponible\": 50,\n  \"stockReservado\": 0,\n  \"stockMinimo\": 10\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/inventario",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "inventario"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar stock",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cantidad\": 10,\n  \"motivo\": \"Reposición de stock\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/stock/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "stock",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reservar stock",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idPedido\": 1,\n  \"idProducto\": 1,\n  \"cantidadReservada\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/stock/reservas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "stock",
+                "reservas"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - MS Pedidos y Ventas",
+      "item": [
+        {
+          "name": "Crear carrito",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idCliente\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/pedidos/carritos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos",
+                "carritos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Agregar producto al carrito",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idProducto\": 1,\n  \"cantidad\": 2,\n  \"precioUnitario\": 4990\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/pedidos/carritos/1/items",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos",
+                "carritos",
+                "1",
+                "items"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Realizar pedido online",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idCliente\": 1,\n  \"direccionEntrega\": \"Barrio Lastarria, Santiago\",\n  \"opcionEnvio\": \"DESPACHO\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/pedidos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "pedidos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Registrar pago",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idPedido\": 1,\n  \"monto\": 9980,\n  \"metodoPago\": \"TARJETA\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/ventas/pagos",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ventas",
+                "pagos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Generar factura",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idVenta\": 1,\n  \"correoDestino\": \"cliente@ecomarket.cl\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/ventas/facturas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "ventas",
+                "facturas"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 - MS Logística de Envíos",
+      "item": [
+        {
+          "name": "Crear envío",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idPedido\": 1,\n  \"direccionDestino\": \"Barrio Lastarria, Santiago\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/envios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "envios"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar estado de envío",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"EN_CAMINO\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/envios/1/estado",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "envios",
+                "1",
+                "estado"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Consultar seguimiento",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/envios/1/seguimiento",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "envios",
+                "1",
+                "seguimiento"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Planificar ruta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"origen\": \"Tienda Lastarria\",\n  \"destino\": \"Cliente Santiago Centro\",\n  \"distanciaKm\": 4.5\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/rutas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "rutas"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 - MS Administración y Soporte",
+      "item": [
+        {
+          "name": "Listar tiendas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/admin/tiendas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "tiendas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear tienda",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"EcoMarket Lastarria\",\n  \"ciudad\": \"Santiago\",\n  \"horarioApertura\": \"09:00\",\n  \"horarioCierre\": \"19:00\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/tiendas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "tiendas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear ticket de soporte",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idCliente\": 1,\n  \"motivo\": \"Consulta sobre pedido\",\n  \"descripcion\": \"Cliente solicita información del despacho\",\n  \"prioridad\": \"MEDIA\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/soporte/tickets",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "soporte",
+                "tickets"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Responder ticket",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idEmpleadoSoporte\": 1,\n  \"mensaje\": \"Su pedido se encuentra en preparación\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/soporte/tickets/1/respuestas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "soporte",
+                "tickets",
+                "1",
+                "respuestas"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 - MS Reportes",
+      "item": [
+        {
+          "name": "Generar reporte de ventas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reportes/ventas?idTienda=1&fechaInicio=2026-05-01&fechaFin=2026-05-31",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes",
+                "ventas"
+              ],
+              "query": [
+                {
+                  "key": "idTienda",
+                  "value": "1"
+                },
+                {
+                  "key": "fechaInicio",
+                  "value": "2026-05-01"
+                },
+                {
+                  "key": "fechaFin",
+                  "value": "2026-05-31"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Generar reporte de inventario",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reportes/inventario?idTienda=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes",
+                "inventario"
+              ],
+              "query": [
+                {
+                  "key": "idTienda",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Visualizar indicadores KPI",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/kpi",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "kpi"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Exportar reporte",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idReporte\": 1,\n  \"formato\": \"PDF\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/reportes/1/exportaciones",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reportes",
+                "1",
+                "exportaciones"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
