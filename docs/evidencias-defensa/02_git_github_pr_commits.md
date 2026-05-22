@@ -34,10 +34,11 @@ Esta rama fue creada desde `develop` para trabajar las HU asignadas a Ignacio Va
 
 ## Commits realizados
 
-| Commit    | Mensaje                                                       | Descripción                                |
-| --------- | ------------------------------------------------------------- | ------------------------------------------ |
-| `b23ed45` | `feat(usuarios): implementar actualizacion de perfil cliente` | Implementa HU-3 en MS Usuarios e Identidad |
-| `89569f2` | `docs(postman): agregar evidencia hu3 perfil cliente`         | Agrega evidencia Postman de HU-3           |
+| Commit    | Mensaje                                                       | Descripción                                            |
+| --------- | ------------------------------------------------------------- | ------------------------------------------------------ |
+| `b23ed45` | `feat(usuarios): implementar actualizacion de perfil cliente` | Implementa HU-3 en MS Usuarios e Identidad             |
+| `89569f2` | `docs(postman): agregar evidencia hu3 perfil cliente`         | Agrega evidencia Postman de HU-3                       |
+| `62c7124` | `docs(defensa): preparar evidencias tecnicas sprint final`    | Agrega documentación de evidencias técnicas para HU-56 |
 
 ---
 
