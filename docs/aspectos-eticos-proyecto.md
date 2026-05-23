@@ -5,12 +5,9 @@ En el marco del desarrollo del sistema EcoMarket SPA, se han considerado y resgu
 
 ### 1. Privacidad de Datos y Confidencialidad (Ley 19.628 Chile)
 - **Logística de Envíos:** Las direcciones físicas de despacho, nombres de clientes y números telefónicos son tratados bajo el principio de necesidad mínima de acceso. Los transportistas solo visualizan la información indispensable para la entrega.
-- **Seguridad:** No se almacenan datos sensibles en texto plano en la base de datos MySQL.
 
 ### 2. Transparencia con Proveedores Ecológicos
-- **Evaluación y Selección:** El módulo de proveedores en ms-logistica-envios incluye campos de auditoría (	ipo_proveedor, cobertura) que aseguran una competencia justa.
 - **Soft Delete:** Para proteger la integridad histórica de los despachos y contratos, los proveedores no se eliminan físicamente (evitando pérdida de trazabilidad de pagos), sino que pasan a un estado inactivo.
 
-### 3. Integridad y Autenticidad en Reseñas de Productos
-- **Protección al Consumidor:** El sistema de calificaciones del ms-catalogo se ha diseñado para evitar el fraude de opiniones (falsas reseñas positivas o ataques a la competencia).
-- **Moderación:** Se respeta la libertad de expresión del cliente asegurando que comentarios críticos legítimos sobre la huella de carbono o calidad del producto no puedan ser manipulados ni borrados arbitrariamente por los administradores.
+### 3. Integridad en Reseñas de Productos
+- **Protección al Consumidor:** El sistema de calificaciones del ms-catalogo asegura que comentarios críticos legítimos sobre la huella de carbono o calidad del producto no puedan ser manipulados ni borrados arbitrariamente por los administradores, garantizando transparencia al consumidor.
