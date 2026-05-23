@@ -1,66 +1,92 @@
 package com.ecomarket.logistica.controller;
 
+import com.ecomarket.logistica.dto.CambioEstadoRequestDTO;
 import com.ecomarket.logistica.dto.EnvioDTO;
+import com.ecomarket.logistica.dto.IncidenciaRequestDTO;
 import com.ecomarket.logistica.model.Envio;
-import com.ecomarket.logistica.model.enums.EstadoEnvio;
+import com.ecomarket.logistica.model.SeguimientoEnvio;
 import com.ecomarket.logistica.service.LogisticaService;
-import com.ecomarket.logistica.exception.ResourceNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/envios")
 public class EnvioController {
-    @Autowired
-    private LogisticaService service;
 
-    @PostMapping
-    public ResponseEntity<EntityModel<Envio>> crear(@Valid @RequestBody EnvioDTO dto) {
-        Envio guardado = service.crearEnvio(dto);
-        return new ResponseEntity<>(ensamblar(guardado), HttpStatus.CREATED);
-    }
+    private final LogisticaService logisticaService;
 
-    @GetMapping
-    public ResponseEntity<CollectionModel<EntityModel<Envio>>> listarTodos() {
-        List<EntityModel<Envio>> envios = service.obtenerEnvios().stream()
-            .map(this::ensamblar)
-            .collect(Collectors.toList());
-        return ResponseEntity.ok(CollectionModel.of(envios, linkTo(methodOn(EnvioController.class).listarTodos()).withSelfRel()));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<Envio>> buscarPorId(@PathVariable Long id) {
-        Envio envio = service.obtenerEnvioPorId(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Envio no encontrado con id: " + id));
-        return ResponseEntity.ok(ensamblar(envio));
-    }
-
-    @PatchMapping("/{id}/estado")
-    public ResponseEntity<EntityModel<Envio>> actualizarEstado(@PathVariable Long id, @RequestBody Map<String, String> body) {
-        EstadoEnvio nuevoEstado;
-        try {
-            nuevoEstado = EstadoEnvio.valueOf(body.get("estado").toUpperCase());
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Estado no valido. Use: PREPARACION, EN_TRANSITO, ENTREGADO, CANCELADO");
-        }
-        Envio actualizado = service.actualizarEstadoEnvio(id, nuevoEstado)
-            .orElseThrow(() -> new ResourceNotFoundException("Envio no encontrado con id: " + id));
-        return ResponseEntity.ok(ensamblar(actualizado));
+    public EnvioController(LogisticaService logisticaService) {
+        this.logisticaService = logisticaService;
     }
 
     private EntityModel<Envio> ensamblar(Envio envio) {
         return EntityModel.of(envio,
-            linkTo(methodOn(EnvioController.class).buscarPorId(envio.getIdEnvio())).withSelfRel(),
-            linkTo(methodOn(EnvioController.class).listarTodos()).withRel("envios"));
+                linkTo(methodOn(EnvioController.class).obtenerPorId(envio.getId())).withSelfRel(),
+                linkTo(methodOn(EnvioController.class).obtenerTodos()).withRel("envios"),
+                linkTo(methodOn(EnvioController.class).obtenerSeguimiento(envio.getId())).withRel("seguimiento")
+        );
+    }
+
+    @PostMapping
+    public ResponseEntity<EntityModel<Envio>> crear(@Valid @RequestBody EnvioDTO dto) {
+        Envio creado = logisticaService.crearEnvio(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ensamblar(creado));
+    }
+
+    @GetMapping
+    public ResponseEntity<CollectionModel<EntityModel<Envio>>> obtenerTodos() {
+        List<EntityModel<Envio>> envios = logisticaService.obtenerEnvios().stream()
+                .map(this::ensamblar)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(CollectionModel.of(envios, linkTo(methodOn(EnvioController.class).obtenerTodos()).withSelfRel()));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EntityModel<Envio>> obtenerPorId(@PathVariable Long id) {
+        return ResponseEntity.ok(ensamblar(logisticaService.obtenerEnvioPorId(id)));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EntityModel<Envio>> actualizar(@PathVariable Long id, @RequestBody EnvioDTO dto) {
+        return ResponseEntity.ok(ensamblar(logisticaService.actualizarEnvio(id, dto)));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        logisticaService.eliminarEnvio(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/pedido/{idPedido}")
+    public ResponseEntity<CollectionModel<EntityModel<Envio>>> obtenerPorPedido(@PathVariable Long idPedido) {
+        List<EntityModel<Envio>> envios = logisticaService.obtenerEnviosPorPedido(idPedido).stream()
+                .map(this::ensamblar)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(CollectionModel.of(envios));
+    }
+
+    @PatchMapping("/{id}/estado")
+    public ResponseEntity<EntityModel<Envio>> cambiarEstado(@PathVariable Long id, @Valid @RequestBody CambioEstadoRequestDTO dto) {
+        return ResponseEntity.ok(ensamblar(logisticaService.cambiarEstadoEnvio(id, dto)));
+    }
+
+    @PatchMapping("/{id}/incidencia")
+    public ResponseEntity<EntityModel<Envio>> registrarIncidencia(@PathVariable Long id, @Valid @RequestBody IncidenciaRequestDTO dto) {
+        return ResponseEntity.ok(ensamblar(logisticaService.registrarIncidencia(id, dto)));
+    }
+
+    @GetMapping("/{id}/seguimiento")
+    public ResponseEntity<List<SeguimientoEnvio>> obtenerSeguimiento(@PathVariable Long id) {
+        return ResponseEntity.ok(logisticaService.obtenerSeguimiento(id));
     }
 }
