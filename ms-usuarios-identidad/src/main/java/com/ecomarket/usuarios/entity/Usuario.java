@@ -24,6 +24,15 @@ public class Usuario {
     @Column(nullable = false, unique = true, length = 120)
     private String correo;
 
+    @Column(length = 30)
+    private String telefono;
+
+    @Column(length = 255)
+    private String direccionEnvio;
+
+    @Column(length = 80)
+    private String medioPago;
+
     @Column(nullable = false)
     private String password;
 
