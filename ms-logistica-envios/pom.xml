@@ -11,7 +11,7 @@
     <artifactId>ms-logistica-envios</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>ms-logistica-envios</name>
-    <description>Microservicio de Logística y Envíos para EcoMarket SPA</description>
+    <description>Microservicio de Logistica y Envios para EcoMarket SPA</description>
     <properties>
         <java.version>21</java.version>
     </properties>

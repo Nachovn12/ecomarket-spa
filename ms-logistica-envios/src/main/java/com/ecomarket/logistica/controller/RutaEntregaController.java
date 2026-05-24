@@ -1,8 +1,8 @@
 package com.ecomarket.logistica.controller;
 
+import com.ecomarket.logistica.dto.CambioEstadoRutaRequestDTO;
 import com.ecomarket.logistica.dto.RutaEntregaDTO;
 import com.ecomarket.logistica.model.RutaEntrega;
-import com.ecomarket.logistica.model.enums.EstadoRuta;
 import com.ecomarket.logistica.service.LogisticaService;
 import jakarta.validation.Valid;
 import org.springframework.hateoas.CollectionModel;
@@ -15,7 +15,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -66,8 +65,11 @@ public class RutaEntregaController {
     }
 
     @PatchMapping("/{id}/estado")
-    public ResponseEntity<EntityModel<RutaEntrega>> cambiarEstado(@PathVariable Long id, @RequestBody Map<String, String> request) {
-        EstadoRuta nuevoEstado = EstadoRuta.valueOf(request.get("estado"));
-        return ResponseEntity.ok(ensamblar(logisticaService.cambiarEstadoRuta(id, nuevoEstado)));
+    public ResponseEntity<EntityModel<RutaEntrega>> cambiarEstado(
+            @PathVariable Long id,
+            @Valid @RequestBody CambioEstadoRutaRequestDTO request) {
+        return ResponseEntity.ok(
+                ensamblar(logisticaService.cambiarEstadoRuta(id, request.getEstado()))
+        );
     }
 }

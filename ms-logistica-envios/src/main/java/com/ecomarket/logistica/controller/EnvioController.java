@@ -86,7 +86,22 @@ public class EnvioController {
     }
 
     @GetMapping("/{id}/seguimiento")
-    public ResponseEntity<List<SeguimientoEnvio>> obtenerSeguimiento(@PathVariable Long id) {
-        return ResponseEntity.ok(logisticaService.obtenerSeguimiento(id));
+    public ResponseEntity<CollectionModel<EntityModel<SeguimientoEnvio>>> obtenerSeguimiento(
+            @PathVariable Long id) {
+
+        List<EntityModel<SeguimientoEnvio>> seguimiento = logisticaService.obtenerSeguimiento(id)
+                .stream()
+                .map(s -> EntityModel.of(s,
+                        linkTo(methodOn(EnvioController.class).obtenerSeguimiento(id)).withRel("seguimiento"),
+                        linkTo(methodOn(EnvioController.class).obtenerPorId(id)).withRel("envio")))
+                .collect(Collectors.toList());
+
+        CollectionModel<EntityModel<SeguimientoEnvio>> collection = CollectionModel.of(
+                seguimiento,
+                linkTo(methodOn(EnvioController.class).obtenerSeguimiento(id)).withSelfRel(),
+                linkTo(methodOn(EnvioController.class).obtenerPorId(id)).withRel("envio")
+        );
+
+        return ResponseEntity.ok(collection);
     }
 }

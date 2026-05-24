@@ -31,7 +31,7 @@ public class LogisticaService {
     }
 
     // ==========================================
-    // LÓGICA DE ENVÍOS Y SEGUIMIENTOS
+    // LOGICA DE ENVIOS Y SEGUIMIENTOS
     // ==========================================
     @Transactional
     public Envio crearEnvio(EnvioDTO dto) {
@@ -52,14 +52,14 @@ public class LogisticaService {
                 .orElseThrow(() -> new ResourceNotFoundException("Proveedor informado no existe"));
             if (!proveedor.getActivo()) {
                 log.error("Intento de asociar proveedor inactivo ID: {}", proveedor.getId());
-                throw new ConflictoNegocioException("Solo proveedores activos pueden asociarse a envíos");
+                throw new ConflictoNegocioException("Solo proveedores activos pueden asociarse a envios");
             }
             envio.setProveedor(proveedor);
         }
 
         envio = envioRepository.save(envio);
         log.info("Envio creado exitosamente con ID: {}", envio.getId());
-        registrarSeguimiento(envio, EstadoEnvio.PREPARADO, "Envío creado y en preparación", "Sistema");
+        registrarSeguimiento(envio, EstadoEnvio.PREPARADO, "Envio creado y en preparacion", "Sistema");
         
         return envio;
     }
@@ -92,14 +92,14 @@ public class LogisticaService {
     public Envio cambiarEstadoEnvio(Long id, CambioEstadoRequestDTO request) {
         Envio envio = obtenerEnvioPorId(id);
         if (envio.getEstado() == EstadoEnvio.ENTREGADO) {
-            log.warn("Intento de cambiar estado a un envío ya ENTREGADO (ID: {})", id);
-            throw new ConflictoNegocioException("Si el Envio está ENTREGADO, no debe permitir volver a otro estado");
+            log.warn("Intento de cambiar estado a un envio ya ENTREGADO (ID: {})", id);
+            throw new ConflictoNegocioException("Si el envio esta ENTREGADO, no debe permitir volver a otro estado");
         }
         envio.setEstado(request.getEstado());
         if (request.getUbicacion() != null) envio.setUbicacionActual(request.getUbicacion());
         envio = envioRepository.save(envio);
         
-        log.info("Estado del envío {} cambiado a {}", id, request.getEstado());
+        log.info("Estado del envio {} cambiado a {}", id, request.getEstado());
         registrarSeguimiento(envio, request.getEstado(), request.getObservacion(), request.getActualizadoPor());
         return envio;
     }
@@ -108,13 +108,13 @@ public class LogisticaService {
     public Envio registrarIncidencia(Long id, IncidenciaRequestDTO request) {
         Envio envio = obtenerEnvioPorId(id);
         if (envio.getEstado() == EstadoEnvio.ENTREGADO) {
-            throw new ConflictoNegocioException("No se puede registrar incidencia en un envío ENTREGADO");
+            throw new ConflictoNegocioException("No se puede registrar incidencia en un envio ENTREGADO");
         }
         envio.setEstado(EstadoEnvio.CON_INCIDENCIA);
         envio.setMotivoIncidencia(request.getMotivoIncidencia());
         envio = envioRepository.save(envio);
         
-        log.info("Incidencia registrada en el envío {}: {}", id, request.getMotivoIncidencia());
+        log.info("Incidencia registrada en el envio {}: {}", id, request.getMotivoIncidencia());
         String obs = "INCIDENCIA: " + request.getMotivoIncidencia() + ". " + (request.getObservacion() != null ? request.getObservacion() : "");
         registrarSeguimiento(envio, EstadoEnvio.CON_INCIDENCIA, obs, request.getActualizadoPor());
         return envio;
@@ -136,7 +136,7 @@ public class LogisticaService {
     }
 
     // ==========================================
-    // LÓGICA DE PROVEEDORES
+    // LOGICA DE PROVEEDORES
     // ==========================================
     @Transactional
     public Proveedor crearProveedor(ProveedorDTO dto) {
@@ -183,7 +183,7 @@ public class LogisticaService {
         Proveedor prov = obtenerProveedorPorId(id);
         prov.setActivo(false);
         proveedorRepository.save(prov);
-        log.info("Proveedor {} desactivado. Regla: no se elimina físicamente.", id);
+        log.info("Proveedor {} desactivado. Regla: no se elimina fisicamente.", id);
     }
 
     public List<Proveedor> obtenerProveedoresActivos() { return proveedorRepository.findByActivoTrue(); }
@@ -193,11 +193,18 @@ public class LogisticaService {
     }
 
     // ==========================================
-    // LÓGICA DE RUTAS DE ENTREGA
+    // LOGICA DE RUTAS DE ENTREGA
     // ==========================================
     @Transactional
     public RutaEntrega crearRuta(RutaEntregaDTO dto) {
         RutaEntrega ruta = new RutaEntrega();
+
+        if (dto.getEstado() != null) {
+            ruta.setEstado(dto.getEstado());
+        } else {
+            ruta.setEstado(EstadoRuta.PLANIFICADA);
+        }
+
         ruta = rutaEntregaRepository.save(ruta);
         log.info("Ruta creada con ID: {}", ruta.getId());
         return ruta;
@@ -211,7 +218,15 @@ public class LogisticaService {
 
     @Transactional
     public RutaEntrega actualizarRuta(Long id, RutaEntregaDTO dto) {
-        return obtenerRutaPorId(id); // Lógica base
+        RutaEntrega ruta = obtenerRutaPorId(id);
+
+        if (dto.getEstado() != null) {
+            ruta.setEstado(dto.getEstado());
+        }
+
+        ruta = rutaEntregaRepository.save(ruta);
+        log.info("Ruta {} actualizada correctamente", id);
+        return ruta;
     }
 
     @Transactional
@@ -229,7 +244,7 @@ public class LogisticaService {
         }
         ruta.setEstado(nuevoEstado);
         ruta = rutaEntregaRepository.save(ruta);
-        log.info("Ruta {} cambió al estado {}", id, nuevoEstado);
+        log.info("Ruta {} cambio al estado {}", id, nuevoEstado);
         return ruta;
     }
 }
