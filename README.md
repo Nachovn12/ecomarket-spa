@@ -406,66 +406,58 @@ Se recomienda abrir una terminal por cada microservicio que se desee levantar.
 
 ### 14.1 Ejecutar MS Usuarios e Identidad
 
-Desde la raíz del repositorio:
-
 ```powershell
-mvn -f ms-usuarios-identidad/pom.xml spring-boot:run
+cd .\ms-usuarios-identidad\
+.\mvnw.cmd spring-boot:run
 ```
 
 ### 14.2 Ejecutar MS Catálogo
 
-Desde la raíz del repositorio:
-
 ```powershell
-mvn -f ms-catalogo/pom.xml spring-boot:run
+cd .\ms-catalogo\
+.\mvnw.cmd spring-boot:run
 ```
 
 ### 14.3 Ejecutar MS Inventario y Abastecimiento
 
-Desde la raíz del repositorio:
-
 ```powershell
-mvn -f ms-inventario-abastecimiento/pom.xml spring-boot:run
+cd .\ms-inventario-abastecimiento\
+.\mvnw.cmd spring-boot:run
 ```
 
 ### 14.4 Ejecutar MS Pedidos y Ventas
 
-Desde la raíz del repositorio:
-
 ```powershell
-mvn -f ms-pedidos-ventas/pom.xml spring-boot:run
+cd .\ms-pedidos-ventas\
+.\mvnw.cmd spring-boot:run
 ```
 
 ### 14.5 Ejecutar MS Logística de Envíos
 
-Desde la raíz del repositorio:
-
 ```powershell
-mvn -f ms-logistica-envios/pom.xml spring-boot:run
+cd .\ms-logistica-envios\
+.\mvnw.cmd spring-boot:run
 ```
 
 ### 14.6 Ejecutar MS Administración y Soporte
 
-Desde la raíz del repositorio:
-
 ```powershell
-mvn -f ms-administracion-soporte/pom.xml spring-boot:run
+cd .\ms-administracion-soporte\
+.\mvnw.cmd spring-boot:run
 ```
 
 ### 14.7 Ejecutar MS Reportes
 
-Desde la raíz del repositorio:
-
 ```powershell
-mvn -f ms-reportes/pom.xml spring-boot:run
+cd .\ms-reportes\
+.\mvnw.cmd spring-boot:run
 ```
 
 ### 14.8 Ejecutar API Gateway
 
-Desde la raíz del repositorio:
-
 ```powershell
-mvn -f api-gateway/pom.xml spring-boot:run
+cd .\api-gateway\
+.\mvnw.cmd spring-boot:run
 ```
 
 ---
