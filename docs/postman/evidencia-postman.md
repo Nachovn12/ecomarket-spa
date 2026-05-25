@@ -984,7 +984,7 @@ La evidencia Postman respalda los siguientes elementos solicitados en la evaluac
 - Validaciones y reglas de negocio.
 - Manejo de excepciones.
 - Uso de códigos HTTP adecuados.
-- Preparación para defensa técnica.
+- Evidencia técnica para la entrega.
 - Documentación de endpoints.
 
 ---
@@ -1007,5 +1007,5 @@ También se recomienda mantener actualizada la colección Postman principal del 
 
 Las pruebas documentadas en Postman permiten evidenciar que el backend de EcoMarket SPA expone endpoints REST organizados por microservicio, utiliza métodos HTTP adecuados, responde con JSON, maneja errores controlados y permite validar los flujos principales del sistema.
 
-Esta evidencia complementa la validación automatizada realizada con Maven y JUnit, aportando respaldo manual para la entrega EP2 y la posterior defensa técnica.
+Esta evidencia complementa la validación automatizada realizada con Maven y JUnit, aportando respaldo manual para la entrega EP2.
 

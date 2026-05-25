@@ -63,7 +63,7 @@ HATEOAS aporta beneficios técnicos importantes para EcoMarket SPA:
 | Bajo acoplamiento | El cliente no necesita conocer todas las URLs previamente |
 | Claridad REST | Mejora la estructura de respuestas de la API |
 | Escalabilidad | Facilita extender recursos y acciones futuras |
-| Defensa técnica | Permite demostrar uso avanzado de API REST con Spring Boot |
+| Evidencia técnica | Permite demostrar uso avanzado de API REST con Spring Boot |
 
 ---
 
@@ -605,12 +605,12 @@ Antes de cerrar la HU-51, validar:
 [ ] Se identifican endpoints principales por microservicio.
 [ ] Se explica su relación con API Gateway.
 [ ] Se deja evidencia o ejemplo para Postman.
-[ ] Se puede explicar en defensa.
+[ ] Se puede validar con evidencia técnica.
 ```
 
 ---
 
-## Resumen para defensa
+## Evidencia técnica validada
 
 HATEOAS permite que las respuestas REST de EcoMarket SPA incluyan enlaces de navegación entre recursos.
 
@@ -624,4 +624,4 @@ En el proyecto, HATEOAS se aplica o documenta en endpoints principales de catál
 
 La documentación HATEOAS base permite demostrar que EcoMarket SPA no solo expone endpoints REST, sino que también considera navegabilidad y buenas prácticas de diseño de API.
 
-Esta documentación respalda la HU-51 y sirve como evidencia técnica para la defensa del Sprint 3.
+Esta documentación respalda la HU-51 y sirve como evidencia técnica del Sprint 3.

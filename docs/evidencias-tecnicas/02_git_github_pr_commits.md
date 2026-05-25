@@ -28,7 +28,7 @@ feature/s4-ignacio-actualizacion-perfil-evidencias
 Esta rama fue creada desde `develop` para trabajar las HU asignadas a Ignacio Valeria:
 
 - HU-3 — Actualización de perfil de cliente.
-- HU-56 — Preparar evidencias técnicas para defensa.
+- HU-56 — Preparar evidencias técnicas para entrega.
 
 ---
 
@@ -38,7 +38,7 @@ Esta rama fue creada desde `develop` para trabajar las HU asignadas a Ignacio Va
 | --------- | ------------------------------------------------------------- | ------------------------------------------------------ |
 | `b23ed45` | `feat(usuarios): implementar actualizacion de perfil cliente` | Implementa HU-3 en MS Usuarios e Identidad             |
 | `89569f2` | `docs(postman): agregar evidencia hu3 perfil cliente`         | Agrega evidencia Postman de HU-3                       |
-| `62c7124` | `docs(defensa): preparar evidencias tecnicas sprint final`    | Agrega documentación de evidencias técnicas para HU-56 |
+| `62c7124` | `docs(evidencias): preparar evidencias tecnicas sprint final` | Agrega documentación de evidencias técnicas para HU-56 |
 
 ---
 
@@ -75,7 +75,7 @@ nothing to commit, working tree clean
 | ------- | ------------------------------------------------------------------- |
 | Base    | `develop`                                                           |
 | Compare | `feature/s4-ignacio-actualizacion-perfil-evidencias`                |
-| Título  | `feat(s4): actualizar perfil cliente y preparar evidencias defensa` |
+| Título  | `feat(s4): actualizar perfil cliente y preparar evidencias tecnicas` |
 
 ---
 
@@ -89,7 +89,7 @@ Se implementan y documentan actividades del Sprint 4 asignadas a Ignacio Valeria
 ## HU/Tareas incluidas
 
 - HU-3 — Actualización de perfil de cliente
-- HU-56 — TT-08 Preparar evidencias técnicas para defensa
+- HU-56 — TT-08 Preparar evidencias técnicas para entrega
 
 ## Cambios realizados
 
@@ -100,7 +100,7 @@ Se implementan y documentan actividades del Sprint 4 asignadas a Ignacio Valeria
 - Se agrega manejo global de errores.
 - Se configura H2 para tests.
 - Se agrega evidencia Postman de HU-3.
-- Se agregan documentos de evidencias técnicas para defensa.
+- Se agregan documentos de evidencias técnicas para la entrega.
 
 ## Validaciones
 
@@ -132,7 +132,7 @@ docs/evidencias-tecnicas/capturas/
 
 ---
 
-## Qué explicar en defensa
+## Evidencia técnica validada
 
 El equipo trabaja usando Git Flow académico. Cada integrante crea una rama `feature`, realiza commits técnicos, sube cambios al repositorio remoto y abre un Pull Request hacia `develop`.
 

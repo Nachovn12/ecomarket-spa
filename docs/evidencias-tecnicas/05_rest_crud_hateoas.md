@@ -285,7 +285,7 @@ Esta evidencia respalda:
 
 ---
 
-## Qué explicar en defensa
+## Evidencia técnica validada
 
 REST define cómo se exponen los recursos del sistema mediante endpoints y métodos HTTP.
 

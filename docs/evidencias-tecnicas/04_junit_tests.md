@@ -139,13 +139,13 @@ docs/evidencias-tecnicas/capturas/
 
 ---
 
-## Qué explicar en defensa
+## Evidencia técnica validada
 
 JUnit valida que el microservicio levanta correctamente dentro del contexto de Spring Boot.
 
 H2 permite ejecutar pruebas sin depender de MySQL local, manteniendo MySQL/XAMPP como configuración oficial para ejecución académica.
 
-Esto permite que los tests sean más estables, rápidos y fáciles de ejecutar durante la defensa técnica.
+Esto permite que los tests sean más estables, rápidos y fáciles de ejecutar durante la validación técnica del proyecto.
 
 ---
 
@@ -157,7 +157,7 @@ Esta evidencia respalda los siguientes criterios:
 - Configuración de entorno de pruebas.
 - Separación entre base de datos local y base de datos de test.
 - Correcta compilación del microservicio.
-- Preparación para defensa técnica individual.
+- Evidencia técnica para la entrega.
 
 ---
 

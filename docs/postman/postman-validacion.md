@@ -4,7 +4,7 @@
 
 Validar los endpoints REST principales de EcoMarket SPA mediante una colección general de Postman organizada por microservicio.
 
-La colección tiene como propósito apoyar la validación técnica del proyecto, facilitar pruebas durante el desarrollo y servir como evidencia para la defensa académica del Sprint 2.
+La colección tiene como propósito apoyar la validación técnica del proyecto, facilitar pruebas durante el desarrollo y servir como evidencia técnica del Sprint 2.
 
 ---
 
@@ -80,7 +80,7 @@ Para validar correctamente los endpoints desde Postman, se recomienda seguir est
 7. Validar que el API Gateway responda correctamente.
 8. Ejecutar los endpoints correspondientes al microservicio que se está probando.
 9. Revisar request, response y códigos HTTP.
-10. Registrar evidencia para la defensa.
+10. Registrar evidencia técnica de la prueba.
 
 ---
 
@@ -286,7 +286,7 @@ El API Gateway:
 
 ---
 
-## Evidencias recomendadas para la defensa
+## Evidencias técnicas recomendadas
 
 Para la presentación del proyecto, se recomienda guardar evidencia de:
 

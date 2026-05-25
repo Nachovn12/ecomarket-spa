@@ -287,7 +287,7 @@ Esta evidencia respalda:
 - Manejo de errores.
 - Pruebas.
 - Git y trabajo colaborativo.
-- Preparación de defensa técnica.
+- Preparación de evidencia técnica.
 
 ---
 
@@ -310,7 +310,7 @@ docs/evidencias-tecnicas/capturas/
 
 ---
 
-## Qué explicar en defensa
+## Evidencia técnica validada
 
 La arquitectura de microservicios permite dividir el sistema por dominios funcionales, reduciendo el acoplamiento y mejorando la mantenibilidad.
 

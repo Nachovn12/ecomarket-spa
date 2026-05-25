@@ -12,7 +12,7 @@ Jira se utiliza para organizar el trabajo del equipo mediante épicas, historias
 
 Sprint 4 — Admin y Reportes
 
-Este sprint considera el cierre académico del proyecto, preparación de evidencias técnicas, documentación y funcionalidades finales necesarias para la defensa.
+Este sprint considera el cierre académico del proyecto, preparación de evidencias técnicas, documentación y funcionalidades finales necesarias para la entrega.
 
 ### Estado de cierre del sprint
 
@@ -42,7 +42,7 @@ El Sprint 4 queda reflejado como cerrado funcionalmente desde el punto de vista 
 | HU-27 | Historia | Configuración de tienda | Ignacio Valeria | Finalizada |
 | HU-28 | Historia | Generación de reportes de negocio | Benjamín Palma | Finalizada |
 | HU-29 | Historia | Solicitud de soporte | Ignacio Valeria | Finalizada |
-| HU-56 | Tarea | TT-08 Preparar evidencias técnicas para defensa | Ignacio Valeria | Finalizada |
+| HU-56 | Tarea | TT-08 Preparar evidencias técnicas para entrega | Ignacio Valeria | Finalizada |
 | HU-57 | Tarea | TT-13 Documentar facturación electrónica y flujo comercial | Benjamín Flores | Finalizada |
 | HU-58 | Tarea | TT-17 Implementar consultas base del MS Reportes | Benjamín Palma | Finalizada |
 | HU-59 | Tarea | TT-21 Documentar aspectos éticos del proyecto | Benjamín Espinoza | Finalizada |
@@ -79,11 +79,11 @@ MS Usuarios e Identidad.
 
 ---
 
-## HU-56 — Preparar evidencias técnicas para defensa
+## HU-56 — Preparar evidencias técnicas para entrega
 
 ### Descripción
 
-Preparar las evidencias técnicas del proyecto EcoMarket SPA para la entrega y defensa final.
+Preparar las evidencias técnicas del proyecto EcoMarket SPA para la entrega final.
 
 ### Actividades principales
 
@@ -93,7 +93,7 @@ Preparar las evidencias técnicas del proyecto EcoMarket SPA para la entrega y d
 - Reunir evidencias de JUnit.
 - Reunir evidencias de REST, CRUD y HATEOAS.
 - Ordenar evidencias según la rúbrica.
-- Preparar presentación y evidencias técnicas para la defensa.
+- Preparar evidencias técnicas para la entrega.
 
 ### Evidencia técnica relacionada
 
@@ -105,7 +105,7 @@ Preparar las evidencias técnicas del proyecto EcoMarket SPA para la entrega y d
 - Evidencia de JUnit.
 - Evidencia REST, CRUD y HATEOAS.
 - Evidencia de arquitectura de microservicios.
-- Presentación y evidencias técnicas para la defensa.
+- Evidencias técnicas para la entrega.
 
 ---
 
@@ -123,15 +123,15 @@ Guardar capturas dentro de:
 | Épicas por microservicio | `capturas/jira_epicas_microservicios.png` | Separación por dominio |
 | HU asignadas por integrante | `capturas/jira_hu_asignadas.png` | Participación colaborativa |
 | Detalle de HU-3 | `capturas/jira_hu3_perfil_cliente.png` | Evidencia de trabajo individual |
-| Detalle de HU-56 | `capturas/jira_hu56_evidencias.png` | Evidencia de defensa |
+| Detalle de HU-56 | `capturas/jira_hu56_evidencias.png` | Evidencia técnica |
 
 ---
 
-## Qué explicar en defensa
+## Evidencia técnica validada
 
 Jira permite demostrar que el equipo organizó el trabajo mediante una planificación ágil. Cada historia de usuario se relaciona con una necesidad del sistema, un microservicio o un entregable técnico. También permite evidenciar la participación individual de cada integrante.
 
-En mi caso, las HU asignadas fueron HU-3 y HU-56. La HU-3 se relaciona con el MS Usuarios e Identidad y la actualización del perfil del Cliente Web. La HU-56 corresponde a la preparación y organización de evidencias técnicas para la defensa final.
+Las HU asignadas fueron HU-3 y HU-56. La HU-3 se relaciona con el MS Usuarios e Identidad y la actualización del perfil del Cliente Web. La HU-56 corresponde a la preparación y organización de evidencias técnicas para la entrega final.
 
-Para el Sprint 4, se debe explicar que el sprint `S4 - Admin y Reportes` contiene 14 issues, todas finalizadas en Jira, y que el avance esperado para la entrega queda reflejado en la rama `develop` de GitHub.
+Para el Sprint 4, la evidencia registra que el sprint `S4 - Admin y Reportes` contiene 14 issues, todas finalizadas en Jira, y que el avance esperado para la entrega queda reflejado en la rama `develop` de GitHub.
 

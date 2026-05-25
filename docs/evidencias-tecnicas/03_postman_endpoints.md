@@ -421,9 +421,9 @@ docs/evidencias-tecnicas/capturas/
 
 ---
 
-## Qué explicar en defensa
+## Evidencia técnica validada
 
-Postman permite demostrar que los endpoints REST funcionan correctamente, reciben JSON válido, devuelven códigos HTTP adecuados y aplican validaciones de negocio.
+Las pruebas realizadas en Postman permiten validar que los endpoints REST funcionan correctamente, reciben datos en formato JSON, devuelven códigos HTTP adecuados y aplican reglas de negocio definidas para el microservicio.
 
-En la HU-3, Postman permite evidenciar que el Cliente Web puede consultar y actualizar su perfil, además de comprobar que el sistema responde correctamente ante errores como correo inválido, cliente inexistente o correo duplicado.
+Para la HU-3, la evidencia permite comprobar que el Cliente Web puede consultar y actualizar su perfil. Además, se validan respuestas controladas ante escenarios como correo inválido, cliente inexistente o correo duplicado.
 

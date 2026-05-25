@@ -257,7 +257,7 @@ Casos esperados:
 | Consulta exitosa            |          200 OK |
 | Actualización exitosa       |          200 OK |
 
-El manejo de excepciones permite mejorar la confiabilidad del sistema y entregar respuestas claras durante pruebas manuales, pruebas automatizadas y defensa técnica.
+El manejo de excepciones permite mejorar la confiabilidad del sistema y entregar respuestas claras durante pruebas manuales, pruebas automatizadas y validación técnica.
 
 ---
 
@@ -304,7 +304,7 @@ Ejemplos de eventos registrados:
 - Registro de tickets de soporte.
 - Generación de reportes y KPIs.
 
-Los logs aportan trazabilidad, facilitan la depuración y respaldan la defensa técnica del proyecto.
+Los logs aportan trazabilidad, facilitan la depuración y respaldan la evidencia técnica del proyecto.
 
 ---
 
@@ -372,7 +372,7 @@ Esta arquitectura permite evidenciar los aspectos solicitados en la EP2:
 - Validaciones y reglas de negocio.
 - Manejo de excepciones.
 - Logs estructurados.
-- Preparación para pruebas con Postman y defensa técnica.
+- Preparación para pruebas con Postman y validación técnica.
 
 ---
 
@@ -380,5 +380,5 @@ Esta arquitectura permite evidenciar los aspectos solicitados en la EP2:
 
 La arquitectura backend de EcoMarket SPA representa una solución distribuida orientada a microservicios, con separación clara de responsabilidades, persistencia independiente por dominio y comunicación REST entre componentes.
 
-El uso de API Gateway, Spring Boot, JPA/Hibernate, MySQL, validaciones, manejo de excepciones, logs y HATEOAS permite cumplir con los requerimientos técnicos de la evaluación EP2 y entregar una base sólida para la defensa técnica del proyecto.
+El uso de API Gateway, Spring Boot, JPA/Hibernate, MySQL, validaciones, manejo de excepciones, logs y HATEOAS permite cumplir con los requerimientos técnicos de la evaluación EP2 y entregar una base sólida de evidencia técnica del proyecto.
 

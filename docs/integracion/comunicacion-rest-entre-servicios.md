@@ -350,7 +350,7 @@ Ejemplos de eventos registrados:
 - Intentos de operación inválida.
 - Consultas relevantes para reportes.
 
-Los logs permiten trazabilidad durante pruebas, defensa técnica y diagnóstico de errores.
+Los logs permiten trazabilidad durante pruebas, validación técnica y diagnóstico de errores.
 
 ---
 

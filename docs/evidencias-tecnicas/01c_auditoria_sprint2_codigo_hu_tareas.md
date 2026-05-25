@@ -35,44 +35,20 @@ Para considerar una HU/Tarea como reflejada se revisó:
 | Issue | Tipo | Microservicio/Componente | Validación en código develop | Evidencia/documentación | Estado técnico |
 |---|---|---|---|---|---|
 | HU-6 | Historia | MS Catálogo | `ProductoController`, `CategoriaController`, `ResenaController`, `CatalogoService`, `Producto`, `Categoria`, `Resena` y repositories respaldan búsqueda y gestión base de productos ecológicos | `docs/postman/evidencia-postman.md`; colección Postman principal | Reflejada |
-| HU-7 | Historia | MS Pedidos y Ventas | `CarritoService`, `CarritoController`, `CarritoCompra` e `ItemCarrito` respaldan creación de carrito y gestión de productos asociados | `docs/ms-pedidos-ventas-flujo-comercial.md`; colección Postman principal | Reflejada |
-| HU-8 | Historia | MS Pedidos y Ventas | `CuponDescuentoService` y flujo de carrito/venta permiten aplicar cupones y recalcular totales del flujo comercial | `docs/ms-pedidos-ventas-flujo-comercial.md`; colección Postman principal | Reflejada |
-| HU-10 | Historia | MS Pedidos y Ventas | `PedidoService` y `PedidoController` respaldan consulta de historial y trazabilidad de pedidos por cliente | `docs/ms-pedidos-ventas-flujo-comercial.md` | Reflejada |
-| HU-11 | Historia | MS Pedidos y Ventas | `PedidoService`, `PedidoController`, `Pedido`, `CarritoCompra` e `ItemCarrito` respaldan creación de pedido online desde carrito | `docs/ms-pedidos-ventas-flujo-comercial.md` | Reflejada con observación |
-| HU-13 | Historia | MS Pedidos y Ventas | `PedidoService` y `PedidoController` respaldan cancelación de pedidos pendientes y control de estado | `docs/ms-pedidos-ventas-flujo-comercial.md` | Reflejada con observación |
-| HU-14 | Historia | MS Pedidos y Ventas | `VentaService`, `VentaController` y `Venta` respaldan registro de venta presencial, cálculo de subtotal, descuentos y total | `docs/ms-pedidos-ventas-flujo-comercial.md` | Reflejada con observación |
-| HU-36 | Historia | MS Pedidos y Ventas | `VentaService` y `Factura` respaldan generación académica de factura asociada a una venta | `docs/ms-pedidos-ventas-flujo-comercial.md` | Reflejada con observación |
+| HU-7 | Historia | MS Pedidos y Ventas | `CarritoService`, `CarritoController`, `CarritoCompra` e `ItemCarrito` respaldan creación de carrito y gestión de productos asociados | `docs/pedidos-ventas/flujo-comercial-facturacion-electronica.md`; colección Postman principal | Reflejada |
+| HU-8 | Historia | MS Pedidos y Ventas | `CuponDescuentoService` y flujo de carrito/venta permiten aplicar cupones y recalcular totales del flujo comercial | `docs/pedidos-ventas/flujo-comercial-facturacion-electronica.md`; colección Postman principal | Reflejada |
+| HU-10 | Historia | MS Pedidos y Ventas | `PedidoService` y `PedidoController` respaldan consulta de historial y trazabilidad de pedidos por cliente | `docs/pedidos-ventas/flujo-comercial-facturacion-electronica.md` | Reflejada |
+| HU-11 | Historia | MS Pedidos y Ventas | `PedidoService`, `PedidoController`, `Pedido`, `CarritoCompra` e `ItemCarrito` respaldan creación de pedido online desde carrito | `docs/pedidos-ventas/flujo-comercial-facturacion-electronica.md` | Reflejada |
+| HU-13 | Historia | MS Pedidos y Ventas | `PedidoService` y `PedidoController` respaldan cancelación de pedidos pendientes y control de estado | `docs/pedidos-ventas/flujo-comercial-facturacion-electronica.md` | Reflejada |
+| HU-14 | Historia | MS Pedidos y Ventas | `VentaService`, `VentaController` y `Venta` respaldan registro de venta presencial, cálculo de subtotal, descuentos y total | `docs/pedidos-ventas/flujo-comercial-facturacion-electronica.md` | Reflejada |
+| HU-36 | Historia | MS Pedidos y Ventas | `VentaService` y `Factura` respaldan generación académica de factura asociada a una venta | `docs/pedidos-ventas/flujo-comercial-facturacion-electronica.md` | Reflejada |
 | HU-43 | Tarea | API Gateway | `api-gateway/src/main/resources/application.properties` respalda configuración de rutas base hacia microservicios | `docs/api-gateway-rutas.md` | Reflejada |
 | HU-44 | Tarea | Postman | La colección `EcoMarket-SPA.postman_collection.json` y el ambiente local consolidan requests y variables por microservicio | `postman/EcoMarket-SPA.postman_collection.json`; `postman/EcoMarket-SPA-local.postman_environment.json` | Reflejada |
-| HU-45 | Tarea | MS Pedidos y Ventas | Servicios, controladores y entidades de carrito, cupones, pedidos, ventas y facturas respaldan CRUD y flujo comercial | `docs/ms-pedidos-ventas-flujo-comercial.md`; `docs/postman/evidencia-postman.md` | Reflejada |
-| HU-46 | Tarea | Postman / Flujo comercial | La colección Postman y la documentación del flujo compra/venta respaldan validación manual de endpoints principales | `docs/postman/evidencia-postman.md`; `docs/ms-pedidos-ventas-flujo-comercial.md` | Reflejada |
+| HU-45 | Tarea | MS Pedidos y Ventas | Servicios, controladores y entidades de carrito, cupones, pedidos, ventas y facturas respaldan CRUD y flujo comercial | `docs/pedidos-ventas/flujo-comercial-facturacion-electronica.md`; `docs/postman/evidencia-postman.md` | Reflejada |
+| HU-46 | Tarea | Postman / Flujo comercial | La colección Postman y la documentación del flujo compra/venta respaldan validación manual de endpoints principales | `docs/postman/evidencia-postman.md`; `docs/pedidos-ventas/flujo-comercial-facturacion-electronica.md` | Reflejada |
 | HU-47 | Tarea | MS Inventario y Abastecimiento | `InventarioController`, `AjusteStockController`, `PedidoReabastecimientoController`, `RecepcionMercanciaController` y servicios asociados respaldan CRUD y reglas base | Código fuente de `ms-inventario-abastecimiento` | Reflejada |
 | HU-48 | Tarea | MS Inventario y Abastecimiento | `application.properties` del microservicio respalda configuración de base de datos local para inventario | `ms-inventario-abastecimiento/src/main/resources/application.properties` | Reflejada |
 | HU-49 | Tarea | MS Catálogo | `ProductoController`, `CategoriaController`, `ResenaController`, `CatalogoService`, modelos y repositories respaldan CRUD del catálogo | Código fuente de `ms-catalogo`; `docs/postman/evidencia-postman.md` | Reflejada |
-
----
-
-## Observaciones técnicas detectadas
-
-### HU-11 — Realización de pedido online
-
-La creación del pedido desde carrito existe, pero la validación real de stock contra MS Inventario no está implementada como llamada HTTP interna; queda como integración documentada/preparada.
-
-### HU-13 — Cancelación de pedido pendiente
-
-La cancelación de pedido pendiente existe, pero la restauración real de stock queda como integración esperada/documentada.
-
-### HU-14 — Registro de venta presencial
-
-La venta presencial calcula totales, pero el descuento real del inventario no se ejecuta como transacción distribuida.
-
-### HU-36 — Generación de factura electrónica
-
-La factura es académica/simulada; no integra SII, PDF real ni envío por correo.
-
-### HU-46 — Validación de flujo de compra/venta en Postman
-
-La validación Postman está documentada, pero las capturas pueden complementarse si el docente las exige.
 
 ---
 

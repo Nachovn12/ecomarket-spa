@@ -15,7 +15,7 @@ Estos criterios nos ayudan a:
 - Saber cuándo una HU o tarea está lista para empezar.
 - Saber cuándo una HU o tarea está realmente terminada.
 - Mantener orden en los microservicios.
-- Dejar evidencia clara para Jira y la defensa.
+- Dejar evidencia clara para Jira y la entrega técnica.
 - Evitar integrar a `develop` código incompleto o sin validar.
 
 ---
@@ -197,7 +197,7 @@ Debe cumplir con:
 - Validación técnica realizada.
 - Pull Request creado hacia `develop`.
 - Evidencia agregada en Jira.
-- El integrante puede explicar lo realizado en la defensa.
+- El integrante deja evidencia técnica verificable del trabajo realizado.
 
 Si falta alguno de estos puntos, la tarjeta no debería marcarse como finalizada todavía.
 
@@ -217,7 +217,7 @@ Estos criterios se definieron considerando los elementos técnicos solicitados p
 - Validación con Postman.
 - Pruebas JUnit cuando corresponde.
 - HATEOAS cuando aplica.
-- Evidencia técnica para la defensa.
+- Evidencia técnica para la entrega.
 
 ---
 

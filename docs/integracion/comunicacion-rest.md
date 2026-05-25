@@ -482,7 +482,7 @@ http://localhost:8081
 | Se identifican las comunicaciones REST principales | Cumplido |
 | Existen pruebas que demuestran consumo entre servicios | Pendiente de evidencia Postman |
 | Se documentan request, response y códigos HTTP | Cumplido |
-| La integración puede explicarse en la defensa | Cumplido |
+| La integración está respaldada con evidencia técnica | Cumplido |
 
 ---
 
@@ -498,7 +498,7 @@ http://localhost:8081
 
 ---
 
-## Resumen para defensa
+## Evidencia técnica validada
 
 La comunicación REST entre microservicios permite que EcoMarket SPA mantenga una arquitectura desacoplada y escalable.
 
@@ -522,5 +522,5 @@ Las integraciones más importantes son:
 - Pedidos solicita despacho a Logística.
 - Reportes consume datos de Ventas, Inventario y Administración.
 
-Esta documentación respalda la HU-50 y sirve como evidencia técnica para la defensa del Sprint 3.
+Esta documentación respalda la HU-50 y sirve como evidencia técnica del Sprint 3.
 

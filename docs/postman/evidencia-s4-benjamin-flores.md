@@ -1,5 +1,11 @@
 # Evidencia Postman — Sprint S4 — Benjamín Flores Arévalo
 
+## Objetivo
+
+Registrar evidencia de validación manual en Postman para endpoints asociados a HU-12 y HU-15 del MS Pedidos y Ventas.
+
+---
+
 ## Endpoint 1
 
 - **HU:** HU-12
@@ -119,10 +125,14 @@
 - **Código obtenido:** 400
 - **Resultado:** Error 400 — estado de devolución inválido.
 
-## Nota para defensa
+---
 
-Las capturas reales de Postman deben adjuntarse en Miro o en la carpeta de evidencias del equipo para respaldar la ejecución de estos endpoints durante la defensa.
+## Evidencia técnica asociada
+
+Las capturas reales de Postman deben adjuntarse en la carpeta de evidencias del equipo o en el tablero colaborativo utilizado para la entrega, manteniendo trazabilidad con las HU indicadas.
+
+---
 
 ## Alcance académico
 
-Este documento es de carácter académico. La integración con el SII no está implementada. La entidad Factura representa el concepto dentro del sistema EcoMarket SPA.
+Este documento es de carácter académico. La entidad `Factura` representa el concepto dentro del sistema EcoMarket SPA y no integra servicios externos tributarios.
