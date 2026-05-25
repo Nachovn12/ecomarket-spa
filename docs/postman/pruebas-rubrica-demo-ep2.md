@@ -1,7 +1,7 @@
 # Pruebas Postman para Defensa EP2 — EcoMarket SPA
 
-**Asignatura:** Desarrollo Full Stack I — DSY1103  
-**Proyecto:** EcoMarket SPA  
+**Asignatura:** Desarrollo Full Stack I — DSY1103
+**Proyecto:** EcoMarket SPA
 **Ubicación recomendada en el repo:** `docs/postman/pruebas-rubrica-demo-ep2.md`
 
 ## Objetivo
@@ -48,12 +48,6 @@ CREATE DATABASE IF NOT EXISTS bd_reportes;
 
 ### 1.2 Levantar microservicios
 
-Desde la raíz del proyecto:
-
-```powershell
-cd "C:\Users\Nacho\Documents\Proyectos - DUOC\DESARROLLO FULLSTACK I\ecomarket-spa"
-```
-
 Abrir una terminal por servicio:
 
 ```powershell
@@ -92,32 +86,32 @@ EcoMarket SPA - Local Environment
 
 Variables:
 
-| Variable | Valor |
-|---|---|
-| `gateway_url` | `http://localhost:8081` |
-| `usuarios_url` | `http://localhost:8083` |
-| `catalogo_url` | `http://localhost:8084` |
+| Variable         | Valor                   |
+| ---------------- | ----------------------- |
+| `gateway_url`    | `http://localhost:8081` |
+| `usuarios_url`   | `http://localhost:8083` |
+| `catalogo_url`   | `http://localhost:8084` |
 | `inventario_url` | `http://localhost:8085` |
-| `pedidos_url` | `http://localhost:8086` |
-| `logistica_url` | `http://localhost:8087` |
-| `admin_url` | `http://localhost:8088` |
-| `reportes_url` | `http://localhost:8089` |
+| `pedidos_url`    | `http://localhost:8086` |
+| `logistica_url`  | `http://localhost:8087` |
+| `admin_url`      | `http://localhost:8088` |
+| `reportes_url`   | `http://localhost:8089` |
 
 ---
 
 ## 2. Matriz rúbrica → prueba en vivo
 
-| Rúbrica | Prueba que se debe mostrar |
-|---|---|
-| CSR | Abrir Controller → Service → Repository → Entity/DTO |
-| Persistencia | Ejecutar POST, luego GET y revisar phpMyAdmin |
-| CRUD REST | Probar POST, GET, PUT/PATCH y DELETE cuando aplique |
+| Rúbrica           | Prueba que se debe mostrar                                        |
+| ----------------- | ----------------------------------------------------------------- |
+| CSR               | Abrir Controller → Service → Repository → Entity/DTO              |
+| Persistencia      | Ejecutar POST, luego GET y revisar phpMyAdmin                     |
+| CRUD REST         | Probar POST, GET, PUT/PATCH y DELETE cuando aplique               |
 | Reglas de negocio | Cupón, cancelación de pedido, factura duplicada, cambio de estado |
-| Bean Validation | Enviar JSON inválido y mostrar 400 Bad Request |
-| Excepciones | Login inválido, factura duplicada, recurso inexistente |
-| Logs | Ejecutar endpoint y mostrar consola del microservicio |
-| Comunicación REST | Probar directo y por API Gateway |
-| GitHub/Jira | Mostrar `docs/evidencias-tecnicas/`, commits y HU |
+| Bean Validation   | Enviar JSON inválido y mostrar 400 Bad Request                    |
+| Excepciones       | Login inválido, factura duplicada, recurso inexistente            |
+| Logs              | Ejecutar endpoint y mostrar consola del microservicio             |
+| Comunicación REST | Probar directo y por API Gateway                                  |
+| GitHub/Jira       | Mostrar `docs/evidencias-tecnicas/`, commits y HU                 |
 
 ---
 
@@ -156,7 +150,7 @@ activo true
 _links
 ```
 
-**Qué explicar:**  
+**Qué explicar:**
 El `UsuarioController` recibe el JSON, valida el DTO y delega en `UsuarioService`. El service normaliza correo, valida duplicidad, asigna rol `CLIENTE` y persiste mediante `UsuarioRepository`.
 
 ---
@@ -191,7 +185,7 @@ rol CLIENTE
 funcionalidadesDisponibles
 ```
 
-**Qué explicar:**  
+**Qué explicar:**
 El sistema valida credenciales y usuario activo. Retorna un token académico para evidenciar seguridad básica.
 
 ---
@@ -217,7 +211,7 @@ Esperado:
 401 Unauthorized
 ```
 
-**Qué explicar:**  
+**Qué explicar:**
 El error se controla correctamente, no se cae el microservicio y se responde con código HTTP adecuado.
 
 ---
@@ -244,7 +238,7 @@ Esperado:
 400 Bad Request
 ```
 
-**Qué explicar:**  
+**Qué explicar:**
 Bean Validation evita persistir datos inválidos.
 
 ---
@@ -324,7 +318,7 @@ Esperado:
 200 OK
 ```
 
-**Qué explicar:**  
+**Qué explicar:**
 La búsqueda se implementa en `CatalogoService`, usando repositorios JPA para consultar productos por criterios del dominio.
 
 ---
@@ -438,7 +432,7 @@ Esperado:
 201 Created o 200 OK
 ```
 
-**Qué explicar:**  
+**Qué explicar:**
 Inventario gestiona stock y disponibilidad. La lógica está en el service y se persiste en `bd_inventario`.
 
 ---
@@ -493,7 +487,7 @@ Esperado:
 200 OK
 ```
 
-**Qué explicar:**  
+**Qué explicar:**
 `CarritoService` valida stock recibido, agrega el producto y recalcula totales.
 
 ---
@@ -561,7 +555,7 @@ Esperado:
 estado PENDIENTE
 ```
 
-**Qué explicar:**  
+**Qué explicar:**
 El pedido se genera desde el carrito, el carrito cambia de estado, se registra historial y se mantiene trazabilidad.
 
 ---
@@ -593,7 +587,7 @@ Esperado:
 estado CANCELADO
 ```
 
-**Qué explicar:**  
+**Qué explicar:**
 Solo se permite cancelar pedidos en estado `PENDIENTE`.
 
 ---
@@ -660,7 +654,7 @@ Esperado:
 409 Conflict
 ```
 
-**Qué explicar:**  
+**Qué explicar:**
 La regla evita generar dos facturas para la misma venta. Se demuestra regla de negocio y excepción controlada.
 
 ---
@@ -779,7 +773,7 @@ Esperado:
 200 OK
 ```
 
-**Qué explicar:**  
+**Qué explicar:**
 Logística separa envíos, rutas, proveedores y seguimiento del flujo comercial.
 
 ---
@@ -1033,7 +1027,7 @@ Esperado:
 200 OK
 ```
 
-**Qué explicar:**  
+**Qué explicar:**
 El API Gateway centraliza el acceso y enruta la solicitud al microservicio correspondiente.
 
 ---
