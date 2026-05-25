@@ -2,7 +2,7 @@
 ## EcoMarket SPA - Sprint 3
 
 > Microservicio: ms-pedidos-ventas
-> Puerto: 8084
+> Puerto: 8086
 > Base de datos: MySQL/XAMPP - bd_ventas
 > Rama: feature/sprint3-pedidos-ventas-benjamin
 
@@ -176,4 +176,3 @@ Tests en MsPedidosVentasApplicationTests.java:
 - crearReclamacion: reclamacion creada y listada
 
 Resultado: Tests run: 9, Failures: 0, Errors: 0 - BUILD SUCCESS
-
