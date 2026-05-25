@@ -96,7 +96,7 @@ Cada vez que se termine una HU o tarea técnica, se debe dejar evidencia en la t
 
 Plantilla sugerida:
 
-Se implementó:  
+Se implementó:
 [descripción breve del avance realizado]
 
 Microservicio:  
@@ -105,7 +105,7 @@ ms-...
 Rama:  
 feature/ms-...
 
-Validación Maven:  
+Validación Maven:
 mvn clean package -DskipTests
 
 Resultado:  
@@ -226,3 +226,4 @@ Estos criterios se definieron considerando los elementos técnicos solicitados p
 No se integra a `develop` código incompleto, roto o sin validar.
 
 Cada avance debe poder explicarse, compilar correctamente y quedar respaldado con evidencia en Jira.
+

@@ -166,7 +166,7 @@ Pendiente de captura / Validado en Postman
 
 ## Observación
 
-Esta comunicación es clave porque el MS Pedidos y Ventas no debe administrar stock directamente.  
+Esta comunicación es clave porque el MS Pedidos y Ventas no debe administrar stock directamente.
 La disponibilidad se consulta al MS Inventario y Abastecimiento.
 
 ---
@@ -683,3 +683,4 @@ Las integraciones más importantes son:
 - Reportes consume datos de Ventas, Inventario y Administración.
 
 Esta documentación respalda la HU-50 y sirve como evidencia técnica para la defensa del Sprint 3.
+

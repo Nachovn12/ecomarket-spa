@@ -89,7 +89,7 @@ POST http://localhost:8083/api/usuarios/registro
 ## Evidencia/captura
 
 ```text
-docs/evidencias-defensa/capturas/postman_registro_cliente.png
+docs/evidencias-tecnicas/capturas/postman_registro_cliente.png
 ```
 
 ---
@@ -146,7 +146,7 @@ No aplica.
 ## Evidencia/captura
 
 ```text
-docs/evidencias-defensa/capturas/postman_get_perfil_cliente.png
+docs/evidencias-tecnicas/capturas/postman_get_perfil_cliente.png
 ```
 
 ---
@@ -188,7 +188,7 @@ PUT http://localhost:8083/api/usuarios/clientes/1/perfil
 ## Evidencia/captura
 
 ```text
-docs/evidencias-defensa/capturas/postman_put_perfil_cliente.png
+docs/evidencias-tecnicas/capturas/postman_put_perfil_cliente.png
 ```
 
 ---
@@ -243,7 +243,7 @@ PUT http://localhost:8083/api/usuarios/clientes/1/perfil
 ## Evidencia/captura
 
 ```text
-docs/evidencias-defensa/capturas/postman_error_correo_invalido.png
+docs/evidencias-tecnicas/capturas/postman_error_correo_invalido.png
 ```
 
 ---
@@ -287,7 +287,7 @@ No aplica.
 ## Evidencia/captura
 
 ```text
-docs/evidencias-defensa/capturas/postman_error_cliente_inexistente.png
+docs/evidencias-tecnicas/capturas/postman_error_cliente_inexistente.png
 ```
 
 ---
@@ -339,7 +339,7 @@ PUT http://localhost:8083/api/usuarios/clientes/1/perfil
 ## Evidencia/captura
 
 ```text
-docs/evidencias-defensa/capturas/postman_error_correo_duplicado.png
+docs/evidencias-tecnicas/capturas/postman_error_correo_duplicado.png
 ```
 
 ---
@@ -407,7 +407,7 @@ El microservicio utiliza `GlobalExceptionHandler` con `@RestControllerAdvice` pa
 Guardar capturas en:
 
 ```text
-docs/evidencias-defensa/capturas/
+docs/evidencias-tecnicas/capturas/
 ```
 
 | Evidencia                    | Archivo sugerido                                 |
@@ -426,3 +426,4 @@ docs/evidencias-defensa/capturas/
 Postman permite demostrar que los endpoints REST funcionan correctamente, reciben JSON válido, devuelven códigos HTTP adecuados y aplican validaciones de negocio.
 
 En la HU-3, Postman permite evidenciar que el Cliente Web puede consultar y actualizar su perfil, además de comprobar que el sistema responde correctamente ante errores como correo inválido, cliente inexistente o correo duplicado.
+

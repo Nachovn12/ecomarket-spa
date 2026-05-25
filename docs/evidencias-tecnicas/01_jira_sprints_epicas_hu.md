@@ -73,7 +73,7 @@ Preparar las evidencias técnicas del proyecto EcoMarket SPA para la entrega y d
 
 ### Evidencia técnica relacionada
 
-- Carpeta `docs/evidencias-defensa/`.
+- Carpeta `docs/evidencias-tecnicas/`.
 - Índice de evidencias.
 - Evidencia de Jira.
 - Evidencia de GitHub.
@@ -89,7 +89,7 @@ Preparar las evidencias técnicas del proyecto EcoMarket SPA para la entrega y d
 
 Guardar capturas dentro de:
 
-`docs/evidencias-defensa/capturas/`
+`docs/evidencias-tecnicas/capturas/`
 
 | Evidencia | Archivo sugerido | Relación con rúbrica |
 |---|---|---|
@@ -108,3 +108,4 @@ Guardar capturas dentro de:
 Jira permite demostrar que el equipo organizó el trabajo mediante una planificación ágil. Cada historia de usuario se relaciona con una necesidad del sistema, un microservicio o un entregable técnico. También permite evidenciar la participación individual de cada integrante.
 
 En mi caso, las HU asignadas fueron HU-3 y HU-56. La HU-3 se relaciona con el MS Usuarios e Identidad y la actualización del perfil del Cliente Web. La HU-56 corresponde a la preparación y organización de evidencias técnicas para la defensa final.
+

@@ -381,3 +381,4 @@ Esta arquitectura permite evidenciar los aspectos solicitados en la EP2:
 La arquitectura backend de EcoMarket SPA representa una solución distribuida orientada a microservicios, con separación clara de responsabilidades, persistencia independiente por dominio y comunicación REST entre componentes.
 
 El uso de API Gateway, Spring Boot, JPA/Hibernate, MySQL, validaciones, manejo de excepciones, logs y HATEOAS permite cumplir con los requerimientos técnicos de la evaluación EP2 y entregar una base sólida para la defensa técnica del proyecto.
+

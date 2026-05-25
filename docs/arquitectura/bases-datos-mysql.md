@@ -332,3 +332,4 @@ La separación de bases de datos permite:
 EcoMarket SPA utiliza una arquitectura de microservicios con persistencia distribuida basada en MySQL.
 
 Cada microservicio cuenta con su propia base de datos, entidades JPA, repositorios Spring Data y configuración independiente, cumpliendo con los principios de arquitectura distribuida solicitados en la evaluación EP2 de Desarrollo Full Stack I.
+

@@ -523,3 +523,4 @@ Las integraciones más importantes son:
 - Reportes consume datos de Ventas, Inventario y Administración.
 
 Esta documentación respalda la HU-50 y sirve como evidencia técnica para la defensa del Sprint 3.
+

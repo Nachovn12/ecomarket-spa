@@ -348,3 +348,4 @@ HU-44 — TT-05 Crear colección Postman principal del proyecto
 ```
 
 Su objetivo es dejar preparada una colección general de Postman para validar endpoints REST de EcoMarket SPA, organizada por microservicio y lista para ser utilizada durante la presentación.
+

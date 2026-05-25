@@ -1,4 +1,4 @@
-# Flujo Comercial - MS Pedidos y Ventas
+﻿# Flujo Comercial - MS Pedidos y Ventas
 ## EcoMarket SPA - Sprint 3
 
 > Microservicio: ms-pedidos-ventas
@@ -176,3 +176,4 @@ Tests en MsPedidosVentasApplicationTests.java:
 - crearReclamacion: reclamacion creada y listada
 
 Resultado: Tests run: 9, Failures: 0, Errors: 0 - BUILD SUCCESS
+

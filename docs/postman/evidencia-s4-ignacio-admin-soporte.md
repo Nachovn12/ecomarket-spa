@@ -56,7 +56,7 @@ http://localhost:8088
 Carpeta de capturas:
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/
+docs/evidencias-tecnicas/capturas/admin-soporte/
 ```
 
 ---
@@ -104,7 +104,7 @@ POST http://localhost:8088/api/admin/tiendas
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_admin_crear_tienda.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_admin_crear_tienda.png
 ```
 
 ---
@@ -134,7 +134,7 @@ GET http://localhost:8088/api/admin/tiendas
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_admin_listar_tiendas.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_admin_listar_tiendas.png
 ```
 
 ---
@@ -166,7 +166,7 @@ GET http://localhost:8088/api/admin/tiendas/1
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_admin_consultar_tienda.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_admin_consultar_tienda.png
 ```
 
 ---
@@ -210,7 +210,7 @@ PUT http://localhost:8088/api/admin/tiendas/1
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_admin_actualizar_tienda.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_admin_actualizar_tienda.png
 ```
 
 ---
@@ -245,7 +245,7 @@ GET http://localhost:8088/api/admin/tiendas/1
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_admin_consultar_tienda_actualizada.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_admin_consultar_tienda_actualizada.png
 ```
 
 ---
@@ -286,7 +286,7 @@ POST http://localhost:8088/api/admin/tiendas/1/personal
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_admin_asignar_personal.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_admin_asignar_personal.png
 ```
 
 ---
@@ -316,7 +316,7 @@ GET http://localhost:8088/api/admin/tiendas/1/personal
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_admin_listar_personal_tienda.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_admin_listar_personal_tienda.png
 ```
 
 ---
@@ -363,7 +363,7 @@ POST http://localhost:8088/api/soporte/tickets
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_soporte_crear_ticket.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_soporte_crear_ticket.png
 ```
 
 ---
@@ -392,7 +392,7 @@ GET http://localhost:8088/api/soporte/tickets
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_soporte_listar_tickets.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_soporte_listar_tickets.png
 ```
 
 ---
@@ -424,7 +424,7 @@ GET http://localhost:8088/api/soporte/tickets/1
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_soporte_consultar_ticket.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_soporte_consultar_ticket.png
 ```
 
 ---
@@ -452,7 +452,7 @@ PATCH http://localhost:8088/api/soporte/tickets/1/estado?estado=EN_ATENCION
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_soporte_actualizar_estado_ticket.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_soporte_actualizar_estado_ticket.png
 ```
 
 ---
@@ -491,7 +491,7 @@ POST http://localhost:8088/api/soporte/tickets/1/respuestas
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_soporte_responder_ticket.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_soporte_responder_ticket.png
 ```
 
 ---
@@ -520,7 +520,7 @@ GET http://localhost:8088/api/soporte/tickets/1/respuestas
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_soporte_listar_respuestas_ticket.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_soporte_listar_respuestas_ticket.png
 ```
 
 ---
@@ -563,7 +563,7 @@ POST http://localhost:8088/api/admin/monitorizacion/metricas
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_monitorizacion_metrica_disponible.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_monitorizacion_metrica_disponible.png
 ```
 
 ---
@@ -604,7 +604,7 @@ POST http://localhost:8088/api/admin/monitorizacion/metricas
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_monitorizacion_metrica_fallo.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_monitorizacion_metrica_fallo.png
 ```
 
 ---
@@ -634,7 +634,7 @@ GET http://localhost:8088/api/admin/monitorizacion/metricas
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_monitorizacion_listar_metricas.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_monitorizacion_listar_metricas.png
 ```
 
 ---
@@ -673,7 +673,7 @@ POST http://localhost:8088/api/admin/monitorizacion/alertas
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_monitorizacion_registrar_alerta.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_monitorizacion_registrar_alerta.png
 ```
 
 ---
@@ -702,7 +702,7 @@ GET http://localhost:8088/api/admin/monitorizacion/alertas
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_monitorizacion_listar_alertas.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_monitorizacion_listar_alertas.png
 ```
 
 ---
@@ -731,7 +731,7 @@ PATCH http://localhost:8088/api/admin/monitorizacion/alertas/1/resolver
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_monitorizacion_resolver_alerta.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_monitorizacion_resolver_alerta.png
 ```
 
 ---
@@ -776,7 +776,7 @@ POST http://localhost:8088/api/admin/respaldos
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_respaldo_programar.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_respaldo_programar.png
 ```
 
 ---
@@ -804,7 +804,7 @@ GET http://localhost:8088/api/admin/respaldos
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_respaldo_listar.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_respaldo_listar.png
 ```
 
 ---
@@ -833,7 +833,7 @@ PATCH http://localhost:8088/api/admin/respaldos/1/ejecutar
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_respaldo_ejecutar.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_respaldo_ejecutar.png
 ```
 
 ---
@@ -862,7 +862,7 @@ PATCH http://localhost:8088/api/admin/respaldos/1/restaurar
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_respaldo_restaurar.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_respaldo_restaurar.png
 ```
 
 ---
@@ -904,7 +904,7 @@ POST http://localhost:8088/api/admin/tiendas
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_admin_error_horario_invalido.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_admin_error_horario_invalido.png
 ```
 
 ---
@@ -944,7 +944,7 @@ POST http://localhost:8088/api/soporte/tickets
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_soporte_error_email_invalido.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_soporte_error_email_invalido.png
 ```
 
 ---
@@ -972,7 +972,7 @@ PATCH http://localhost:8088/api/soporte/tickets/1/estado?estado=NO_EXISTE
 ### Evidencia asociada
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/postman_soporte_error_enum_invalido.png
+docs/evidencias-tecnicas/capturas/admin-soporte/postman_soporte_error_enum_invalido.png
 ```
 
 ---
@@ -1045,7 +1045,7 @@ H2 en memoria
 Guardar capturas en:
 
 ```text
-docs/evidencias-defensa/capturas/admin-soporte/
+docs/evidencias-tecnicas/capturas/admin-soporte/
 ```
 
 | Evidencia                    | Archivo sugerido                                 |
@@ -1095,3 +1095,4 @@ Las pruebas en Postman deben demostrar que el MS Administración y Soporte cumpl
 - HATEOAS.
 - Manejo global de errores.
 - Persistencia en MySQL/XAMPP.
+

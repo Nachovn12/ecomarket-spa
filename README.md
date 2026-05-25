@@ -128,11 +128,13 @@ ecomarket-spa/
 │
 ├── docs/
 │   ├── arquitectura/
+│   ├── calidad/
 │   ├── diagramas/
 │   ├── evidencias/
+│   ├── evidencias-tecnicas/
+│   ├── hateoas/
 │   ├── integracion/
-│   ├── postman/
-│   └── hateoas/
+│   └── postman/
 │
 └── README.md
 ```
@@ -804,6 +806,7 @@ docs/git-flow.md
 | Bases de datos MySQL              | `docs/arquitectura/bases-datos-mysql.md`                |
 | Comunicación REST entre servicios | `docs/integracion/comunicacion-rest-entre-servicios.md` |
 | Evidencia de build y tests        | `docs/evidencias/evidencia-build-tests.md`              |
+| Evidencias técnicas consolidadas  | `docs/evidencias-tecnicas/`                             |
 | Evidencia Postman                 | `docs/postman/evidencia-postman.md`                     |
 | API Gateway                       | `docs/api-gateway-rutas.md`                             |
 | Git Flow                          | `docs/git-flow.md`                                      |
@@ -847,7 +850,7 @@ README.md
 docs/
 src/
 pom.xml
-application.properties.example si existe
+application.properties de cada microservicio
 colecciones Postman si existen
 ```
 

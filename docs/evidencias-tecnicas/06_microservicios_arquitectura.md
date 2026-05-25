@@ -296,7 +296,7 @@ Esta evidencia respalda:
 Guardar capturas dentro de:
 
 ```text
-docs/evidencias-defensa/capturas/
+docs/evidencias-tecnicas/capturas/
 ```
 
 | Evidencia                    | Archivo sugerido                         |
@@ -317,3 +317,4 @@ La arquitectura de microservicios permite dividir el sistema por dominios funcio
 En EcoMarket SPA, cada microservicio tiene una responsabilidad clara, lo que permite desarrollar, probar y mantener funcionalidades de forma independiente.
 
 La HU-3 se implementa dentro del MS Usuarios e Identidad porque corresponde a la gestión del perfil del Cliente Web. Esta funcionalidad se expone mediante endpoints REST, valida datos mediante DTOs, utiliza JPA para persistencia, HATEOAS para respuestas navegables y manejo global de errores para respuestas controladas.
+

@@ -128,7 +128,7 @@ class MsUsuariosIdentidadApplicationTests {
 Guardar capturas en:
 
 ```text
-docs/evidencias-defensa/capturas/
+docs/evidencias-tecnicas/capturas/
 ```
 
 | Evidencia             | Archivo sugerido                      |
@@ -168,3 +168,4 @@ Esta evidencia respalda los siguientes criterios:
 - [x] El microservicio compila con Maven.
 - [x] Los tests pasan correctamente.
 - [x] La configuración local sigue usando MySQL/XAMPP.
+

@@ -120,7 +120,7 @@ No mergear a main. PR listo para revisión antes de integrar a develop.
 Guardar capturas dentro de:
 
 ```text
-docs/evidencias-defensa/capturas/
+docs/evidencias-tecnicas/capturas/
 ```
 
 | Evidencia           | Archivo sugerido                    |
@@ -162,3 +162,4 @@ Esta evidencia respalda los siguientes puntos:
 - [ ] Pull Request creado hacia `develop`.
 - [ ] PR revisado antes del merge.
 - [ ] No se modificó `main` directamente.
+

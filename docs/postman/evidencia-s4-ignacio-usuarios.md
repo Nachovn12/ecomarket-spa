@@ -218,3 +218,4 @@ BUILD SUCCESS
 - [ ] Se usa HATEOAS.
 - [ ] Se usa manejo global de errores.
 - [ ] Se validó en Postman.
+

@@ -396,3 +396,4 @@ EcoMarket SPA implementa comunicación REST entre microservicios como mecanismo 
 El API Gateway centraliza el acceso, los microservicios mantienen independencia de dominio y base de datos, y los flujos entre Pedidos, Inventario, Logística, Administración y Reportes permiten representar una solución distribuida coherente para el caso de negocio.
 
 Esta estrategia cumple con los requerimientos de la EP2, al evidenciar arquitectura distribuida, persistencia independiente, comunicación entre servicios, validaciones, manejo de excepciones, logs y estructura backend basada en Controller, Service y Repository.
+

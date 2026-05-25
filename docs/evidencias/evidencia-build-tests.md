@@ -125,3 +125,4 @@ BUILD SUCCESS global por microservicio.
 ```
 
 Por lo tanto, el backend queda técnicamente validado para la entrega EP2 y preparación de defensa técnica.
+

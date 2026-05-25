@@ -257,7 +257,7 @@ Optional<Usuario> findByCorreo(String correo);
 Guardar capturas dentro de:
 
 ```text
-docs/evidencias-defensa/capturas/
+docs/evidencias-tecnicas/capturas/
 ```
 
 | Evidencia                      | Archivo sugerido                               |
@@ -294,3 +294,4 @@ CRUD permite crear, leer y actualizar información persistente.
 HATEOAS permite que la API entregue enlaces relacionados dentro de sus respuestas, mejorando la navegabilidad.
 
 En la HU-3, el Cliente Web puede consultar y actualizar su perfil mediante endpoints REST, con validaciones, manejo de errores y respuestas navegables.
+
