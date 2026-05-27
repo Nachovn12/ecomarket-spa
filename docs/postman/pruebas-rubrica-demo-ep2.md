@@ -120,7 +120,7 @@ Variables:
 ## A1. Registrar cliente
 
 ```http
-POST {{usuarios_url}}/api/usuarios/registro
+POST http://localhost:8083/api/usuarios/registro
 ```
 
 Body:
@@ -158,7 +158,7 @@ El `UsuarioController` recibe el JSON, valida el DTO y delega en `UsuarioService
 ## A2. Login correcto
 
 ```http
-POST {{usuarios_url}}/api/auth/login
+POST http://localhost:8083/api/auth/login
 ```
 
 Body:
@@ -193,7 +193,7 @@ El sistema valida credenciales y usuario activo. Retorna un token académico par
 ## A3. Login incorrecto
 
 ```http
-POST {{usuarios_url}}/api/auth/login
+POST http://localhost:8083/api/auth/login
 ```
 
 Body:
@@ -219,7 +219,7 @@ El error se controla correctamente, no se cae el microservicio y se responde con
 ## A4. Validación correo inválido
 
 ```http
-POST {{usuarios_url}}/api/usuarios/registro
+POST http://localhost:8083/api/usuarios/registro
 ```
 
 Body:
@@ -248,7 +248,7 @@ Bean Validation evita persistir datos inválidos.
 ## B1. Crear categoría
 
 ```http
-POST {{catalogo_url}}/api/categorias
+POST http://localhost:8084/api/categorias
 ```
 
 Body:
@@ -280,7 +280,7 @@ Si ya existe, usar:
 ## B2. Crear producto
 
 ```http
-POST {{catalogo_url}}/api/productos
+POST http://localhost:8084/api/productos
 ```
 
 Body:
@@ -309,7 +309,7 @@ Si el SKU ya existe, usar `ECO-SHAMPOO-002`.
 ## B3. Buscar producto
 
 ```http
-GET {{catalogo_url}}/api/productos/buscar?palabraClave=shampoo
+GET http://localhost:8084/api/productos/buscar?palabraClave=shampoo
 ```
 
 Esperado:
@@ -326,7 +326,7 @@ La búsqueda se implementa en `CatalogoService`, usando repositorios JPA para co
 ## B4. Producto inválido
 
 ```http
-POST {{catalogo_url}}/api/productos
+POST http://localhost:8084/api/productos
 ```
 
 Body:
@@ -355,7 +355,7 @@ Esperado:
 ## C1. Crear producto de inventario
 
 ```http
-POST {{inventario_url}}/api/productos
+POST http://localhost:8085/api/productos
 ```
 
 Body:
@@ -384,7 +384,7 @@ Si el SKU ya existe, usar `ECO-SHAMPOO-002`.
 ## C2. Consultar producto por SKU
 
 ```http
-GET {{inventario_url}}/api/productos/sku/ECO-SHAMPOO-001
+GET http://localhost:8085/api/productos/sku/ECO-SHAMPOO-001
 ```
 
 Esperado:
@@ -398,7 +398,7 @@ Esperado:
 ## C3. Listar productos de inventario
 
 ```http
-GET {{inventario_url}}/api/productos
+GET http://localhost:8085/api/productos
 ```
 
 Esperado:
@@ -412,7 +412,7 @@ Esperado:
 ## C4. Ajustar stock
 
 ```http
-POST {{inventario_url}}/api/inventario/ajustes
+POST http://localhost:8085/api/inventario/ajustes
 ```
 
 Body:
@@ -442,7 +442,7 @@ Inventario gestiona stock y disponibilidad. La lógica está en el service y se 
 ## D1. Crear carrito
 
 ```http
-POST {{pedidos_url}}/api/pedidos/carritos
+POST http://localhost:8086/api/pedidos/carritos
 ```
 
 Body:
@@ -466,7 +466,7 @@ Guardar el `id` del carrito.
 ## D2. Agregar item al carrito
 
 ```http
-POST {{pedidos_url}}/api/pedidos/carritos/1/items
+POST http://localhost:8086/api/pedidos/carritos/1/items
 ```
 
 Body:
@@ -495,7 +495,7 @@ Esperado:
 ## D3. Crear cupón
 
 ```http
-POST {{pedidos_url}}/api/pedidos/cupones
+POST http://localhost:8086/api/pedidos/cupones
 ```
 
 Body:
@@ -523,7 +523,7 @@ Si ya existe, usar `ECO15`.
 ## D4. Aplicar cupón
 
 ```http
-POST {{pedidos_url}}/api/pedidos/carritos/1/cupon
+POST http://localhost:8086/api/pedidos/carritos/1/cupon
 ```
 
 Body:
@@ -545,7 +545,7 @@ Esperado:
 ## D5. Crear pedido desde carrito
 
 ```http
-POST {{pedidos_url}}/api/pedidos/desde-carrito/1
+POST http://localhost:8086/api/pedidos/desde-carrito/1
 ```
 
 Esperado:
@@ -563,7 +563,7 @@ El pedido se genera desde el carrito, el carrito cambia de estado, se registra h
 ## D6. Consultar estado del pedido
 
 ```http
-GET {{pedidos_url}}/api/pedidos/1/estado
+GET http://localhost:8086/api/pedidos/1/estado
 ```
 
 Esperado:
@@ -577,7 +577,7 @@ Esperado:
 ## D7. Cancelar pedido pendiente
 
 ```http
-PATCH {{pedidos_url}}/api/pedidos/1/cancelar
+PATCH http://localhost:8086/api/pedidos/1/cancelar
 ```
 
 Esperado:
@@ -595,7 +595,7 @@ Solo se permite cancelar pedidos en estado `PENDIENTE`.
 ## D8. Registrar venta presencial
 
 ```http
-POST {{pedidos_url}}/api/ventas/presencial
+POST http://localhost:8086/api/ventas/presencial
 ```
 
 Body:
@@ -629,7 +629,7 @@ Guardar `idVenta`.
 ## D9. Generar factura
 
 ```http
-POST {{pedidos_url}}/api/ventas/1/factura
+POST http://localhost:8086/api/ventas/1/factura
 ```
 
 Esperado:
@@ -645,7 +645,7 @@ Esperado:
 Ejecutar nuevamente:
 
 ```http
-POST {{pedidos_url}}/api/ventas/1/factura
+POST http://localhost:8086/api/ventas/1/factura
 ```
 
 Esperado:
@@ -664,7 +664,7 @@ La regla evita generar dos facturas para la misma venta. Se demuestra regla de n
 ## E1. Crear proveedor
 
 ```http
-POST {{logistica_url}}/api/envios/proveedores
+POST http://localhost:8087/api/envios/proveedores
 ```
 
 Body:
@@ -693,7 +693,7 @@ Esperado:
 ## E2. Crear ruta
 
 ```http
-POST {{logistica_url}}/api/rutas
+POST http://localhost:8087/api/rutas
 ```
 
 Body:
@@ -715,7 +715,7 @@ Esperado:
 ## E3. Crear envío
 
 ```http
-POST {{logistica_url}}/api/envios
+POST http://localhost:8087/api/envios
 ```
 
 Body:
@@ -742,7 +742,7 @@ Esperado:
 ## E4. Consultar envíos
 
 ```http
-GET {{logistica_url}}/api/envios
+GET http://localhost:8087/api/envios
 ```
 
 Esperado:
@@ -756,7 +756,7 @@ Esperado:
 ## E5. Cambiar estado de envío
 
 ```http
-PATCH {{logistica_url}}/api/envios/1/estado
+PATCH http://localhost:8087/api/envios/1/estado
 ```
 
 Body:
@@ -783,7 +783,7 @@ Logística separa envíos, rutas, proveedores y seguimiento del flujo comercial.
 ## F1. Crear tienda
 
 ```http
-POST {{admin_url}}/api/admin/tiendas
+POST http://localhost:8088/api/admin/tiendas
 ```
 
 Body:
@@ -808,7 +808,7 @@ Esperado:
 ## F2. Listar tiendas
 
 ```http
-GET {{admin_url}}/api/admin/tiendas
+GET http://localhost:8088/api/admin/tiendas
 ```
 
 Esperado:
@@ -822,7 +822,7 @@ Esperado:
 ## F3. Crear ticket de soporte
 
 ```http
-POST {{admin_url}}/api/soporte/tickets
+POST http://localhost:8088/api/soporte/tickets
 ```
 
 Body:
@@ -848,7 +848,7 @@ Esperado:
 ## F4. Responder ticket
 
 ```http
-POST {{admin_url}}/api/soporte/tickets/1/respuestas
+POST http://localhost:8088/api/soporte/tickets/1/respuestas
 ```
 
 Body:
@@ -871,7 +871,7 @@ Esperado:
 ## F5. Error por correo inválido
 
 ```http
-POST {{admin_url}}/api/soporte/tickets
+POST http://localhost:8088/api/soporte/tickets
 ```
 
 Body:
@@ -899,7 +899,7 @@ Esperado:
 ## G1. Crear reporte
 
 ```http
-POST {{reportes_url}}/api/reportes
+POST http://localhost:8089/api/v1/reportes
 ```
 
 Body:
@@ -926,7 +926,7 @@ Esperado:
 ## G2. Listar reportes
 
 ```http
-GET {{reportes_url}}/api/reportes
+GET http://localhost:8089/api/v1/reportes
 ```
 
 Esperado:
@@ -940,7 +940,7 @@ Esperado:
 ## G3. Crear KPI
 
 ```http
-POST {{reportes_url}}/api/kpi
+POST http://localhost:8089/api/v1/kpis
 ```
 
 Body:
@@ -964,7 +964,7 @@ Esperado:
 ## G4. Consultar KPIs
 
 ```http
-GET {{reportes_url}}/api/kpi
+GET http://localhost:8089/api/v1/kpis
 ```
 
 Esperado:
@@ -980,7 +980,7 @@ Esperado:
 ## H1. Registro de usuario vía Gateway
 
 ```http
-POST {{gateway_url}}/api/usuarios/registro
+POST http://localhost:8081/api/usuarios/registro
 ```
 
 Body:
@@ -1004,7 +1004,7 @@ Esperado:
 ## H2. Listar productos vía Gateway
 
 ```http
-GET {{gateway_url}}/api/productos
+GET http://localhost:8081/api/productos
 ```
 
 Esperado:
@@ -1018,7 +1018,7 @@ Esperado:
 ## H3. Listar pedidos vía Gateway
 
 ```http
-GET {{gateway_url}}/api/pedidos
+GET http://localhost:8081/api/pedidos
 ```
 
 Esperado:
@@ -1125,7 +1125,7 @@ log.info("Generando factura para venta {}", idVenta);
 Luego ejecutar:
 
 ```http
-POST {{pedidos_url}}/api/ventas/1/factura
+POST http://localhost:8086/api/ventas/1/factura
 ```
 
 Mostrar el log en consola.

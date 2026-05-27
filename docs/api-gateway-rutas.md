@@ -20,22 +20,22 @@ http://localhost:8081
 
 ## Rutas principales
 
-| Ruta Gateway     | Microservicio destino          | Responsabilidad                                         |
-| ---------------- | ------------------------------ | ------------------------------------------------------- |
-| `/auth/**`       | MS Usuarios e Identidad        | Login y autenticación                                   |
-| `/usuarios/**`   | MS Usuarios e Identidad        | Usuarios, clientes, usuarios internos, roles y permisos |
-| `/productos/**`  | MS Catálogo                    | Productos ecológicos                                    |
-| `/categorias/**` | MS Catálogo                    | Categorías de productos                                 |
-| `/inventario/**` | MS Inventario y Abastecimiento | Inventario por tienda                                   |
-| `/stock/**`      | MS Inventario y Abastecimiento | Stock, reservas y movimientos                           |
-| `/pedidos/**`    | MS Pedidos y Ventas            | Pedidos y carrito                                       |
-| `/ventas/**`     | MS Pedidos y Ventas            | Ventas, pagos y facturación                             |
-| `/envios/**`     | MS Logística de Envíos         | Envíos y seguimiento                                    |
-| `/rutas/**`      | MS Logística de Envíos         | Rutas de entrega                                        |
-| `/admin/**`      | MS Administración y Soporte    | Administración interna                                  |
-| `/soporte/**`    | MS Administración y Soporte    | Tickets y soporte                                       |
-| `/reportes/**`   | MS Reportes                    | Reportes ejecutivos                                     |
-| `/kpi/**`        | MS Reportes                    | Indicadores KPI                                         |
+| Ruta Gateway         | Microservicio destino          | Responsabilidad                                         |
+| -------------------- | ------------------------------ | ------------------------------------------------------- |
+| `/api/auth/**`       | MS Usuarios e Identidad        | Login y autenticación                                   |
+| `/api/usuarios/**`   | MS Usuarios e Identidad        | Usuarios, clientes, usuarios internos, roles y permisos |
+| `/api/productos/**`  | MS Catálogo                    | Productos ecológicos                                    |
+| `/api/categorias/**` | MS Catálogo                    | Categorías de productos                                 |
+| `/api/inventario/**` | MS Inventario y Abastecimiento | Inventario por tienda                                   |
+| `/api/stock/**`      | MS Inventario y Abastecimiento | Stock, reservas y movimientos                           |
+| `/api/pedidos/**`    | MS Pedidos y Ventas            | Pedidos y carrito                                       |
+| `/api/ventas/**`     | MS Pedidos y Ventas            | Ventas, pagos y facturación                             |
+| `/api/envios/**`     | MS Logística de Envíos         | Envíos y seguimiento                                    |
+| `/api/rutas/**`      | MS Logística de Envíos         | Rutas de entrega                                        |
+| `/api/admin/**`      | MS Administración y Soporte    | Administración interna                                  |
+| `/api/soporte/**`    | MS Administración y Soporte    | Tickets y soporte                                       |
+| `/api/v1/reportes/**` | MS Reportes                    | Reportes ejecutivos                                     |
+| `/api/v1/kpis/**`    | MS Reportes                    | Indicadores KPI                                         |
 
 ## Justificación técnica
 

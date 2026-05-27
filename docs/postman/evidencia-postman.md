@@ -831,8 +831,8 @@ Resultado: Estado del ticket actualizado correctamente.
 ### Endpoint 1: Crear reporte
 
 **Método:** `POST`
-**URL directa:** `{{reportes_url}}/api/reportes`
-**URL Gateway sugerida:** `{{gateway_url}}/reportes`
+**URL directa:** `{{reportes_url}}/api/v1/reportes`
+**URL Gateway sugerida:** `{{gateway_url}}/api/v1/reportes`
 **Descripción:** Genera un reporte de negocio.
 
 Body de ejemplo:
@@ -860,8 +860,8 @@ Resultado: Reporte creado correctamente.
 ### Endpoint 2: Obtener reporte por ID
 
 **Método:** `GET`
-**URL directa:** `{{reportes_url}}/api/reportes/{id}`
-**URL Gateway sugerida:** `{{gateway_url}}/reportes/{id}`
+**URL directa:** `{{reportes_url}}/api/v1/reportes/{id}`
+**URL Gateway sugerida:** `{{gateway_url}}/api/v1/reportes/{id}`
 **Descripción:** Consulta un reporte generado.
 
 Resultado esperado:
@@ -876,8 +876,8 @@ Resultado: Reporte obtenido correctamente.
 ### Endpoint 3: Crear KPI
 
 **Método:** `POST`
-**URL directa:** `{{reportes_url}}/api/kpi`
-**URL Gateway sugerida:** `{{gateway_url}}/kpi`
+**URL directa:** `{{reportes_url}}/api/v1/kpis`
+**URL Gateway sugerida:** `{{gateway_url}}/api/v1/kpis`
 **Descripción:** Registra un indicador KPI.
 
 Body de ejemplo:
@@ -902,8 +902,8 @@ Resultado: KPI registrado correctamente.
 ### Endpoint 4: Consultar KPIs por tipo
 
 **Método:** `GET`
-**URL directa:** `{{reportes_url}}/api/kpi/tipo/VENTAS_TOTALES`
-**URL Gateway sugerida:** `{{gateway_url}}/kpi/tipo/VENTAS_TOTALES`
+**URL directa:** `{{reportes_url}}/api/v1/kpis/tipo/VENTAS_TOTALES`
+**URL Gateway sugerida:** `{{gateway_url}}/api/v1/kpis/tipo/VENTAS_TOTALES`
 **Descripción:** Consulta indicadores KPI por tipo.
 
 Resultado esperado:

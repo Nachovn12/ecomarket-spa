@@ -18,12 +18,12 @@
 
 ## 2. Integrantes del equipo
 
-| Integrante        | Rol o responsabilidad principal                                                                                                                                                                                                                                                                                                                      |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Benjamín Espinoza | Desarrollo del MS Logística de Envíos. Implementó funcionalidades de envíos, proveedores, rutas de entrega, seguimiento de envíos, cambios de estado, validaciones, respuestas HATEOAS, pruebas Postman y pruebas JUnit asociadas al microservicio.                                                                                                  |
-| Benjamín Flores   | Desarrollo del MS Pedidos y Ventas. Implementó funcionalidades del flujo comercial, incluyendo carrito, pedidos, ventas presenciales, pagos, facturas, cupones, devoluciones, reclamaciones, validación de estados, documentación del flujo comercial y pruebas del microservicio.                                                                   |
-| Benjamín Palma    | Desarrollo del MS Reportes. Implementó reportes de ventas, inventario y rendimiento de tienda, indicadores KPI, exportación de reportes, consultas base, validaciones con DTOs, manejo de errores, HATEOAS y pruebas JUnit del microservicio.                                                                                                        |
-| Ignacio Valeria   | Desarrollo y documentación técnica del proyecto. Participó en MS Usuarios e Identidad y MS Administración y Soporte, además de integración en `develop`, revisión de Pull Requests, validación de builds/tests, documentación de arquitectura, bases de datos, comunicación REST, Postman, Git Flow y preparación de evidencias para la entrega EP2. |
+| Integrante        | Microservicio(s) asignado(s) en Jira                              | Rol o responsabilidad principal                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ----------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Benjamín Espinoza | MS Logística de Envíos, MS Catálogo                               | Desarrollo de los microservicios de logística y catálogo. Implementó funcionalidades asociadas a envíos, rutas, proveedores, seguimiento de envíos, productos, categorías, reseñas y búsqueda. Participó en validaciones de negocio, respuestas HATEOAS, pruebas manuales con Postman y pruebas unitarias con JUnit de sus microservicios asignados.                                                                                                                                                                                                                                  |
+| Benjamín Flores   | MS Pedidos y Ventas                                               | Desarrollo del microservicio comercial. Implementó funcionalidades relacionadas con carrito de compras, pedidos, ventas presenciales, pagos, facturas, cupones, devoluciones, reclamaciones, validación de estados, documentación del flujo comercial, pruebas manuales con Postman y pruebas unitarias del microservicio.                                                                                                                                                                                                                                                                 |
+| Benjamín Palma    | MS Inventario y Abastecimiento, MS Reportes                       | Desarrollo de los microservicios de inventario y reportes. Implementó funcionalidades asociadas a stock, reservas, movimientos de inventario, alertas, reportes de ventas, reportes de inventario, rendimiento de tienda, indicadores KPI, exportación de reportes, validaciones mediante DTOs, manejo de errores, respuestas HATEOAS y pruebas unitarias con JUnit.                                                                                                                                                                                                                  |
+| Ignacio Valeria   | MS Usuarios e Identidad, MS Administración y Soporte, API Gateway | Desarrollo de los microservicios de usuarios, identidad, administración y soporte, además de la configuración del API Gateway. Implementó funcionalidades asociadas a registro, login, roles, permisos, tiendas, tickets de soporte, alertas, métricas y respaldos. Participó en la integración en la rama `develop`, revisión de Pull Requests, validación de builds/tests, documentación de arquitectura, comunicación REST, Postman, Git Flow y preparación de evidencias técnicas para la entrega EP2. |
 
 ---
 
@@ -47,33 +47,13 @@ Desarrollar un backend compuesto por microservicios independientes para EcoMarke
 
 El sistema se compone de siete microservicios de negocio y un API Gateway.
 
-```text
-Cliente Web / Postman / Caja POS
-              |
-              v
-        API Gateway
-              |
-              v
-+-------------+----------------+----------------+----------------+
-|             |                |                |                |
-v             v                v                v                v
-MS Usuarios   MS Catálogo      MS Inventario    MS Pedidos       MS Logística
-e Identidad                                    y Ventas          de Envíos
-|             |                |                |                |
-v             v                v                v                v
-BD Usuarios   BD Catálogo      BD Inventario    BD Ventas        BD Logística
+### 5.1 Diagrama de arquitectura
 
-              |
-              v
-+-----------------------------+-----------------------------+
-|                             |                             |
-v                             v                             v
-MS Administración             MS Reportes                   Otros clientes
-y Soporte
-|                             |
-v                             v
-BD Admin                      BD Reportes
-```
+![Diagrama de arquitectura de microservicios EcoMarket](docs/diagramas/arquitectura/diagrama-arquitectura-microservicios-ecomarket.png)
+
+### 5.2 Diagrama de despliegue
+
+![Diagrama de despliegue backend EcoMarket](docs/diagramas/despliegue/diagrama-despliegue-backend-ecomarket.png)
 
 ---
 
@@ -381,16 +361,16 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
 ## 13. Puertos sugeridos
 
-| Componente | Puerto configurado |
-|---|---:|
-| API Gateway | 8081 |
-| MS Usuarios e Identidad | 8083 |
-| MS Catálogo | 8084 |
-| MS Inventario y Abastecimiento | 8085 |
-| MS Pedidos y Ventas | 8086 |
-| MS Logística de Envíos | 8087 |
-| MS Administración y Soporte | 8088 |
-| MS Reportes | 8089 |
+| Componente                     | Puerto configurado |
+| ------------------------------ | -----------------: |
+| API Gateway                    |               8081 |
+| MS Usuarios e Identidad        |               8083 |
+| MS Catálogo                    |               8084 |
+| MS Inventario y Abastecimiento |               8085 |
+| MS Pedidos y Ventas            |               8086 |
+| MS Logística de Envíos         |               8087 |
+| MS Administración y Soporte    |               8088 |
+| MS Reportes                    |               8089 |
 
 Los puertos fueron configurados considerando la ejecución local y los equipos del instituto, donde algunos puertos comunes como `8080` y `8082` pueden estar ocupados por otros servicios.
 
@@ -581,37 +561,37 @@ Para probar el sistema con Postman:
 
 Variables sugeridas en Postman:
 
-| Variable | Valor sugerido |
-|---|---|
-| `gateway_url` | `http://localhost:8081` |
-| `usuarios_url` | `http://localhost:8083` |
-| `catalogo_url` | `http://localhost:8084` |
+| Variable         | Valor sugerido          |
+| ---------------- | ----------------------- |
+| `gateway_url`    | `http://localhost:8081` |
+| `usuarios_url`   | `http://localhost:8083` |
+| `catalogo_url`   | `http://localhost:8084` |
 | `inventario_url` | `http://localhost:8085` |
-| `pedidos_url` | `http://localhost:8086` |
-| `logistica_url` | `http://localhost:8087` |
-| `admin_url` | `http://localhost:8088` |
-| `reportes_url` | `http://localhost:8089` |
+| `pedidos_url`    | `http://localhost:8086` |
+| `logistica_url`  | `http://localhost:8087` |
+| `admin_url`      | `http://localhost:8088` |
+| `reportes_url`   | `http://localhost:8089` |
 
 ---
 
 ## 19. Rutas principales del API Gateway
 
-| Ruta Gateway  | Microservicio destino          |
-| ------------- | ------------------------------ |
-| `/auth`       | MS Usuarios e Identidad        |
-| `/usuarios`   | MS Usuarios e Identidad        |
-| `/productos`  | MS Catálogo                    |
-| `/categorias` | MS Catálogo                    |
-| `/inventario` | MS Inventario y Abastecimiento |
-| `/stock`      | MS Inventario y Abastecimiento |
-| `/pedidos`    | MS Pedidos y Ventas            |
-| `/ventas`     | MS Pedidos y Ventas            |
-| `/envios`     | MS Logística de Envíos         |
-| `/rutas`      | MS Logística de Envíos         |
-| `/admin`      | MS Administración y Soporte    |
-| `/soporte`    | MS Administración y Soporte    |
-| `/reportes`   | MS Reportes                    |
-| `/kpi`        | MS Reportes                    |
+| Ruta Gateway      | Microservicio destino          |
+| ----------------- | ------------------------------ |
+| `/api/auth`       | MS Usuarios e Identidad        |
+| `/api/usuarios`   | MS Usuarios e Identidad        |
+| `/api/productos`  | MS Catálogo                    |
+| `/api/categorias` | MS Catálogo                    |
+| `/api/inventario` | MS Inventario y Abastecimiento |
+| `/api/stock`      | MS Inventario y Abastecimiento |
+| `/api/pedidos`    | MS Pedidos y Ventas            |
+| `/api/ventas`     | MS Pedidos y Ventas            |
+| `/api/envios`     | MS Logística de Envíos         |
+| `/api/rutas`      | MS Logística de Envíos         |
+| `/api/admin`      | MS Administración y Soporte    |
+| `/api/soporte`    | MS Administración y Soporte    |
+| `/api/v1/reportes` | MS Reportes                   |
+| `/api/v1/kpis`    | MS Reportes                    |
 
 La documentación específica de rutas se encuentra en:
 
@@ -691,10 +671,10 @@ docs/api-gateway-rutas.md
 
 | Método | Ruta                   | Descripción             |
 | ------ | ---------------------- | ----------------------- |
-| POST   | `/api/reportes`        | Crear reporte           |
-| GET    | `/api/reportes/{id}`   | Consultar reporte       |
-| POST   | `/api/kpi`             | Registrar KPI           |
-| GET    | `/api/kpi/tipo/{tipo}` | Consultar KPIs por tipo |
+| POST   | `/api/v1/reportes`        | Crear reporte           |
+| GET    | `/api/v1/reportes/{id}`   | Consultar reporte       |
+| POST   | `/api/v1/kpis`            | Registrar KPI           |
+| GET    | `/api/v1/kpis/tipo/{tipo}` | Consultar KPIs por tipo |
 
 ---
 
