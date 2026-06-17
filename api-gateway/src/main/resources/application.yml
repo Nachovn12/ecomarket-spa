@@ -1,0 +1,125 @@
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: ms-usuarios-auth
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/auth/login,/api/auth/login/**
+
+            - id: ms-usuarios-identidad
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/usuarios/registro,/api/usuarios/clientes/**
+
+            - id: ms-catalogo-productos
+              uri: http://localhost:8084
+              predicates:
+                - Path=/api/productos,/api/productos/**
+
+            - id: ms-catalogo-categorias
+              uri: http://localhost:8084
+              predicates:
+                - Path=/api/categorias,/api/categorias/**
+
+            - id: ms-inventario
+              uri: http://localhost:8085
+              predicates:
+                - Path=/api/inventario,/api/inventario/**
+
+            - id: ms-inventario-productos
+              uri: http://localhost:8085
+              predicates:
+                - Path=/api/inventario/productos,/api/inventario/productos/**
+
+            - id: ms-pedidos
+              uri: http://localhost:8086
+              predicates:
+                - Path=/api/pedidos,/api/pedidos/**
+
+            - id: ms-ventas
+              uri: http://localhost:8086
+              predicates:
+                - Path=/api/ventas,/api/ventas/**
+
+            - id: ms-envios
+              uri: http://localhost:8087
+              predicates:
+                - Path=/api/envios,/api/envios/**
+
+            - id: ms-rutas
+              uri: http://localhost:8087
+              predicates:
+                - Path=/api/rutas,/api/rutas/**
+
+            - id: ms-admin
+              uri: http://localhost:8088
+              predicates:
+                - Path=/api/admin/tiendas,/api/admin/tiendas/**,/api/admin/metricas,/api/admin/metricas/**,/api/admin/alertas,/api/admin/alertas/**,/api/admin/respaldos,/api/admin/respaldos/**
+
+            - id: ms-soporte
+              uri: http://localhost:8088
+              predicates:
+                - Path=/api/soporte/tickets,/api/soporte/tickets/**
+
+            - id: ms-reportes
+              uri: http://localhost:8090
+              predicates:
+                - Path=/api/v1/reportes,/api/v1/reportes/**
+
+            - id: ms-kpis
+              uri: http://localhost:8090
+              predicates:
+                - Path=/api/v1/kpis,/api/v1/kpis/**
+
+            - id: ms-catalogo-resenas
+              uri: http://localhost:8084
+              predicates:
+                - Path=/api/resenas,/api/resenas/**
+
+            - id: ms-pedidos-devoluciones
+              uri: http://localhost:8086
+              predicates:
+                - Path=/api/pedidos/devoluciones,/api/pedidos/devoluciones/**
+
+            - id: ms-pedidos-reclamaciones
+              uri: http://localhost:8086
+              predicates:
+                - Path=/api/pedidos/reclamaciones,/api/pedidos/reclamaciones/**
+    discovery:
+      enabled: false
+
+  main:
+    web-application-type: reactive
+
+eureka:
+  client:
+    enabled: false
+  instance:
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+
+server:
+  port: 8081
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
+    org.springframework.web: INFO
+    reactor:
+      netty: WARN
+    org.springframework.cloud.gateway.server.webflux: INFO

@@ -1,0 +1,10 @@
+spring:
+  cloud:
+    gateway:
+      # Las rutas se cargan del application.yml principal via Spring Boot.
+      # Este yml de test solo aisla la app para arrancar rapido.
+      discovery:
+        locator:
+          enabled: false
+  main:
+    web-application-type: reactive

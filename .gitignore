@@ -9,3 +9,10 @@ node_modules/
 *.jar
 *.war
 logs-runtime/
+
+# Jira automation logs
+scripts/jira/*.log
+
+# Local env files (API tokens, secrets)
+.env.local
+scripts/jira/.env.local
