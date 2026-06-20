@@ -1,0 +1,64 @@
+﻿{
+    "info": {
+        "name": "EcoMarket-Usuarios-Catalogo",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "ms-usuarios",
+            "item": [
+                {
+                    "name": "POST /api/auth/login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });",
+                                    "var jsonData = pm.response.json();",
+                                    "if(jsonData.token) { pm.environment.set(\"token_jwt\", jsonData.token); }"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+                        "body": { "mode": "raw", "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"admin123\"\r\n}" },
+                        "url": { "raw": "{{base_url_gateway}}/api/auth/login", "host": [ "{{base_url_gateway}}" ], "path": [ "api", "auth", "login" ] }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "ms-catalogo",
+            "item": [
+                {
+                    "name": "GET /api/productos",
+                    "event": [ { "listen": "test", "script": { "exec": [ "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });", "pm.test(\"Tiene _links.self\", function () { var jsonData = pm.response.json(); pm.expect(jsonData).to.have.property('_links'); pm.expect(jsonData._links).to.have.property('self'); });" ], "type": "text/javascript" } } ],
+                    "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{token_jwt}}" } ], "url": { "raw": "{{base_url_gateway}}/api/productos", "host": [ "{{base_url_gateway}}" ], "path": [ "api", "productos" ] } }
+                },
+                {
+                    "name": "GET /api/productos/{id}",
+                    "event": [ { "listen": "test", "script": { "exec": [ "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });", "pm.test(\"Tiene _links.self\", function () { var jsonData = pm.response.json(); pm.expect(jsonData).to.have.property('_links'); pm.expect(jsonData._links).to.have.property('self'); });" ], "type": "text/javascript" } } ],
+                    "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{token_jwt}}" } ], "url": { "raw": "{{base_url_gateway}}/api/productos/1", "host": [ "{{base_url_gateway}}" ], "path": [ "api", "productos", "1" ] } }
+                },
+                {
+                    "name": "GET /api/categorias",
+                    "event": [ { "listen": "test", "script": { "exec": [ "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });" ], "type": "text/javascript" } } ],
+                    "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{token_jwt}}" } ], "url": { "raw": "{{base_url_gateway}}/api/categorias", "host": [ "{{base_url_gateway}}" ], "path": [ "api", "categorias" ] } }
+                },
+                {
+                    "name": "GET /api/productos?categoria=eco",
+                    "event": [ { "listen": "test", "script": { "exec": [ "pm.test(\"Status code is 200\", function () { pm.response.to.have.status(200); });" ], "type": "text/javascript" } } ],
+                    "request": { "method": "GET", "header": [ { "key": "Authorization", "value": "Bearer {{token_jwt}}" } ], "url": { "raw": "{{base_url_gateway}}/api/productos", "host": [ "{{base_url_gateway}}" ], "path": [ "api", "productos" ], "query": [ { "key": "categoria", "value": "eco" } ] } }
+                }
+            ]
+        }
+    ],
+    "variable": [
+        { "key": "base_url_gateway", "value": "http://localhost:8081", "type": "string" },
+        { "key": "token_jwt", "value": "", "type": "string" }
+    ]
+}
