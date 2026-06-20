@@ -1,0 +1,21 @@
+[1mdiff --git a/ms-pedidos-ventas/docs/postman/evidencia-s4-benjamin-flores.md b/ms-pedidos-ventas/docs/postman/evidencia-s4-benjamin-flores.md[m
+[1mindex 98311e3..8fee91d 100644[m
+[1m--- a/ms-pedidos-ventas/docs/postman/evidencia-s4-benjamin-flores.md[m
+[1m+++ b/ms-pedidos-ventas/docs/postman/evidencia-s4-benjamin-flores.md[m
+[36m@@ -40,7 +40,6 @@[m
+ ```json[m
+ {[m
+   "idCliente": 1,[m
+[31m-  "idVenta": 1,[m
+   "motivo": "Producto defectuoso"[m
+ }[m
+ ```[m
+[36m@@ -124,6 +123,6 @@[m
+ [m
+ Las capturas reales de Postman deben adjuntarse en Miro o en la carpeta de evidencias del equipo para respaldar la ejecución de estos endpoints durante la defensa.[m
+ [m
+[31m-## 9. Alcance académico[m
+[32m+[m[32m## Alcance académico[m
+ [m
+ Este documento es de carácter académico. La integración con el SII no está implementada. La entidad Factura representa el concepto dentro del sistema EcoMarket SPA.[m
+\ No newline at end of file[m
