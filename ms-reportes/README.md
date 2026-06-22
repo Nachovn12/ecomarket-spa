@@ -83,10 +83,11 @@ cd .\ms-reportes\
 .\mvnw.cmd test
 ```
 
-O desde la raiz:
+O entrando al directorio (recomendado):
 
 ```powershell
-.\ms-reportes\mvnw.cmd -f ms-reportes/pom.xml clean test
+cd .\ms-reportes\
+.\mvnw.cmd clean test
 ```
 
 ## Endpoints principales

@@ -83,10 +83,11 @@ cd .\ms-administracion-soporte\
 .\mvnw.cmd test
 ```
 
-O desde la raiz:
+O entrando al directorio (recomendado):
 
 ```powershell
-.\ms-administracion-soporte\mvnw.cmd -f ms-administracion-soporte/pom.xml clean test
+cd .\ms-administracion-soporte\
+.\mvnw.cmd clean test
 ```
 
 ## Endpoints principales

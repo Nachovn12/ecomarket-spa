@@ -90,10 +90,11 @@ cd .\api-gateway\
 .\mvnw.cmd test
 ```
 
-O desde la raiz:
+O entrando al directorio (recomendado):
 
 ```powershell
-.\api-gateway\mvnw.cmd -f api-gateway/pom.xml clean test
+cd .\api-gateway\
+.\mvnw.cmd clean test
 ```
 
 ## Orden recomendado de ejecucion

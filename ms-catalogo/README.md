@@ -81,10 +81,11 @@ cd .\ms-catalogo\
 .\mvnw.cmd test
 ```
 
-O desde la raiz:
+O entrando al directorio (recomendado):
 
 ```powershell
-.\ms-catalogo\mvnw.cmd -f ms-catalogo/pom.xml clean test
+cd .\ms-catalogo\
+.\mvnw.cmd clean test
 ```
 
 ## Endpoints principales
