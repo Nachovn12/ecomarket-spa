@@ -25,4 +25,10 @@ class MsAdministracionSoporteApplicationTests {
 		// UsuarioInternoClientService usa RestTemplate pero no realiza
 		// Llamadas HTTP durante el arranque, por lo que el test es seguro.
 	}
+
+    // SE AGREGA PARA EL 100%
+    @Test
+    void mainEjecutaAplicacion() {
+        MsAdministracionSoporteApplication.main(new String[] {"--spring.profiles.active=test"});
+    }
 }

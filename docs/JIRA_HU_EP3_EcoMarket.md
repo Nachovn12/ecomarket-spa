@@ -1,4 +1,4 @@
-﻿# JIRA_HU_EP3_EcoMarket.md — Datos completos de Jira (formato profesional real)
+# JIRA_HU_EP3_EcoMarket.md — Datos completos de Jira (formato profesional real)
 
 **Proyecto:** HU (EcoMarket SPA) — board 67
 **Sprint:** S5 - Pruebas Unitarias EP3 (15-21 jun 2026)
@@ -14,6 +14,14 @@
 > **Como usarlo:** Abre cada bloque, abre la issue correspondiente en Jira,
 > y actualiza los campos segun la tabla de mapeo de abajo.
 
+> **DECISION GLOBAL EP3 - HATEOAS REMOVIDO:** Por instruccion explicita del
+> profesor, los 7 microservicios NO usan HATEOAS. Los controllers devuelven
+> DTOs directos (ResponseEntity<DTO> o ResponseEntity<List<DTO>>) sin
+> envoltorios EntityModel/CollectionModel y sin _links/_embedded. Todos los
+> ACs y sub-tasks que mencionaban HATEOAS en versiones previas de este doc
+> fueron actualizados a "Validacion JSON puro / DTO directo". NO reintroducir
+> la dependencia spring-boot-starter-hateoas ni importar
+> org.springframework.hateoas.* en ningun MS.
 ## Tabla de mapeo rapido (para no equivocarse)
 
 | Issue | Asignado actual | SP a poner | Original Estimate (h) | Sprint | Labels actuales |
@@ -238,14 +246,14 @@ AC-5: mvn test BUILD SUCCESS
 
 
 ===========================================
-ISSUE: HU-63 — Pruebas MS Catalogo (Producto, Categoria, Resena)
+ISSUE: HU-63 — Pruebas MS Catalogo (CatalogoService + Producto/Categoria/Resena)
 ===========================================
 
 **CAMPOS A ACTUALIZAR:**
 
 | Campo | Valor |
 |---|---|
-| Summary (ya esta) | [EP3] Pruebas MS Catalogo (Producto, Categoria, Resena) |
+| Summary (ya esta) | [EP3] Pruebas MS Catalogo (CatalogoService + Producto/Categoria/Resena) |
 | Issue Type (ya esta) | Story |
 | Priority (ya esta) | High |
 | Assignee (ya esta) | Benjamin Espinoza |
@@ -253,7 +261,7 @@ ISSUE: HU-63 — Pruebas MS Catalogo (Producto, Categoria, Resena)
 | Epic Link (ya esta) | HU-60 EP-08 Pruebas Unitarias |
 | **Story point estimate** | **5** |
 | **Original estimate** | **8h** |
-| Labels (recomendado) | ep3, tests, ms-catalogo, hateoas, mockito |
+| Labels (recomendado) | ep3, tests, ms-catalogo, mockito |
 
 **SUB-TASKS A CREAR:**
 
@@ -267,13 +275,13 @@ Sub-task 2: Crear ProductoControllerTest
   Summary: test(ms-catalogo): ProductoControllerTest con @WebMvcTest
   Story point estimate: 1
   Original estimate: 2h
-  Description: Cubrir AC-2 (controller con @WebMvcTest + @MockitoBean), AC-3 (CRUD), AC-7 (_links.self en GET/POST/PUT)
+  Description: Cubrir AC-2 (controller con @WebMvcTest + @MockitoBean), AC-3 (CRUD), AC-7 (DTO directo en GET/POST/PUT, sin _links)
 
 Sub-task 3: Crear CategoriaControllerTest
   Summary: test(ms-catalogo): CategoriaControllerTest con @WebMvcTest
   Story point estimate: 1
   Original estimate: 1h
-  Description: Cubrir AC-2 (controller), AC-3 (CRUD de categorias), AC-7 (_embedded en colecciones)
+  Description: Cubrir AC-2 (controller), AC-3 (CRUD de categorias), AC-7 (List<DTO> directo en colecciones, sin _embedded)
 
 Sub-task 4: Crear ResenaControllerTest
   Summary: test(ms-catalogo): ResenaControllerTest con regla de "solo productos comprados"
@@ -321,9 +329,9 @@ AC-6: Promedio de calificaciones
 - Cuando se calcula el promedio
 - Entonces el resultado es 4.0 con HALF_UP a 1 decimal
 
-AC-7: Validacion HATEOAS
+AC-7: Validacion JSON puro / DTO directo
 - Cuando se invoca GET, POST, PUT
-- Entonces _links.self en respuestas, _embedded en colecciones
+- Entonces el JSON expone DTOs directos (sin _links ni _embedded)
 
 AC-8: Cobertura JaCoCo >= 80%
 - Cuando se ejecuta mvn test con JaCoCo
@@ -354,7 +362,7 @@ ISSUE: HU-64 - Pruebas MS Logistica de Envios (LogisticaService + 3 controllers 
 | Sprint (ya esta) | S5 - Pruebas Unitarias EP3 |
 | Epic Link (ya esta) | HU-60 EP-08 Pruebas Unitarias |
 | Story point estimate | 5 |
-| Labels (recomendado) | ep3, tests, ms-logistica-envios, hateoas, mockito, eta-calculator |
+| Labels (recomendado) | ep3, tests, ms-logistica-envios, mockito, eta-calculator |
 
 **ESTRUCTURA REAL DEL MS (verificada contra ms-logistica-envios/src/main/java/com/ecomarket/logistica/):**
 - service/LogisticaService.java (UN SOLO service, no 4 separados)
@@ -375,10 +383,10 @@ Sub-task 1: Crear LogisticaServiceTest
   Description: Cubrir AC-1 (LogisticaService con @ExtendWith(MockitoExtension.class) + @Mock de los 4 repositorios + @Mock de PedidosClientService). Validar AC-3 (asignacion de envio a proveedor con menor tiempo estimado) y AC-4 (calculo de ruta optima con distancia total en km, EtaCalculator). Dado que LogisticaService es unico, este test cubre las 4 entidades (Envio, Proveedor, RutaEntrega, SeguimientoEnvio) en una sola clase con multiples @Nested.
 
 Sub-task 2: Crear 3 ControllerTest con @WebMvcTest
-  Summary: test(ms-logistica-envios): 3 ControllerTest con @WebMvcTest + @MockitoBean + HATEOAS
+  Summary: test(ms-logistica-envios): 3 ControllerTest con @WebMvcTest + @MockitoBean (DTO directo)
   Story point estimate: 2
   Original estimate: 3h
-  Description: Cubrir AC-2 (EnvioControllerTest, ProveedorControllerTest, RutaEntregaControllerTest con @WebMvcTest + @MockitoBean de LogisticaService). Validar AC-5 (_links.self en GET/POST/PUT, _embedded en colecciones). 3 archivos, no 4. Si los controllers delegan logica de seguimiento a LogisticaService, el test va por ahi.
+  Description: Cubrir AC-2 (EnvioControllerTest, ProveedorControllerTest, RutaEntregaControllerTest con @WebMvcTest + @MockitoBean de LogisticaService). Validar AC-5 (DTO directo en GET/POST/PUT, List<DTO> en colecciones, sin _links/_embedded). 3 archivos, no 4. Si los controllers delegan logica de seguimiento a LogisticaService, el test va por ahi.
 
 Sub-task 3: Crear EtaCalculatorTest
   Summary: test(ms-logistica-envios): EtaCalculatorTest para ruta optima por menor tiempo
@@ -420,9 +428,9 @@ AC-4: Calculo de ruta optima con EtaCalculator
 - Y con 1 sola parada retorna 0 km
 - Y con lista vacia lanza IllegalArgumentException
 
-AC-5: Validacion HATEOAS
+AC-5: Validacion JSON puro / DTO directo
 - Cuando se invocan GET/POST/PUT de Envio, Proveedor, RutaEntrega
-- Entonces las respuestas incluyen _links.self y las colecciones _embedded
+- Entonces el JSON expone DTOs directos (sin _links ni _embedded)
 
 AC-6: Cobertura JaCoCo >= 80%
 - Cuando se ejecuta mvn -f ms-logistica-envios/pom.xml test con jacoco:report
@@ -451,7 +459,7 @@ ISSUE: HU-65 — Pruebas MS Usuarios e Identidad (Auth, Usuario, RolPermiso, Usu
 | Epic Link (ya esta) | HU-60 EP-08 Pruebas Unitarias |
 | **Story point estimate** | **8** |
 | **Original estimate** | **12h** |
-| Labels (recomendado) | ep3, tests, ms-usuarios-identidad, hateoas, mockito, run, password |
+| Labels (recomendado) | ep3, tests, ms-usuarios-identidad, mockito, run, password |
 
 **SUB-TASKS A CREAR:**
 
@@ -477,13 +485,13 @@ Sub-task 4: Crear AuthControllerTest + UsuarioControllerTest
   Summary: test(ms-usuarios): 2 ControllerTest con @WebMvcTest
   Story point estimate: 1
   Original estimate: 2h
-  Description: Cubrir AC-2 (AuthControllerTest y UsuarioControllerTest con @WebMvcTest + @MockitoBean), AC-5 (_links.self)
+  Description: Cubrir AC-2 (AuthControllerTest y UsuarioControllerTest con @WebMvcTest + @MockitoBean), AC-5 (DTO directo, sin _links.self)
 
 Sub-task 5: Crear RolPermisoControllerTest + UsuarioInternoControllerTest
   Summary: test(ms-usuarios): 2 ControllerTest adicionales
   Story point estimate: 1
   Original estimate: 1h
-  Description: Cubrir AC-2 (RolPermisoControllerTest y UsuarioInternoControllerTest con @WebMvcTest), AC-5 (HATEOAS)
+  Description: Cubrir AC-2 (RolPermisoControllerTest y UsuarioInternoControllerTest con @WebMvcTest), AC-5 (DTO directo, sin HATEOAS)
 
 **DESCRIPCION:**
 
@@ -513,7 +521,7 @@ AC-4: Politica de password robusta
 - Cuando UsuarioService valida la password
 - Entonces acepta el valido y rechaza los que no cumplen
 
-AC-5: Validacion HATEOAS _links.self en GET, POST, PUT
+AC-5: Validacion JSON puro / DTO directo (sin _links.self) en GET, POST, PUT
 
 AC-6: Cobertura JaCoCo >= 80%
 
@@ -528,14 +536,14 @@ AC-6: Cobertura JaCoCo >= 80%
 
 
 ===========================================
-ISSUE: HU-66 — Pruebas MS Administracion y Soporte (Tienda, Metrica, Alerta, Respaldo, Ticket)
+ISSUE: HU-66 — Pruebas MS Administracion y Soporte (AdministracionSoporteService + Controller)
 ===========================================
 
 **CAMPOS A ACTUALIZAR:**
 
 | Campo | Valor |
 |---|---|
-| Summary (ya esta) | [EP3] Pruebas MS Administracion y Soporte (Tienda, Metrica, Alerta, Respaldo, Ticket) |
+| Summary (ya esta) | [EP3] Pruebas MS Administracion y Soporte (AdministracionSoporteService + Controller) |
 | Issue Type (ya esta) | Story |
 | Priority (ya esta) | High |
 | Assignee (ya esta) | Benjamin Flores |
@@ -543,7 +551,7 @@ ISSUE: HU-66 — Pruebas MS Administracion y Soporte (Tienda, Metrica, Alerta, R
 | Epic Link (ya esta) | HU-60 EP-08 Pruebas Unitarias |
 | **Story point estimate** | **5** |
 | **Original estimate** | **8h** |
-| Labels (recomendado) | ep3, tests, ms-administracion-soporte, hateoas, mockito |
+| Labels (recomendado) | ep3, tests, ms-administracion-soporte, mockito |
 
 **SUB-TASKS A CREAR:**
 
@@ -569,7 +577,7 @@ Sub-task 4: Crear 5 ControllerTest
   Summary: test(ms-administracion): 5 ControllerTest con @WebMvcTest
   Story point estimate: 1
   Original estimate: 2h
-  Description: Cubrir AC-2 (TiendaControllerTest, MetricaControllerTest, AlertaControllerTest, RespaldoControllerTest, TicketControllerTest con @WebMvcTest + @MockitoBean) y AC-5 (HATEOAS)
+  Description: Cubrir AC-2 (TiendaControllerTest, MetricaControllerTest, AlertaControllerTest, RespaldoControllerTest, TicketControllerTest con @WebMvcTest + @MockitoBean) y AC-5 (DTO directo, sin HATEOAS)
 
 **DESCRIPCION:**
 
@@ -599,7 +607,7 @@ AC-4: Restauracion de respaldo
 - Cuando se ejecuta la restauracion
 - Entonces se restauran los datos y se registra la operacion
 
-AC-5: Validacion HATEOAS _links.self, _embedded en colecciones
+AC-5: Validacion JSON puro / DTO directo (sin _links.self ni _embedded) en colecciones
 
 AC-6: Cobertura JaCoCo >= 80%
 
@@ -695,7 +703,7 @@ ISSUE: HU-68 — Pruebas MS Inventario y Abastecimiento (5 services + 5 controll
 | Epic Link (ya esta) | HU-60 EP-08 Pruebas Unitarias |
 | **Story point estimate** | **8** |
 | **Original estimate** | **12h** |
-| Labels (recomendado) | ep3, tests, ms-inventario-abastecimiento, hateoas, mockito |
+| Labels (recomendado) | ep3, tests, ms-inventario-abastecimiento, mockito |
 
 **SUB-TASKS A CREAR:**
 
@@ -721,7 +729,7 @@ Sub-task 4: Crear 5 ControllerTest
   Summary: test(ms-inventario): 5 ControllerTest con @WebMvcTest
   Story point estimate: 2
   Original estimate: 3h
-  Description: Cubrir AC-2 (InventarioControllerTest, AjusteStockControllerTest, ProductoControllerTest, PedidoReabastecimientoControllerTest, RecepcionMercanciaControllerTest con @WebMvcTest + @MockitoBean) y AC-6 (HATEOAS)
+  Description: Cubrir AC-2 (InventarioControllerTest, AjusteStockControllerTest, ProductoControllerTest, PedidoReabastecimientoControllerTest, RecepcionMercanciaControllerTest con @WebMvcTest + @MockitoBean) y AC-6 (DTO directo, sin HATEOAS)
 
 **DESCRIPCION:**
 
@@ -754,7 +762,7 @@ AC-5: Recepcion de mercancia
 - Cuando se confirma la recepcion
 - Entonces se actualiza el stock y se registra el movimiento
 
-AC-6: Validacion HATEOAS _links.self, _embedded
+AC-6: Validacion JSON puro / DTO directo (sin _links ni _embedded)
 
 AC-7: Cobertura JaCoCo >= 80%
 
@@ -784,7 +792,7 @@ ISSUE: HU-69 — Pruebas MS Reportes (ReporteService, KpiController, ReporteCont
 | Epic Link (ya esta) | HU-60 EP-08 Pruebas Unitarias |
 | **Story point estimate** | **5** |
 | **Original estimate** | **8h** |
-| Labels (recomendado) | ep3, tests, ms-reportes, hateoas, mockito, kpi |
+| Labels (recomendado) | ep3, tests, ms-reportes, mockito, kpi |
 
 **SUB-TASKS A CREAR:**
 
@@ -798,7 +806,7 @@ Sub-task 2: Crear ReporteControllerTest
   Summary: test(ms-reportes): ReporteControllerTest con @WebMvcTest
   Story point estimate: 1
   Original estimate: 2h
-  Description: Cubrir AC-2 (ReporteControllerTest con @WebMvcTest + @MockitoBean), AC-5 (_links.self, _embedded)
+  Description: Cubrir AC-2 (ReporteControllerTest con @WebMvcTest + @MockitoBean), AC-5 (DTO directo, sin _links ni _embedded)
 
 Sub-task 3: Crear KpiControllerTest
   Summary: test(ms-reportes): KpiControllerTest con validacion de KPIs
@@ -832,7 +840,7 @@ AC-4: Calculo de KPIs
 - Cuando se calcula conversion
 - Entonces el resultado es 25% con HALF_UP
 
-AC-5: Validacion HATEOAS _links.self, _embedded
+AC-5: Validacion JSON puro / DTO directo (sin _links.self ni _embedded)
 
 AC-6: Cobertura JaCoCo >= 80%
 
@@ -946,7 +954,7 @@ ISSUE: HU-71 - Pruebas MS Pedidos y Ventas (5 services + 5 controllers + 1 IT)
 | Sprint (ya esta) | S5 - Pruebas Unitarias EP3 |
 | Epic Link (ya esta) | HU-60 EP-08 Pruebas Unitarias |
 | Story point estimate | 13 |
-| Labels (recomendado) | ep3, tests, ms-pedidos-ventas, hateoas, mockito, iva, transicion-estados, devolucion |
+| Labels (recomendado) | ep3, tests, ms-pedidos-ventas, mockito, iva, transicion-estados, devolucion |
 
 **ESTRUCTURA REAL DEL MS (verificada contra ms-pedidos-ventas/src/main/java/com/ecomarket/pedidos/):**
 - service/PedidoService.java (nucleo: crear pedido, transiciones de estado, IVA)
@@ -985,11 +993,11 @@ Sub-task 3: Crear CuponDescuentoServiceTest + DevolucionServiceTest
   Original estimate: 3h
   Description: Cubrir AC-1. CuponDescuentoServiceTest valida AC-5 (descuento porcentual: subtotal=1000, valorDescuento=10 -> descuento=100; descuento fijo: subtotal=1000, valorDescuento=150 -> descuento=min(150,1000)=150), AC-6 (cupon exhaurido lanza BusinessException con mensaje "cupon agotado"), validacion de monto minimo. DevolucionServiceTest valida AC-8 (devolucion parcial: venta con 3 items, se devuelve 1, recalcula IVA de la nota de credito; nota de credito usa el mismo calculo de IVA directo que la venta original).
 
-Sub-task 4: Crear 5 ControllerTest con HATEOAS
-  Summary: test(ms-pedidos-ventas): 5 ControllerTest con @WebMvcTest + HATEOAS
+Sub-task 4: Crear 5 ControllerTest con DTO directo
+  Summary: test(ms-pedidos-ventas): 5 ControllerTest con @WebMvcTest + DTO directo
   Story point estimate: 3
   Original estimate: 5h
-  Description: Cubrir AC-2 (PedidoControllerTest, VentaControllerTest, CarritoControllerTest, CuponDescuentoControllerTest, DevolucionControllerTest con @WebMvcTest + @MockitoBean del service correspondiente) y AC-9 (_links.self en GET/POST/PUT/DELETE, _embedded en colecciones). NO hay ReclamacionController; las endpoints de reclamacion viven en DevolucionController o PedidoController (verificar). 5 controllers totales, no 6.
+  Description: Cubrir AC-2 (PedidoControllerTest, VentaControllerTest, CarritoControllerTest, CuponDescuentoControllerTest, DevolucionControllerTest con @WebMvcTest + @MockitoBean del service correspondiente) y AC-9 (DTO directo en GET/POST/PUT/DELETE, List<DTO> en colecciones, sin _links ni _embedded). NO hay ReclamacionController; las endpoints de reclamacion viven en DevolucionController o PedidoController (verificar). 5 controllers totales, no 6.
 
 Sub-task 5: Crear PedidoControllerIT (test de integracion end-to-end)
   Summary: test(ms-pedidos-ventas): PedidoControllerIT con @SpringBootTest + H2
@@ -1056,9 +1064,9 @@ AC-8: Devolucion parcial con recalculo de IVA en nota de credito
 - Entonces se genera nota de credito con: subtotal=1000, iva=190, total=1190
 - Y el calculo de IVA sigue siendo DIRECTO (no inverso)
 
-AC-9: _links.self y _embedded en endpoints REST
+AC-9: Validacion JSON puro / DTO directo en endpoints REST
 - Cuando se invocan GET/POST/PUT/DELETE
-- Entonces las respuestas incluyen _links.self y las colecciones _embedded
+- Entonces el JSON expone DTOs directos (sin _links ni _embedded)
 
 AC-10: Test de integracion end-to-end (PedidoControllerIT)
 - Dado contexto Spring con H2 + @SpringBootTest
