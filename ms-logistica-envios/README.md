@@ -82,10 +82,11 @@ cd .\ms-logistica-envios\
 .\mvnw.cmd test
 ```
 
-O desde la raiz:
+O entrando al directorio (recomendado):
 
 ```powershell
-.\ms-logistica-envios\mvnw.cmd -f ms-logistica-envios/pom.xml clean test
+cd .\ms-logistica-envios\
+.\mvnw.cmd clean test
 ```
 
 ## Endpoints principales
