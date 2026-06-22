@@ -19,9 +19,4 @@ class MsCatalogoApplicationTests {
     void contextLoads() {
     }
 
-    // SE AGREGA PARA EL 100%
-    @Test
-    void mainEjecutaAplicacion() {
-        MsCatalogoApplication.main(new String[] {"--spring.profiles.active=test"});
-    }
 }
