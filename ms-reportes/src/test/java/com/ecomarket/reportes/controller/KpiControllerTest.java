@@ -14,8 +14,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import com.ecomarket.reportes.exception.ReporteNotFoundException;
+
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -103,10 +108,46 @@ class KpiControllerTest {
     @Test
     void getKpiPorId_conIdInexistente_retorna404() throws Exception {
         when(reporteService.obtenerKPIPorId(99L))
-                .thenThrow(new com.ecomarket.reportes.exception.ReporteNotFoundException(
-                        "IndicadorKPI no encontrado con id: 99"));
+                .thenThrow(new ReporteNotFoundException("IndicadorKPI no encontrado con id: 99"));
 
         mockMvc.perform(get("/api/v1/kpis/99"))
                 .andExpect(status().isNotFound());
+    }
+
+    // AC-5: DELETE /api/v1/kpis/{id} con id existente → 204
+    @Test
+    void deleteKpi_conIdExistente_retorna204() throws Exception {
+        doNothing().when(reporteService).eliminarKPI(1L);
+
+        mockMvc.perform(delete("/api/v1/kpis/1"))
+                .andExpect(status().isNoContent());
+    }
+
+    // AC-5: DELETE /api/v1/kpis/{id} con id inexistente → 404
+    @Test
+    void deleteKpi_conIdInexistente_retorna404() throws Exception {
+        doThrow(new ReporteNotFoundException("IndicadorKPI no encontrado con id: 99"))
+                .when(reporteService).eliminarKPI(99L);
+
+        mockMvc.perform(delete("/api/v1/kpis/99"))
+                .andExpect(status().isNotFound());
+    }
+
+    // AC-4: GET /api/v1/kpis/tipo/{tipo} → 200 + lista filtrada por tipo
+    @Test
+    void getKpisPorTipo_retorna200ConListaFiltrada() throws Exception {
+        IndicadorKPI k1 = buildKpi(1L, TipoKPI.RENDIMIENTO_TIENDA, 0.9);
+        IndicadorKPI k2 = buildKpi(2L, TipoKPI.RENDIMIENTO_TIENDA, 0.75);
+        IndicadorKPIResponseDTO dto1 = buildKpiDTO(1L, "RENDIMIENTO_TIENDA", 0.9);
+        IndicadorKPIResponseDTO dto2 = buildKpiDTO(2L, "RENDIMIENTO_TIENDA", 0.75);
+
+        when(reporteService.listarKPIsPorTipo(TipoKPI.RENDIMIENTO_TIENDA)).thenReturn(List.of(k1, k2));
+        when(reporteService.toDTO(k1)).thenReturn(dto1);
+        when(reporteService.toDTO(k2)).thenReturn(dto2);
+
+        mockMvc.perform(get("/api/v1/kpis/tipo/RENDIMIENTO_TIENDA"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].tipo").value("RENDIMIENTO_TIENDA"))
+                .andExpect(jsonPath("$[1].valor").value(0.75));
     }
 }
