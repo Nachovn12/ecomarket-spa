@@ -49,6 +49,7 @@ public class CatalogoServiceTest {
         request.setNombre("Prod 1");
         request.setPrecio(100.0);
         request.setIdCategoria(1L);
+        request.setEstado("PUBLICADO");
 
         Categoria cat = new Categoria();
         cat.setIdCategoria(1L);
@@ -60,6 +61,7 @@ public class CatalogoServiceTest {
         guardado.setIdProducto(100L);
         guardado.setSku("SKU-1");
         guardado.setCategoria(cat);
+        guardado.setEstado(EstadoProducto.PUBLICADO);
         
         when(productoRepository.save(any(Producto.class))).thenReturn(guardado);
 
@@ -68,6 +70,56 @@ public class CatalogoServiceTest {
         assertNotNull(response);
         assertEquals(100L, response.getIdProducto());
         assertEquals("SKU-1", response.getSku());
+    }
+
+    @Test
+    void crearProducto_Exito_SinCategoriaYEstadoNull() {
+        ProductoRequestDTO request = new ProductoRequestDTO();
+        request.setSku("SKU-2");
+        request.setNombre("Prod 2");
+        request.setPrecio(50.0);
+        request.setIdCategoria(null);
+        request.setEstado(null);
+
+        when(productoRepository.existsBySku("SKU-2")).thenReturn(false);
+
+        Producto guardado = new Producto();
+        guardado.setIdProducto(101L);
+        guardado.setSku("SKU-2");
+        guardado.setEstado(null);
+
+        when(productoRepository.save(any(Producto.class))).thenReturn(guardado);
+
+        ProductoResponseDTO response = catalogoService.crearProducto(request);
+        assertNotNull(response);
+        assertNull(response.getIdCategoria());
+    }
+
+    @Test
+    void crearProducto_CategoriaNoEncontrada() {
+        ProductoRequestDTO request = new ProductoRequestDTO();
+        request.setSku("SKU-1");
+        request.setNombre("Prod 1");
+        request.setPrecio(100.0);
+        request.setIdCategoria(99L);
+
+        when(productoRepository.existsBySku("SKU-1")).thenReturn(false);
+        when(categoriaRepository.findById(99L)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> catalogoService.crearProducto(request));
+    }
+
+    @Test
+    void crearProducto_EstadoInvalido() {
+        ProductoRequestDTO request = new ProductoRequestDTO();
+        request.setSku("SKU-3");
+        request.setNombre("Prod 3");
+        request.setPrecio(10.0);
+        request.setEstado("INVENTADO");
+
+        when(productoRepository.existsBySku("SKU-3")).thenReturn(false);
+
+        assertThrows(IllegalArgumentException.class, () -> catalogoService.crearProducto(request));
     }
 
     @Test
@@ -133,6 +185,25 @@ public class CatalogoServiceTest {
     }
 
     @Test
+    void actualizarProducto_Exito_SinCambioSkuYSinCategoria() {
+        Producto p = new Producto();
+        p.setIdProducto(1L);
+        p.setSku("SKU-OLD");
+
+        ProductoRequestDTO req = new ProductoRequestDTO();
+        req.setSku("SKU-OLD");
+        req.setNombre("Prod NEW");
+        req.setPrecio(200.0);
+        req.setIdCategoria(null);
+
+        when(productoRepository.findById(1L)).thenReturn(Optional.of(p));
+        when(productoRepository.save(any(Producto.class))).thenReturn(p);
+
+        ProductoResponseDTO res = catalogoService.actualizarProducto(1L, req);
+        assertNotNull(res);
+    }
+
+    @Test
     void actualizarProducto_SkuDuplicado() {
         Producto p = new Producto();
         p.setIdProducto(1L);
@@ -183,6 +254,13 @@ public class CatalogoServiceTest {
     }
 
     @Test
+    void buscarPorPrecio_Invalido() {
+        assertThrows(IllegalArgumentException.class, () -> catalogoService.buscarPorPrecio(-10.0, 50.0));
+        assertThrows(IllegalArgumentException.class, () -> catalogoService.buscarPorPrecio(10.0, -50.0));
+        assertThrows(IllegalArgumentException.class, () -> catalogoService.buscarPorPrecio(50.0, 10.0));
+    }
+
+    @Test
     void buscarEcologicos_Exito() {
         when(productoRepository.findByDescripcionEcologicaContainingIgnoreCase("biodegradable")).thenReturn(List.of(new Producto()));
         List<ProductoResponseDTO> res = catalogoService.buscarEcologicos("biodegradable");
@@ -195,14 +273,26 @@ public class CatalogoServiceTest {
     void crearCategoria_Exito() {
         CategoriaRequestDTO req = new CategoriaRequestDTO();
         req.setNombre("Cat 1");
+        req.setEstado("ACTIVA");
         when(categoriaRepository.existsByNombreIgnoreCase("Cat 1")).thenReturn(false);
         
         Categoria c = new Categoria();
         c.setIdCategoria(1L);
+        c.setEstado(EstadoCategoria.ACTIVA);
         when(categoriaRepository.save(any(Categoria.class))).thenReturn(c);
 
         CategoriaResponseDTO res = catalogoService.crearCategoria(req);
         assertEquals(1L, res.getIdCategoria());
+    }
+
+    @Test
+    void crearCategoria_EstadoInvalido() {
+        CategoriaRequestDTO req = new CategoriaRequestDTO();
+        req.setNombre("Cat 1");
+        req.setEstado("INVALIDO");
+        when(categoriaRepository.existsByNombreIgnoreCase("Cat 1")).thenReturn(false);
+        
+        assertThrows(IllegalArgumentException.class, () -> catalogoService.crearCategoria(req));
     }
 
     @Test
