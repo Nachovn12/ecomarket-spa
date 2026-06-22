@@ -13,4 +13,10 @@ class ApiGatewayApplicationTests {
     @Test
     void contextLoads() {
     }
+
+    // SE AGREGA PARA EL 100%
+    @Test
+    void mainEjecutaAplicacion() {
+        ApiGatewayApplication.main(new String[] {"--spring.profiles.active=test"});
+    }
 }

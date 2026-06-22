@@ -51,7 +51,7 @@ Intentar acceder a http://localhost:8081/doc/swagger-ui.html devuelve 404
 
 ## Tecnologias
 
-- Java 21
+- Java 25
 - Spring Boot
 - Spring Cloud Gateway MVC
 - Spring Actuator
@@ -93,7 +93,7 @@ cd .\api-gateway\
 O desde la raiz:
 
 ```powershell
-mvn -f api-gateway/pom.xml clean test
+.\api-gateway\mvnw.cmd -f api-gateway/pom.xml clean test
 ```
 
 ## Orden recomendado de ejecucion

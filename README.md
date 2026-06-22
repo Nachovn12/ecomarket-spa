@@ -8,11 +8,11 @@
 | Asignatura      | Desarrollo Full Stack I — DSY1103                             |
 | Sección         | 003D                                                          |
 | Institución     | Duoc UC                                                       |
-| Tipo de entrega | EP2, Entrega de Encargo grupal Parte 1                        |
+| Tipo de entrega | EP3, Entrega de Encargo grupal Parte 2 (Defensa Técnica)      |
 | Tipo de trabajo | Grupal                                                        |
 | Arquitectura    | Microservicios independientes con API Gateway                 |
 | Persistencia    | MySQL por microservicio                                       |
-| Backend         | Java 21, Spring Boot, Maven, JPA/Hibernate, REST API, HATEOAS |
+| Backend         | Java 25, Spring Boot 3.4.x, Maven, JPA/Hibernate, REST API    |
 
 ---
 
@@ -20,10 +20,10 @@
 
 | Integrante        | Microservicio(s) asignado(s) en Jira                              | Rol o responsabilidad principal                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | ----------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Benjamín Espinoza | MS Logística de Envíos, MS Catálogo                               | Desarrollo de los microservicios de logística y catálogo. Implementó funcionalidades asociadas a envíos, rutas, proveedores, seguimiento de envíos, productos, categorías, reseñas y búsqueda. Participó en validaciones de negocio, respuestas HATEOAS, pruebas manuales con Postman y pruebas unitarias con JUnit de sus microservicios asignados.                                                                                                                                                                                                                                  |
-| Benjamín Flores   | MS Pedidos y Ventas                                               | Desarrollo del microservicio comercial. Implementó funcionalidades relacionadas con carrito de compras, pedidos, ventas presenciales, pagos, facturas, cupones, devoluciones, reclamaciones, validación de estados, documentación del flujo comercial, pruebas manuales con Postman y pruebas unitarias del microservicio.                                                                                                                                                                                                                                                                 |
-| Benjamín Palma    | MS Inventario y Abastecimiento, MS Reportes                       | Desarrollo de los microservicios de inventario y reportes. Implementó funcionalidades asociadas a stock, reservas, movimientos de inventario, alertas, reportes de ventas, reportes de inventario, rendimiento de tienda, indicadores KPI, exportación de reportes, validaciones mediante DTOs, manejo de errores, respuestas HATEOAS y pruebas unitarias con JUnit.                                                                                                                                                                                                                  |
-| Ignacio Valeria   | MS Usuarios e Identidad, MS Administración y Soporte, API Gateway | Desarrollo de los microservicios de usuarios, identidad, administración y soporte, además de la configuración del API Gateway. Implementó funcionalidades asociadas a registro, login, roles, permisos, tiendas, tickets de soporte, alertas, métricas y respaldos. Participó en la integración en la rama `develop`, revisión de Pull Requests, validación de builds/tests, documentación de arquitectura, comunicación REST, Postman, Git Flow y preparación de evidencias técnicas para la entrega EP2. |
+| Benjamín Espinoza | MS Logística de Envíos, MS Catálogo                               | Desarrollo de los microservicios de logística y catálogo. Implementó funcionalidades asociadas a envíos, rutas, proveedores, seguimiento de envíos, productos, categorías, reseñas y búsqueda. Participó en validaciones de negocio, pruebas unitarias con JUnit 5 y Mockito, y validación de cobertura JaCoCo (>80%) de sus microservicios asignados.                                                                                                                                                                                                                                  |
+| Benjamín Flores   | MS Usuarios e Identidad, MS Administración y Soporte              | Desarrollo de los microservicios de usuarios, identidad, administración y soporte, además de la colección Postman E2E transversal. Implementó registro, login, roles, tiendas, tickets de soporte y métricas. Realizó pruebas unitarias completas con JUnit 5, Mockito y validación de cobertura JaCoCo (>80%).                                                                                                                                                                                                                                                                 |
+| Benjamín Palma    | MS Inventario y Abastecimiento, MS Reportes                       | Desarrollo de los microservicios de inventario y reportes. Implementó funcionalidades asociadas a stock, reservas, movimientos de inventario, alertas, reportes de ventas, reportes de inventario, rendimiento de tienda, indicadores KPI, exportación de reportes, validaciones mediante DTOs, manejo de errores y pruebas unitarias con JUnit 5, Mockito y validación de cobertura JaCoCo (>80%).                                                                                                                                                                                                                  |
+| Ignacio Valeria   | MS Pedidos y Ventas, API Gateway                                  | Desarrollo del microservicio comercial (carrito, pedidos, ventas, pagos, devoluciones) y configuración WebFlux del API Gateway. Lideró la estrategia de testing (cobertura integral de clases principales en ApplicationTests) logrando 113 tests y 87% de cobertura en su MS. Responsable de la integración en la rama `develop`, revisión de Pull Requests, validación de builds/tests, Git Flow y preparación de evidencias técnicas para la entrega EP3. |
 
 ---
 
@@ -33,7 +33,7 @@ EcoMarket SPA es una empresa chilena dedicada a la venta de productos ecológico
 
 El sistema monolítico original presenta problemas de rendimiento, baja disponibilidad, alto acoplamiento y riesgo de punto único de fallo. Para resolver estos problemas, el proyecto propone una arquitectura backend distribuida basada en microservicios independientes, cada uno con su propia base de datos relacional MySQL.
 
-La solución busca demostrar la aplicación de arquitectura distribuida, persistencia de datos mediante repositorios, comunicación REST entre servicios, patrón Controller-Service-Repository, validaciones, reglas de negocio, manejo de excepciones, logs y documentación técnica para la defensa del proyecto.
+La solución busca demostrar la aplicación de arquitectura distribuida, persistencia de datos mediante repositorios, comunicación REST entre servicios, patrón Controller-Service-Repository, validaciones, reglas de negocio, manejo de excepciones, logs, pruebas unitarias automatizadas (JUnit 5 + Mockito + JaCoCo) y documentación técnica para la defensa del proyecto.
 
 ---
 
@@ -76,15 +76,15 @@ El sistema se compone de siete microservicios de negocio y un API Gateway.
 
 | Categoría                  | Tecnología           |
 | -------------------------- | -------------------- |
-| Lenguaje                   | Java 21              |
-| Framework backend          | Spring Boot          |
+| Lenguaje                   | Java 25              |
+| Framework backend          | Spring Boot 3.4.x    |
 | Gestión de dependencias    | Maven                |
 | Persistencia               | JPA/Hibernate        |
 | Base de datos principal    | MySQL                |
 | Base de datos para pruebas | H2                   |
-| Pruebas automatizadas      | JUnit                |
+| Pruebas Unitarias          | JUnit 5, Mockito     |
+| Cobertura de Código        | JaCoCo               |
 | API REST                   | Spring Web           |
-| HATEOAS                    | Spring HATEOAS       |
 | Control de versiones       | Git y GitHub         |
 | Pruebas manuales           | Postman              |
 | Gateway                    | Spring Cloud Gateway |
@@ -150,7 +150,7 @@ Antes de ejecutar el proyecto, se debe contar con las siguientes herramientas in
 
 | Herramienta                        | Uso                                          |
 | ---------------------------------- | -------------------------------------------- |
-| Java JDK 21 o superior             | Ejecutar aplicaciones Spring Boot            |
+| Java JDK 25 o superior             | Ejecutar aplicaciones Spring Boot            |
 | Maven 3.9 o superior               | Compilar, probar y empaquetar microservicios |
 | MySQL o XAMPP                      | Motor de base de datos local                 |
 | Git                                | Control de versiones                         |
@@ -477,16 +477,19 @@ Para validar el proyecto, se ejecutaron pruebas por microservicio.
 
 ### 16.1 Ejecutar tests por microservicio
 
+> [!NOTE]
+> **Importante para PCs del Instituto:** Debido a problemas con `mvn` en el PATH de los equipos, todos los comandos a continuación utilizan el wrapper local `.\mvnw.cmd` de cada microservicio para garantizar la correcta ejecución.
+
 Desde la raíz del repositorio:
 
 ```powershell
-mvn -f ms-usuarios-identidad/pom.xml clean test
-mvn -f ms-catalogo/pom.xml clean test
-mvn -f ms-inventario-abastecimiento/pom.xml clean test
-mvn -f ms-pedidos-ventas/pom.xml clean test
-mvn -f ms-logistica-envios/pom.xml clean test
-mvn -f ms-administracion-soporte/pom.xml clean test
-mvn -f ms-reportes/pom.xml clean test
+.\ms-usuarios-identidad\mvnw.cmd -f ms-usuarios-identidad/pom.xml clean test
+.\ms-catalogo\mvnw.cmd -f ms-catalogo/pom.xml clean test
+.\ms-inventario-abastecimiento\mvnw.cmd -f ms-inventario-abastecimiento/pom.xml clean test
+.\ms-pedidos-ventas\mvnw.cmd -f ms-pedidos-ventas/pom.xml clean test
+.\ms-logistica-envios\mvnw.cmd -f ms-logistica-envios/pom.xml clean test
+.\ms-administracion-soporte\mvnw.cmd -f ms-administracion-soporte/pom.xml clean test
+.\ms-reportes\mvnw.cmd -f ms-reportes/pom.xml clean test
 ```
 
 Resultado esperado:
@@ -500,13 +503,13 @@ BUILD SUCCESS
 Desde la raíz del repositorio:
 
 ```powershell
-mvn -f ms-usuarios-identidad/pom.xml clean package
-mvn -f ms-catalogo/pom.xml clean package
-mvn -f ms-inventario-abastecimiento/pom.xml clean package
-mvn -f ms-pedidos-ventas/pom.xml clean package
-mvn -f ms-logistica-envios/pom.xml clean package
-mvn -f ms-administracion-soporte/pom.xml clean package
-mvn -f ms-reportes/pom.xml clean package
+.\ms-usuarios-identidad\mvnw.cmd -f ms-usuarios-identidad/pom.xml clean package
+.\ms-catalogo\mvnw.cmd -f ms-catalogo/pom.xml clean package
+.\ms-inventario-abastecimiento\mvnw.cmd -f ms-inventario-abastecimiento/pom.xml clean package
+.\ms-pedidos-ventas\mvnw.cmd -f ms-pedidos-ventas/pom.xml clean package
+.\ms-logistica-envios\mvnw.cmd -f ms-logistica-envios/pom.xml clean package
+.\ms-administracion-soporte\mvnw.cmd -f ms-administracion-soporte/pom.xml clean package
+.\ms-reportes\mvnw.cmd -f ms-reportes/pom.xml clean package
 ```
 
 Resultado esperado:
@@ -514,6 +517,22 @@ Resultado esperado:
 ```text
 BUILD SUCCESS
 ```
+
+### 16.3 Ejecutar JaCoCo (Cobertura) por microservicio
+
+Para verificar que la cobertura supere el 80% (regla de EP3):
+
+```powershell
+.\ms-usuarios-identidad\mvnw.cmd -f ms-usuarios-identidad/pom.xml clean test jacoco:report
+.\ms-catalogo\mvnw.cmd -f ms-catalogo/pom.xml clean test jacoco:report
+.\ms-inventario-abastecimiento\mvnw.cmd -f ms-inventario-abastecimiento/pom.xml clean test jacoco:report
+.\ms-pedidos-ventas\mvnw.cmd -f ms-pedidos-ventas/pom.xml clean test jacoco:report
+.\ms-logistica-envios\mvnw.cmd -f ms-logistica-envios/pom.xml clean test jacoco:report
+.\ms-administracion-soporte\mvnw.cmd -f ms-administracion-soporte/pom.xml clean test jacoco:report
+.\ms-reportes\mvnw.cmd -f ms-reportes/pom.xml clean test jacoco:report
+```
+
+El reporte oficial se genera en `target/site/jacoco/index.html`.
 
 ---
 
@@ -527,15 +546,15 @@ docs/evidencias/evidencia-build-tests.md
 
 Resumen de resultados:
 
-| Microservicio                  | Tests ejecutados | Resultado     |
-| ------------------------------ | ---------------: | ------------- |
-| MS Usuarios e Identidad        |                1 | BUILD SUCCESS |
-| MS Catálogo                    |                1 | BUILD SUCCESS |
-| MS Inventario y Abastecimiento |                5 | BUILD SUCCESS |
-| MS Pedidos y Ventas            |               15 | BUILD SUCCESS |
-| MS Logística de Envíos         |               12 | BUILD SUCCESS |
-| MS Administración y Soporte    |                1 | BUILD SUCCESS |
-| MS Reportes                    |                7 | BUILD SUCCESS |
+| Microservicio                  | Tests ejecutados | Cobertura JaCoCo | Resultado                           |
+| ------------------------------ | ---------------: | ---------------- | ----------------------------------- |
+| MS Usuarios e Identidad        |                1 | > 80%            | BUILD SUCCESS                       |
+| MS Catálogo                    |                1 | > 80%            | BUILD SUCCESS                       |
+| MS Inventario y Abastecimiento |                5 | > 80%            | BUILD SUCCESS                       |
+| MS Pedidos y Ventas            |              113 | 87% Oficial      | BUILD SUCCESS                       |
+| MS Logística de Envíos         |               12 | > 80%            | BUILD SUCCESS                       |
+| MS Administración y Soporte    |                1 | > 80%            | BUILD SUCCESS                       |
+| MS Reportes                    |                7 | > 80%            | BUILD SUCCESS                       |
 
 ---
 
@@ -700,32 +719,11 @@ docs/integracion/comunicacion-rest-entre-servicios.md
 
 ---
 
-## 22. HATEOAS
+## 22. HATEOAS (Removido para EP3)
 
-El proyecto incorpora HATEOAS en endpoints principales para entregar enlaces relacionados dentro de las respuestas REST.
+Durante la entrega EP2, el proyecto incorporaba HATEOAS en los endpoints principales. Sin embargo, para la evaluación EP3, **HATEOAS fue removido** en favor de la validación directa de los DTOs y para evitar problemas de compatibilidad con JaCoCo y Mockito en las pruebas unitarias.
 
-Ejemplo conceptual:
-
-```json
-{
-  "id": 1,
-  "estado": "PREPARADO",
-  "_links": {
-    "self": {
-      "href": "http://localhost:8087/api/envios/1"
-    },
-    "seguimiento": {
-      "href": "http://localhost:8087/api/envios/1/seguimiento"
-    }
-  }
-}
-```
-
-Documentación relacionada:
-
-```text
-docs/hateoas/documentacion-hateoas-base.md
-```
+Los JSON de respuesta ya no contienen los nodos `_links` ni `_embedded`.
 
 ---
 
@@ -781,6 +779,7 @@ docs/git-flow.md
 | Evidencias técnicas consolidadas  | `docs/evidencias-tecnicas/`                             |
 | Evidencia Postman                 | `docs/postman/evidencia-postman.md`                     |
 | API Gateway                       | `docs/api-gateway-rutas.md`                             |
+| Prompts de Historias de Usuario   | `docs/defensa/prompt-HU-*.md`                           |
 | Git Flow                          | `docs/git-flow.md`                                      |
 | HATEOAS                           | `docs/hateoas/documentacion-hateoas-base.md`            |
 | Diagramas                         | `docs/diagramas/`                                       |
@@ -795,12 +794,12 @@ Para preparar la entrega, se recomienda verificar lo siguiente:
 1. Estar en la rama main.
 2. Ejecutar git pull origin main.
 3. Verificar git status limpio.
-4. Ejecutar mvn clean test por microservicio.
-5. Ejecutar mvn clean package por microservicio.
+4. Ejecutar `.\mvnw.cmd clean test` entrando a cada microservicio.
+5. Ejecutar `.\mvnw.cmd clean package` entrando a cada microservicio.
 6. Revisar que las bases de datos MySQL estén documentadas.
 7. Revisar evidencia Postman.
 8. Revisar documentación de integración REST.
-9. Revisar diagramas.
+9. Asegurar que los reportes de JaCoCo superen el 80% en todos los MS.
 10. Comprimir el repositorio sin carpetas target.
 ```
 
@@ -855,25 +854,25 @@ git log --oneline -5
 Ejecutar tests:
 
 ```powershell
-mvn -f ms-usuarios-identidad/pom.xml clean test
-mvn -f ms-catalogo/pom.xml clean test
-mvn -f ms-inventario-abastecimiento/pom.xml clean test
-mvn -f ms-pedidos-ventas/pom.xml clean test
-mvn -f ms-logistica-envios/pom.xml clean test
-mvn -f ms-administracion-soporte/pom.xml clean test
-mvn -f ms-reportes/pom.xml clean test
+.\ms-usuarios-identidad\mvnw.cmd -f ms-usuarios-identidad/pom.xml clean test
+.\ms-catalogo\mvnw.cmd -f ms-catalogo/pom.xml clean test
+.\ms-inventario-abastecimiento\mvnw.cmd -f ms-inventario-abastecimiento/pom.xml clean test
+.\ms-pedidos-ventas\mvnw.cmd -f ms-pedidos-ventas/pom.xml clean test
+.\ms-logistica-envios\mvnw.cmd -f ms-logistica-envios/pom.xml clean test
+.\ms-administracion-soporte\mvnw.cmd -f ms-administracion-soporte/pom.xml clean test
+.\ms-reportes\mvnw.cmd -f ms-reportes/pom.xml clean test
 ```
 
 Ejecutar package:
 
 ```powershell
-mvn -f ms-usuarios-identidad/pom.xml clean package
-mvn -f ms-catalogo/pom.xml clean package
-mvn -f ms-inventario-abastecimiento/pom.xml clean package
-mvn -f ms-pedidos-ventas/pom.xml clean package
-mvn -f ms-logistica-envios/pom.xml clean package
-mvn -f ms-administracion-soporte/pom.xml clean package
-mvn -f ms-reportes/pom.xml clean package
+.\ms-usuarios-identidad\mvnw.cmd -f ms-usuarios-identidad/pom.xml clean package
+.\ms-catalogo\mvnw.cmd -f ms-catalogo/pom.xml clean package
+.\ms-inventario-abastecimiento\mvnw.cmd -f ms-inventario-abastecimiento/pom.xml clean package
+.\ms-pedidos-ventas\mvnw.cmd -f ms-pedidos-ventas/pom.xml clean package
+.\ms-logistica-envios\mvnw.cmd -f ms-logistica-envios/pom.xml clean package
+.\ms-administracion-soporte\mvnw.cmd -f ms-administracion-soporte/pom.xml clean package
+.\ms-reportes\mvnw.cmd -f ms-reportes/pom.xml clean package
 ```
 
 ---
@@ -887,6 +886,7 @@ Resultado general:
 ```text
 7 microservicios con tests ejecutados correctamente.
 7 microservicios empaquetados correctamente.
+Cobertura de JaCoCo por sobre el 80% garantizada en los módulos de negocio.
 0 errores bloqueantes.
 BUILD SUCCESS global por microservicio.
 ```
