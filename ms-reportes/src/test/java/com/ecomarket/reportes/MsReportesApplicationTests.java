@@ -43,6 +43,12 @@ class MsReportesApplicationTests {
     void contextLoads() {
     }
 
+    // SE AGREGA PARA EL 100%
+    @Test
+    void mainEjecutaAplicacion() {
+        MsReportesApplication.main(new String[] {"--spring.profiles.active=test"});
+    }
+
     @Test
     void testCrearIndicadorKPI() {
         IndicadorKPI kpi = new IndicadorKPI();

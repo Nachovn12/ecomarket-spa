@@ -25,7 +25,7 @@ Microservicio responsable de tiendas, asignacion de personal, tickets de soporte
 
 ## Tecnologias
 
-- Java 21
+- Java 25
 - Spring Boot
 - Spring Web
 - Spring Data JPA / Hibernate
@@ -86,7 +86,7 @@ cd .\ms-administracion-soporte\
 O desde la raiz:
 
 ```powershell
-mvn -f ms-administracion-soporte/pom.xml clean test
+.\ms-administracion-soporte\mvnw.cmd -f ms-administracion-soporte/pom.xml clean test
 ```
 
 ## Endpoints principales

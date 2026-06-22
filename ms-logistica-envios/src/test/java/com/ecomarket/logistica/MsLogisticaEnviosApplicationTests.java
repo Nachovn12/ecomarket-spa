@@ -45,6 +45,12 @@ class MsLogisticaEnviosApplicationTests {
     void contextLoads() {
     }
 
+    // SE AGREGA PARA EL 100%
+    @Test
+    void mainEjecutaAplicacion() {
+        MsLogisticaEnviosApplication.main(new String[] {"--spring.profiles.active=test"});
+    }
+
     @Test
     void crearProveedorValido() {
         ProveedorDTO dto = new ProveedorDTO();

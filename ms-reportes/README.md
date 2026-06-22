@@ -25,7 +25,7 @@ Microservicio responsable de generar reportes, indicadores KPI, exportaciones e 
 
 ## Tecnologias
 
-- Java 21
+- Java 25
 - Spring Boot
 - Spring Web
 - Spring Data JPA / Hibernate
@@ -86,7 +86,7 @@ cd .\ms-reportes\
 O desde la raiz:
 
 ```powershell
-mvn -f ms-reportes/pom.xml clean test
+.\ms-reportes\mvnw.cmd -f ms-reportes/pom.xml clean test
 ```
 
 ## Endpoints principales
