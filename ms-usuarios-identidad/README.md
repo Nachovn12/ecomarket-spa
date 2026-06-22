@@ -81,10 +81,11 @@ cd .\ms-usuarios-identidad\
 .\mvnw.cmd test
 ```
 
-O desde la raiz:
+O entrando al directorio (recomendado):
 
 ```powershell
-.\ms-usuarios-identidad\mvnw.cmd -f ms-usuarios-identidad/pom.xml clean test
+cd .\ms-usuarios-identidad\
+.\mvnw.cmd clean test
 ```
 
 ## Endpoints principales
