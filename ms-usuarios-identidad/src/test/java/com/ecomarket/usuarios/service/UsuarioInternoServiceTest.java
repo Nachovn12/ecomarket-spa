@@ -254,4 +254,109 @@ public class UsuarioInternoServiceTest {
         assertFalse(resp.getActivo());
         assertTrue(resp.getEliminado());
     }
+
+    // ─── actualizar: correo mismo que el actual (rama !equals → false, no verifica dup) ────────
+    @Test
+    void actualizarUsuarioInterno_MismoCorreo_NoVerificaDuplicado() {
+        // Escenario: el administrador actualiza datos de un Empleado sin cambiar su correo.
+        // La rama if(!correoActual.equals(correoNuevo) && exists) debe ser false → no lanza excepción.
+        Usuario u = Usuario.builder().id(1L).nombre("Carlos Mendoza").correo("carlos.mendoza@ecomarket.cl")
+                .rol(Rol.EMPLEADO).activo(true).eliminado(false).build();
+        when(usuarioRepository.findById(1L)).thenReturn(Optional.of(u));
+        when(usuarioRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+
+        UsuarioInternoUpdateDTO req = new UsuarioInternoUpdateDTO();
+        req.setNombre("Carlos M. Mendoza"); // cambia nombre
+        req.setCorreo("carlos.mendoza@ecomarket.cl"); // mismo correo → no verifica duplicado
+
+        UsuarioInternoResponseDTO resp = usuarioInternoService.actualizarUsuarioInterno(1L, req, "ADMINISTRADOR");
+        assertEquals("Carlos M. Mendoza", resp.getNombre());
+    }
+
+    // ─── actualizar: correo blank (rama if correo != null && !blank → false) ─────────────────
+    @Test
+    void actualizarUsuarioInterno_CorreoBlank_NoActualizaCorreo() {
+        // Escenario: el administrador actualiza solo el nombre del Gerente, dejando el correo vacío.
+        Usuario u = Usuario.builder().id(2L).nombre("Ana Rojas").correo("ana.rojas@ecomarket.cl")
+                .rol(Rol.GERENTE).activo(true).eliminado(false).build();
+        when(usuarioRepository.findById(2L)).thenReturn(Optional.of(u));
+        when(usuarioRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+
+        UsuarioInternoUpdateDTO req = new UsuarioInternoUpdateDTO();
+        req.setNombre("Ana Rojas Vera");
+        req.setCorreo("   "); // blank → rama false, no toca el correo
+
+        UsuarioInternoResponseDTO resp = usuarioInternoService.actualizarUsuarioInterno(2L, req, "ADMINISTRADOR");
+        assertNotNull(resp);
+    }
+
+    // ─── actualizar: rol blank (rama if rol != null && !blank → false) ────────────────────────
+    @Test
+    void actualizarUsuarioInterno_RolBlank_NoActualizaRol() {
+        // Escenario: el administrador actualiza password del empleado sin cambiar su rol.
+        Usuario u = Usuario.builder().id(3L).nombre("Luis Torres").correo("luis.torres@ecomarket.cl")
+                .rol(Rol.EMPLEADO).activo(true).eliminado(false).build();
+        when(usuarioRepository.findById(3L)).thenReturn(Optional.of(u));
+        when(usuarioRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+
+        UsuarioInternoUpdateDTO req = new UsuarioInternoUpdateDTO();
+        req.setPassword("NuevaP@ss1"); // cambia password
+        req.setRol(""); // blank → rama false, no toca el rol
+
+        UsuarioInternoResponseDTO resp = usuarioInternoService.actualizarUsuarioInterno(3L, req, "ADMINISTRADOR");
+        assertEquals("EMPLEADO", resp.getRol()); // el rol NO cambió
+    }
+
+    // ─── actualizar: nombre no-nulo pero en blanco (rama !isBlank() → false) ──
+    @Test
+    void actualizarUsuarioInterno_NombreBlank_NoActualizaNombre() {
+        // Escenario: el administrador intenta actualizar el nombre de un Gerente de Tienda
+        // pero el campo llega como espacios en blanco desde el formulario web.
+        // Regla de negocio: si el valor es blank (no vacío, pero solo espacios), se ignora el campo.
+        Usuario u = Usuario.builder()
+                .id(5L)
+                .nombre("Pedro Alarcón")
+                .correo("pedro.alarcon@ecomarket.cl")
+                .rol(Rol.GERENTE)
+                .activo(true)
+                .eliminado(false)
+                .build();
+        when(usuarioRepository.findById(5L)).thenReturn(Optional.of(u));
+        when(usuarioRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+
+        UsuarioInternoUpdateDTO req = new UsuarioInternoUpdateDTO();
+        req.setNombre("   "); // no nulo, pero blank → !isBlank() false → no se actualiza nombre
+
+        UsuarioInternoResponseDTO resp = usuarioInternoService.actualizarUsuarioInterno(5L, req, "ADMINISTRADOR");
+        // El nombre del Gerente permanece sin cambios
+        assertEquals("Pedro Alarcón", resp.getNombre());
+    }
+
+    // ─── actualizar: password no-nula pero en blanco (rama !isBlank() → false) ─
+    @Test
+    void actualizarUsuarioInterno_PasswordBlank_NoActualizaPassword() {
+        // Escenario: el administrador intenta resetear la contraseña de una Empleada de caja
+        // pero el campo de contraseña llega con espacios (bug del formulario web).
+        // Regla de negocio: si el valor es blank, el password actual no se modifica.
+        Usuario u = Usuario.builder()
+                .id(6L)
+                .nombre("Valentina Soto")
+                .correo("valentina.soto@ecomarket.cl")
+                .password("Actual@Pass1")
+                .rol(Rol.EMPLEADO)
+                .activo(true)
+                .eliminado(false)
+                .build();
+        when(usuarioRepository.findById(6L)).thenReturn(Optional.of(u));
+        when(usuarioRepository.save(any())).thenAnswer(i -> i.getArgument(0));
+
+        UsuarioInternoUpdateDTO req = new UsuarioInternoUpdateDTO();
+        req.setNombre("Valentina Soto C.");
+        req.setPassword("   "); // no nula, pero blank → !isBlank() false → no se actualiza password
+
+        UsuarioInternoResponseDTO resp = usuarioInternoService.actualizarUsuarioInterno(6L, req, "ADMINISTRADOR");
+        assertNotNull(resp);
+        // La contraseña de la empleada permanece sin cambios
+        assertEquals("Actual@Pass1", u.getPassword());
+    }
 }
