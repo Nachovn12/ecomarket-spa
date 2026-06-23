@@ -17,14 +17,18 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Manejador centralizado de excepciones para ms-inventario-abastecimiento.
- * Retorna respuestas JSON estructuradas con timestamp, status, error, message y path.
- */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @ExceptionHandler(ReglaDeNegocioException.class)
+    public ResponseEntity<Map<String, Object>> handleReglaDeNegocio(
+            ReglaDeNegocioException ex, HttpServletRequest req) {
+        log.warn("Regla de negocio violada: {} - path: {}", ex.getMessage(), req.getRequestURI());
+        return buildResponse(HttpStatus.UNPROCESSABLE_ENTITY, "Regla de negocio violada",
+                ex.getMessage(), req.getRequestURI());
+    }
 
     @ExceptionHandler(SkuDuplicadoException.class)
     public ResponseEntity<Map<String, Object>> handleSkuDuplicado(
@@ -60,6 +64,7 @@ public class GlobalExceptionHandler {
         body.put("validaciones", errores);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Map<String, Object>> handleDataIntegrity(DataIntegrityViolationException ex,
                                                                    HttpServletRequest req) {

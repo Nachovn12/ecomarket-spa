@@ -19,7 +19,7 @@ Microservicio responsable del registro de clientes, autenticacion, actualizacion
 - Permite consultar y actualizar el perfil de cliente.
 - Administra usuarios internos del sistema.
 - Asigna roles, permisos y niveles de acceso.
-- Expone respuestas REST con validaciones, manejo de errores y enlaces HATEOAS.
+- Expone respuestas REST con validaciones, manejo de errores.
 
 ## Tecnologias
 
@@ -27,14 +27,14 @@ Microservicio responsable del registro de clientes, autenticacion, actualizacion
 - Spring Boot
 - Spring Web
 - Spring Data JPA / Hibernate
-- Spring HATEOAS
+
 - MySQL
 - Maven
 - JUnit
 
 ## Estructura CSR
 
-- `controller`: expone endpoints REST y respuestas HATEOAS.
+- `controller`: expone endpoints REST.
 - `service`: concentra reglas de negocio y validaciones del dominio.
 - `repository`: encapsula el acceso a datos con Spring Data JPA.
 - `model`: contiene las clases persistentes JPA (`@Entity`, `@Table`, `@Id`).
