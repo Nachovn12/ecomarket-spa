@@ -2,21 +2,27 @@ package com.ecomarket.catalogo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.ActiveProfiles;
 
+/**
+ * Test de integración mínimo del contexto de Spring Boot.
+ * Verifica que el ApplicationContext de ms-catalogo cargue correctamente
+ * con la BD H2 en memoria (perfil "test") sin levantar MySQL.
+ */
 @SpringBootTest
-@TestPropertySource(properties = {
-        "spring.datasource.url=jdbc:h2:mem:catalogo_test;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE",
-        "spring.datasource.driver-class-name=org.h2.Driver",
-        "spring.datasource.username=sa",
-        "spring.datasource.password=",
-        "spring.jpa.hibernate.ddl-auto=create-drop",
-        "spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect"
-})
+@ActiveProfiles("test")
 class MsCatalogoApplicationTests {
 
     @Test
     void contextLoads() {
+        // Verifica que el contexto de Spring Boot (JPA, Repos, Services, Controllers)
+        // levanta sin errores en el perfil de pruebas con H2 en memoria.
     }
 
+    @Test
+    void mainEjecutaAplicacion() {
+        // Verifica que el punto de entrada de la aplicación ejecuta correctamente.
+        System.setProperty("spring.profiles.active", "test");
+        MsCatalogoApplication.main(new String[]{});
+    }
 }
