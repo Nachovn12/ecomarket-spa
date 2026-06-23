@@ -5,16 +5,13 @@ import com.ecomarket.admin.model.*;
 import com.ecomarket.admin.service.AdministracionSoporteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -25,26 +22,16 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(AdministracionSoporteController.class)
 class AdministracionSoporteControllerTest {
 
+    @Autowired
     private MockMvc mockMvc;
 
-    @Mock
+    @MockitoBean
     private AdministracionSoporteService administracionSoporteService;
 
-    @InjectMocks
-    private AdministracionSoporteController administracionSoporteController;
-
-    private ObjectMapper objectMapper;
-
-    @BeforeEach
-    void setUp() {
-        // Aquí está la magia: levantamos MockMvc sin usar @WebMvcTest
-        mockMvc = MockMvcBuilders.standaloneSetup(administracionSoporteController).build();
-        objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-    }
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
     @Test
     @DisplayName("AC-2: POST /api/admin/tiendas retorna 201")
@@ -70,7 +57,8 @@ class AdministracionSoporteControllerTest {
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.idTienda").value(1))
-                .andExpect(jsonPath("$.nombre").value("Tienda Santiago"));
+                .andExpect(jsonPath("$.nombre").value("Tienda Santiago"))
+                .andExpect(jsonPath("$._links").doesNotExist());
     }
 
     @Test
@@ -88,7 +76,8 @@ class AdministracionSoporteControllerTest {
         mockMvc.perform(get("/api/admin/tiendas"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].idTienda").value(1))
-                .andExpect(jsonPath("$[0].nombre").value("Tienda Valdivia"));
+                .andExpect(jsonPath("$[0].nombre").value("Tienda Valdivia"))
+                .andExpect(jsonPath("$._links").doesNotExist());
     }
 
     @Test
@@ -105,7 +94,8 @@ class AdministracionSoporteControllerTest {
 
         mockMvc.perform(get("/api/admin/tiendas/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.idTienda").value(1));
+                .andExpect(jsonPath("$.idTienda").value(1))
+                .andExpect(jsonPath("$._links").doesNotExist());
     }
 
     @Test
@@ -133,7 +123,8 @@ class AdministracionSoporteControllerTest {
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.idTicket").value(1))
-                .andExpect(jsonPath("$.estado").value("ABIERTO"));
+                .andExpect(jsonPath("$.estado").value("ABIERTO"))
+                .andExpect(jsonPath("$._links").doesNotExist());
     }
 
     @Test
@@ -150,7 +141,8 @@ class AdministracionSoporteControllerTest {
 
         mockMvc.perform(get("/api/soporte/tickets"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].idTicket").value(1));
+                .andExpect(jsonPath("$[0].idTicket").value(1))
+                .andExpect(jsonPath("$._links").doesNotExist());
     }
 
     @Test
@@ -176,7 +168,8 @@ class AdministracionSoporteControllerTest {
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.idAlerta").value(1))
-                .andExpect(jsonPath("$.resuelta").value(false));
+                .andExpect(jsonPath("$.resuelta").value(false))
+                .andExpect(jsonPath("$._links").doesNotExist());
     }
 
     @Test
@@ -193,7 +186,8 @@ class AdministracionSoporteControllerTest {
 
         mockMvc.perform(get("/api/admin/alertas/activas"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].resuelta").value(false));
+                .andExpect(jsonPath("$[0].resuelta").value(false))
+                .andExpect(jsonPath("$._links").doesNotExist());
     }
 
     @Test
@@ -217,7 +211,8 @@ class AdministracionSoporteControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.estado").value("PROGRAMADO"));
+                .andExpect(jsonPath("$.estado").value("PROGRAMADO"))
+                .andExpect(jsonPath("$._links").doesNotExist());
     }
 
     @Test
@@ -233,6 +228,7 @@ class AdministracionSoporteControllerTest {
 
         mockMvc.perform(get("/api/admin/respaldos"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].estado").value("EJECUTADO"));
+                .andExpect(jsonPath("$[0].estado").value("EJECUTADO"))
+                .andExpect(jsonPath("$._links").doesNotExist());
     }
 }
