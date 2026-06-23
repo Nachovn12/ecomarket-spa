@@ -38,6 +38,7 @@ public class PedidosClientServiceTest {
     }
 
     @Test
+    @SuppressWarnings({"rawtypes", "unchecked"})
     void ping_Exito() {
         Map<String, Object> response = Map.of("status", "UP");
         ResponseEntity<Map> entity = new ResponseEntity<>(response, HttpStatus.OK);

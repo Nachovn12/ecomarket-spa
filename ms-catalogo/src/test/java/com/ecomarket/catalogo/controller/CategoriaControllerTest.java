@@ -45,7 +45,8 @@ public class CategoriaControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.idCategoria").value(1L));
+                .andExpect(jsonPath("$.idCategoria").value(1L))
+                .andExpect(jsonPath("$._links").doesNotExist());
     }
 
     @Test

@@ -19,7 +19,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -234,8 +234,8 @@ public class CatalogoServiceTest {
     @Test
     void buscarPorPalabraClave_Exito() {
         when(productoRepository.findByNombreContainingIgnoreCaseOrDescripcionContainingIgnoreCaseOrDescripcionEcologicaContainingIgnoreCase(
-                "bio", "bio", "bio")).thenReturn(List.of(new Producto()));
-        List<ProductoResponseDTO> res = catalogoService.buscarPorPalabraClave("bio");
+                "bambu", "bambu", "bambu")).thenReturn(List.of(new Producto()));
+        List<ProductoResponseDTO> res = catalogoService.buscarPorPalabraClave("bambu");
         assertFalse(res.isEmpty());
     }
 
@@ -444,10 +444,11 @@ public class CatalogoServiceTest {
     void calcularPromedioCalificaciones_Exito() {
         Resena r1 = new Resena(); r1.setCalificacion(4);
         Resena r2 = new Resena(); r2.setCalificacion(5);
-        when(resenaRepository.findByProductoIdProducto(1L)).thenReturn(List.of(r1, r2));
+        Resena r3 = new Resena(); r3.setCalificacion(3);
+        when(resenaRepository.findByProductoIdProducto(1L)).thenReturn(List.of(r1, r2, r3));
 
         Double promedio = catalogoService.calcularPromedioCalificaciones(1L);
-        assertEquals(4.5, promedio);
+        assertEquals(4.0, promedio);
     }
     
     @Test

@@ -46,7 +46,8 @@ public class ResenaControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.idResena").value(1L));
+                .andExpect(jsonPath("$.idResena").value(1L))
+                .andExpect(jsonPath("$._links").doesNotExist());
     }
 
     @Test
