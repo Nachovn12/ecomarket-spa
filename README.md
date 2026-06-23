@@ -483,13 +483,13 @@ Para validar el proyecto, se ejecutaron pruebas por microservicio.
 Desde la raíz del repositorio:
 
 ```powershell
-.\ms-usuarios-identidad\mvnw.cmd -f ms-usuarios-identidad/pom.xml clean test
-.\ms-catalogo\mvnw.cmd -f ms-catalogo/pom.xml clean test
-.\ms-inventario-abastecimiento\mvnw.cmd -f ms-inventario-abastecimiento/pom.xml clean test
-.\ms-pedidos-ventas\mvnw.cmd -f ms-pedidos-ventas/pom.xml clean test
-.\ms-logistica-envios\mvnw.cmd -f ms-logistica-envios/pom.xml clean test
-.\ms-administracion-soporte\mvnw.cmd -f ms-administracion-soporte/pom.xml clean test
-.\ms-reportes\mvnw.cmd -f ms-reportes/pom.xml clean test
+cd .\ms-usuarios-identidad\ ; .\mvnw.cmd clean test ; cd ..
+cd .\ms-catalogo\ ; .\mvnw.cmd clean test ; cd ..
+cd .\ms-inventario-abastecimiento\ ; .\mvnw.cmd clean test ; cd ..
+cd .\ms-pedidos-ventas\ ; .\mvnw.cmd clean test ; cd ..
+cd .\ms-logistica-envios\ ; .\mvnw.cmd clean test ; cd ..
+cd .\ms-administracion-soporte\ ; .\mvnw.cmd clean test ; cd ..
+cd .\ms-reportes\ ; .\mvnw.cmd clean test ; cd ..
 ```
 
 Resultado esperado:
@@ -503,13 +503,13 @@ BUILD SUCCESS
 Desde la raíz del repositorio:
 
 ```powershell
-.\ms-usuarios-identidad\mvnw.cmd -f ms-usuarios-identidad/pom.xml clean package
-.\ms-catalogo\mvnw.cmd -f ms-catalogo/pom.xml clean package
-.\ms-inventario-abastecimiento\mvnw.cmd -f ms-inventario-abastecimiento/pom.xml clean package
-.\ms-pedidos-ventas\mvnw.cmd -f ms-pedidos-ventas/pom.xml clean package
-.\ms-logistica-envios\mvnw.cmd -f ms-logistica-envios/pom.xml clean package
-.\ms-administracion-soporte\mvnw.cmd -f ms-administracion-soporte/pom.xml clean package
-.\ms-reportes\mvnw.cmd -f ms-reportes/pom.xml clean package
+cd .\ms-usuarios-identidad\ ; .\mvnw.cmd clean package ; cd ..
+cd .\ms-catalogo\ ; .\mvnw.cmd clean package ; cd ..
+cd .\ms-inventario-abastecimiento\ ; .\mvnw.cmd clean package ; cd ..
+cd .\ms-pedidos-ventas\ ; .\mvnw.cmd clean package ; cd ..
+cd .\ms-logistica-envios\ ; .\mvnw.cmd clean package ; cd ..
+cd .\ms-administracion-soporte\ ; .\mvnw.cmd clean package ; cd ..
+cd .\ms-reportes\ ; .\mvnw.cmd clean package ; cd ..
 ```
 
 Resultado esperado:
@@ -523,13 +523,13 @@ BUILD SUCCESS
 Para verificar que la cobertura supere el 80% (regla de EP3):
 
 ```powershell
-.\ms-usuarios-identidad\mvnw.cmd -f ms-usuarios-identidad/pom.xml clean test jacoco:report
-.\ms-catalogo\mvnw.cmd -f ms-catalogo/pom.xml clean test jacoco:report
-.\ms-inventario-abastecimiento\mvnw.cmd -f ms-inventario-abastecimiento/pom.xml clean test jacoco:report
-.\ms-pedidos-ventas\mvnw.cmd -f ms-pedidos-ventas/pom.xml clean test jacoco:report
-.\ms-logistica-envios\mvnw.cmd -f ms-logistica-envios/pom.xml clean test jacoco:report
-.\ms-administracion-soporte\mvnw.cmd -f ms-administracion-soporte/pom.xml clean test jacoco:report
-.\ms-reportes\mvnw.cmd -f ms-reportes/pom.xml clean test jacoco:report
+cd .\ms-usuarios-identidad\ ; .\mvnw.cmd clean test jacoco:report ; cd ..
+cd .\ms-catalogo\ ; .\mvnw.cmd clean test jacoco:report ; cd ..
+cd .\ms-inventario-abastecimiento\ ; .\mvnw.cmd clean test jacoco:report ; cd ..
+cd .\ms-pedidos-ventas\ ; .\mvnw.cmd clean test jacoco:report ; cd ..
+cd .\ms-logistica-envios\ ; .\mvnw.cmd clean test jacoco:report ; cd ..
+cd .\ms-administracion-soporte\ ; .\mvnw.cmd clean test jacoco:report ; cd ..
+cd .\ms-reportes\ ; .\mvnw.cmd clean test jacoco:report ; cd ..
 ```
 
 El reporte oficial se genera en `target/site/jacoco/index.html`.
@@ -854,25 +854,25 @@ git log --oneline -5
 Ejecutar tests:
 
 ```powershell
-.\ms-usuarios-identidad\mvnw.cmd -f ms-usuarios-identidad/pom.xml clean test
-.\ms-catalogo\mvnw.cmd -f ms-catalogo/pom.xml clean test
-.\ms-inventario-abastecimiento\mvnw.cmd -f ms-inventario-abastecimiento/pom.xml clean test
-.\ms-pedidos-ventas\mvnw.cmd -f ms-pedidos-ventas/pom.xml clean test
-.\ms-logistica-envios\mvnw.cmd -f ms-logistica-envios/pom.xml clean test
-.\ms-administracion-soporte\mvnw.cmd -f ms-administracion-soporte/pom.xml clean test
-.\ms-reportes\mvnw.cmd -f ms-reportes/pom.xml clean test
+cd .\ms-usuarios-identidad\ ; .\mvnw.cmd clean test ; cd ..
+cd .\ms-catalogo\ ; .\mvnw.cmd clean test ; cd ..
+cd .\ms-inventario-abastecimiento\ ; .\mvnw.cmd clean test ; cd ..
+cd .\ms-pedidos-ventas\ ; .\mvnw.cmd clean test ; cd ..
+cd .\ms-logistica-envios\ ; .\mvnw.cmd clean test ; cd ..
+cd .\ms-administracion-soporte\ ; .\mvnw.cmd clean test ; cd ..
+cd .\ms-reportes\ ; .\mvnw.cmd clean test ; cd ..
 ```
 
 Ejecutar package:
 
 ```powershell
-.\ms-usuarios-identidad\mvnw.cmd -f ms-usuarios-identidad/pom.xml clean package
-.\ms-catalogo\mvnw.cmd -f ms-catalogo/pom.xml clean package
-.\ms-inventario-abastecimiento\mvnw.cmd -f ms-inventario-abastecimiento/pom.xml clean package
-.\ms-pedidos-ventas\mvnw.cmd -f ms-pedidos-ventas/pom.xml clean package
-.\ms-logistica-envios\mvnw.cmd -f ms-logistica-envios/pom.xml clean package
-.\ms-administracion-soporte\mvnw.cmd -f ms-administracion-soporte/pom.xml clean package
-.\ms-reportes\mvnw.cmd -f ms-reportes/pom.xml clean package
+cd .\ms-usuarios-identidad\ ; .\mvnw.cmd clean package ; cd ..
+cd .\ms-catalogo\ ; .\mvnw.cmd clean package ; cd ..
+cd .\ms-inventario-abastecimiento\ ; .\mvnw.cmd clean package ; cd ..
+cd .\ms-pedidos-ventas\ ; .\mvnw.cmd clean package ; cd ..
+cd .\ms-logistica-envios\ ; .\mvnw.cmd clean package ; cd ..
+cd .\ms-administracion-soporte\ ; .\mvnw.cmd clean package ; cd ..
+cd .\ms-reportes\ ; .\mvnw.cmd clean package ; cd ..
 ```
 
 ---
