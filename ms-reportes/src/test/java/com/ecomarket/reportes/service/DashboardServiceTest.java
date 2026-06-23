@@ -89,4 +89,18 @@ class DashboardServiceTest {
         assertThat(dto.getTasaConversion()).isNotNull();
         assertThat(dto.getTicketPromedio()).isNotNull();
     }
+
+    // Cobertura extra: calcularTasaConversion con 0 pedidos
+    @Test
+    void calcularTasaConversion_conCeroPedidos_retornaCero() {
+        BigDecimal resultado = dashboardService.calcularTasaConversion(0, 0);
+        assertThat(resultado).isEqualByComparingTo(BigDecimal.ZERO);
+    }
+
+    // Cobertura extra: calcularTicketPromedio con 0 transacciones
+    @Test
+    void calcularTicketPromedio_conCeroTransacciones_retornaCero() {
+        BigDecimal resultado = dashboardService.calcularTicketPromedio(1000.0, 0);
+        assertThat(resultado).isEqualByComparingTo(BigDecimal.ZERO);
+    }
 }

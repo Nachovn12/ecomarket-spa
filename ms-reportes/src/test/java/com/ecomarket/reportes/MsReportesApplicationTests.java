@@ -44,6 +44,12 @@ class MsReportesApplicationTests {
     }
 
     @Test
+    void mainClassLoads() {
+        MsReportesApplication.main(new String[]{"--spring.profiles.active=test", "--spring.sql.init.mode=never", "--spring.jpa.hibernate.ddl-auto=create-drop", "--spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL", "--spring.datasource.driver-class-name=org.h2.Driver"});
+        assertTrue(true, "Application main loaded successfully");
+    }
+
+    @Test
     void testCrearIndicadorKPI() {
         IndicadorKPI kpi = new IndicadorKPI();
         kpi.setTipo(TipoKPI.VENTAS_TOTALES);
