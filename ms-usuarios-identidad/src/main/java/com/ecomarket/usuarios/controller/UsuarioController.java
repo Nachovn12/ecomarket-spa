@@ -14,12 +14,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -38,13 +35,8 @@ public class UsuarioController {
             @ApiResponse(responseCode = "409", description = "Email o RUN ya registrados", content = @Content)
     })
     @PostMapping("/registro")
-    public ResponseEntity<EntityModel<UsuarioResponseDTO>> registrarCliente(@Valid @RequestBody UsuarioRequestDTO request) {
-        UsuarioResponseDTO response = usuarioService.registrarCliente(request);
-
-        EntityModel<UsuarioResponseDTO> model = EntityModel.of(response,
-                linkTo(methodOn(UsuarioController.class).registrarCliente(request)).withSelfRel());
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(model);
+    public ResponseEntity<UsuarioResponseDTO> registrarCliente(@Valid @RequestBody UsuarioRequestDTO request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.registrarCliente(request));
     }
 
     @Operation(summary = "Obtener el perfil de un cliente")
@@ -54,15 +46,9 @@ public class UsuarioController {
             @ApiResponse(responseCode = "404", description = "Cliente no encontrado", content = @Content)
     })
     @GetMapping("/clientes/{idCliente}/perfil")
-    public ResponseEntity<EntityModel<PerfilClienteResponseDTO>> obtenerPerfilCliente(
+    public ResponseEntity<PerfilClienteResponseDTO> obtenerPerfilCliente(
             @Parameter(description = "ID del cliente", example = "10", required = true) @PathVariable Long idCliente) {
-        PerfilClienteResponseDTO response = usuarioService.obtenerPerfilCliente(idCliente);
-
-        EntityModel<PerfilClienteResponseDTO> model = EntityModel.of(response,
-                linkTo(methodOn(UsuarioController.class).obtenerPerfilCliente(idCliente)).withSelfRel(),
-                linkTo(methodOn(UsuarioController.class).actualizarPerfilCliente(idCliente, null)).withRel("actualizarPerfil"));
-
-        return ResponseEntity.ok(model);
+        return ResponseEntity.ok(usuarioService.obtenerPerfilCliente(idCliente));
     }
 
     @Operation(summary = "Actualizar el perfil de un cliente")
@@ -73,16 +59,9 @@ public class UsuarioController {
             @ApiResponse(responseCode = "404", description = "Cliente no encontrado", content = @Content)
     })
     @PutMapping("/clientes/{idCliente}/perfil")
-    public ResponseEntity<EntityModel<PerfilClienteResponseDTO>> actualizarPerfilCliente(
+    public ResponseEntity<PerfilClienteResponseDTO> actualizarPerfilCliente(
             @Parameter(description = "ID del cliente", example = "10", required = true) @PathVariable Long idCliente,
             @Valid @RequestBody ActualizarPerfilClienteRequestDTO request) {
-
-        PerfilClienteResponseDTO response = usuarioService.actualizarPerfilCliente(idCliente, request);
-
-        EntityModel<PerfilClienteResponseDTO> model = EntityModel.of(response,
-                linkTo(methodOn(UsuarioController.class).obtenerPerfilCliente(idCliente)).withSelfRel(),
-                linkTo(methodOn(UsuarioController.class).actualizarPerfilCliente(idCliente, request)).withRel("actualizarPerfil"));
-
-        return ResponseEntity.ok(model);
+        return ResponseEntity.ok(usuarioService.actualizarPerfilCliente(idCliente, request));
     }
 }

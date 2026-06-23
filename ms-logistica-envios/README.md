@@ -25,7 +25,7 @@ Microservicio responsable de gestionar envios, rutas de entrega, proveedores log
 
 ## Tecnologias
 
-- Java 21
+- Java 25
 - Spring Boot
 - Spring Web
 - Spring Data JPA / Hibernate
@@ -82,10 +82,11 @@ cd .\ms-logistica-envios\
 .\mvnw.cmd test
 ```
 
-O desde la raiz:
+O entrando al directorio (recomendado):
 
 ```powershell
-mvn -f ms-logistica-envios/pom.xml clean test
+cd .\ms-logistica-envios\
+.\mvnw.cmd clean test
 ```
 
 ## Endpoints principales

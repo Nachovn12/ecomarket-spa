@@ -12,17 +12,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * Controller de categorias del catalogo.
@@ -49,25 +43,21 @@ public class CategoriaController {
                     content = @Content)
     })
     @PostMapping
-    public ResponseEntity<EntityModel<CategoriaResponseDTO>> crearCategoria(
-            @Valid @RequestBody CategoriaRequestDTO dto) {
+    public ResponseEntity<CategoriaResponseDTO> crearCategoria(@Valid @RequestBody CategoriaRequestDTO dto) {
         CategoriaResponseDTO creada = catalogoService.crearCategoria(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ensamblarResource(creada));
+        return ResponseEntity.status(HttpStatus.CREATED).body(creada);
     }
 
     @Operation(
             summary = "Listar todas las categorias",
-            description = "Retorna la coleccion de categorias registradas con enlaces HATEOAS."
+            description = "Retorna la coleccion de categorias registradas."
     )
     @ApiResponse(responseCode = "200", description = "Listado de categorias",
             content = @Content(schema = @Schema(implementation = CategoriaResponseDTO.class)))
     @GetMapping
-    public ResponseEntity<CollectionModel<EntityModel<CategoriaResponseDTO>>> listarCategorias() {
-        List<EntityModel<CategoriaResponseDTO>> categorias = catalogoService.obtenerTodasCategorias().stream()
-                .map(this::ensamblarResource)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(CollectionModel.of(categorias,
-                linkTo(methodOn(CategoriaController.class).listarCategorias()).withSelfRel()));
+    public ResponseEntity<List<CategoriaResponseDTO>> listarCategorias() {
+        List<CategoriaResponseDTO> categorias = catalogoService.obtenerTodasCategorias();
+        return ResponseEntity.ok(categorias);
     }
 
     @Operation(
@@ -81,11 +71,11 @@ public class CategoriaController {
                     content = @Content)
     })
     @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<CategoriaResponseDTO>> obtenerCategoriaPorId(
+    public ResponseEntity<CategoriaResponseDTO> obtenerCategoriaPorId(
             @Parameter(description = "ID de la categoria a buscar", example = "1", required = true)
             @PathVariable Long id) {
         CategoriaResponseDTO categoria = catalogoService.obtenerCategoriaPorId(id);
-        return ResponseEntity.ok(ensamblarResource(categoria));
+        return ResponseEntity.ok(categoria);
     }
 
     @Operation(
@@ -100,12 +90,12 @@ public class CategoriaController {
             @ApiResponse(responseCode = "409", description = "Conflicto con el nuevo nombre", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<EntityModel<CategoriaResponseDTO>> actualizarCategoria(
+    public ResponseEntity<CategoriaResponseDTO> actualizarCategoria(
             @Parameter(description = "ID de la categoria a actualizar", example = "1", required = true)
             @PathVariable Long id,
             @Valid @RequestBody CategoriaRequestDTO dto) {
         CategoriaResponseDTO actualizada = catalogoService.actualizarCategoria(id, dto);
-        return ResponseEntity.ok(ensamblarResource(actualizada));
+        return ResponseEntity.ok(actualizada);
     }
 
     @Operation(
@@ -122,11 +112,5 @@ public class CategoriaController {
             @PathVariable Long id) {
         catalogoService.eliminarCategoria(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private EntityModel<CategoriaResponseDTO> ensamblarResource(CategoriaResponseDTO dto) {
-        return EntityModel.of(dto,
-                linkTo(methodOn(CategoriaController.class).obtenerCategoriaPorId(dto.getIdCategoria())).withSelfRel(),
-                linkTo(methodOn(CategoriaController.class).listarCategorias()).withRel("categorias"));
     }
 }

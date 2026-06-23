@@ -11,17 +11,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/envios/proveedores")
@@ -34,13 +28,6 @@ public class ProveedorController {
         this.logisticaService = logisticaService;
     }
 
-    private EntityModel<Proveedor> ensamblar(Proveedor prov) {
-        return EntityModel.of(prov,
-                linkTo(methodOn(ProveedorController.class).obtenerPorId(prov.getId())).withSelfRel(),
-                linkTo(methodOn(ProveedorController.class).obtenerTodos()).withRel("proveedores")
-        );
-    }
-
     @Operation(summary = "Crear un proveedor logistico")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Proveedor creado",
@@ -49,20 +36,17 @@ public class ProveedorController {
             @ApiResponse(responseCode = "409", description = "Conflicto al crear el proveedor", content = @Content)
     })
     @PostMapping
-    public ResponseEntity<EntityModel<Proveedor>> crear(@Valid @RequestBody ProveedorDTO dto) {
+    public ResponseEntity<Proveedor> crear(@Valid @RequestBody ProveedorDTO dto) {
         Proveedor creado = logisticaService.crearProveedor(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ensamblar(creado));
+        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @Operation(summary = "Listar todos los proveedores logisticos")
     @ApiResponse(responseCode = "200", description = "Listado de proveedores",
             content = @Content(schema = @Schema(implementation = Proveedor.class)))
     @GetMapping
-    public ResponseEntity<CollectionModel<EntityModel<Proveedor>>> obtenerTodos() {
-        List<EntityModel<Proveedor>> proveedores = logisticaService.obtenerProveedores().stream()
-                .map(this::ensamblar)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(CollectionModel.of(proveedores, linkTo(methodOn(ProveedorController.class).obtenerTodos()).withSelfRel()));
+    public ResponseEntity<List<Proveedor>> obtenerTodos() {
+        return ResponseEntity.ok(logisticaService.obtenerProveedores());
     }
 
     @Operation(summary = "Obtener un proveedor por ID")
@@ -72,9 +56,9 @@ public class ProveedorController {
             @ApiResponse(responseCode = "404", description = "Proveedor no encontrado", content = @Content)
     })
     @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<Proveedor>> obtenerPorId(
+    public ResponseEntity<Proveedor> obtenerPorId(
             @Parameter(description = "ID del proveedor", example = "1", required = true) @PathVariable Long id) {
-        return ResponseEntity.ok(ensamblar(logisticaService.obtenerProveedorPorId(id)));
+        return ResponseEntity.ok(logisticaService.obtenerProveedorPorId(id));
     }
 
     @Operation(summary = "Actualizar un proveedor logistico")
@@ -84,10 +68,10 @@ public class ProveedorController {
             @ApiResponse(responseCode = "404", description = "Proveedor no encontrado", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<EntityModel<Proveedor>> actualizar(
+    public ResponseEntity<Proveedor> actualizar(
             @Parameter(description = "ID del proveedor", example = "1", required = true) @PathVariable Long id,
             @Valid @RequestBody ProveedorDTO dto) {
-        return ResponseEntity.ok(ensamblar(logisticaService.actualizarProveedor(id, dto)));
+        return ResponseEntity.ok(logisticaService.actualizarProveedor(id, dto));
     }
 
     @Operation(summary = "Activar un proveedor")
@@ -118,25 +102,19 @@ public class ProveedorController {
     @ApiResponse(responseCode = "200", description = "Proveedores activos",
             content = @Content(schema = @Schema(implementation = Proveedor.class)))
     @GetMapping("/activos")
-    public ResponseEntity<CollectionModel<EntityModel<Proveedor>>> obtenerActivos() {
-        List<EntityModel<Proveedor>> activos = logisticaService.obtenerProveedoresActivos().stream()
-                .map(this::ensamblar)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(CollectionModel.of(activos));
+    public ResponseEntity<List<Proveedor>> obtenerActivos() {
+        return ResponseEntity.ok(logisticaService.obtenerProveedoresActivos());
     }
 
     @Operation(summary = "Buscar proveedores por tipo y cobertura")
     @ApiResponse(responseCode = "200", description = "Resultados de la busqueda",
             content = @Content(schema = @Schema(implementation = Proveedor.class)))
     @GetMapping("/buscar")
-    public ResponseEntity<CollectionModel<EntityModel<Proveedor>>> buscar(
+    public ResponseEntity<List<Proveedor>> buscar(
             @Parameter(description = "Tipo de proveedor", example = "TRANSPORTE", required = true)
             @RequestParam String tipoProveedor,
             @Parameter(description = "Cobertura geografica", example = "REGIONAL", required = true)
             @RequestParam String cobertura) {
-        List<EntityModel<Proveedor>> resultados = logisticaService.buscarProveedores(tipoProveedor, cobertura).stream()
-                .map(this::ensamblar)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(CollectionModel.of(resultados));
+        return ResponseEntity.ok(logisticaService.buscarProveedores(tipoProveedor, cobertura));
     }
 }

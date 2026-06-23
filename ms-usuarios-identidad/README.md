@@ -23,7 +23,7 @@ Microservicio responsable del registro de clientes, autenticacion, actualizacion
 
 ## Tecnologias
 
-- Java 21
+- Java 25
 - Spring Boot
 - Spring Web
 - Spring Data JPA / Hibernate
@@ -81,10 +81,11 @@ cd .\ms-usuarios-identidad\
 .\mvnw.cmd test
 ```
 
-O desde la raiz:
+O entrando al directorio (recomendado):
 
 ```powershell
-mvn -f ms-usuarios-identidad/pom.xml clean test
+cd .\ms-usuarios-identidad\
+.\mvnw.cmd clean test
 ```
 
 ## Endpoints principales

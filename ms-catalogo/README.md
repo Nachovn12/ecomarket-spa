@@ -23,7 +23,7 @@ Microservicio responsable de administrar productos ecologicos, categorias, busqu
 
 ## Tecnologias
 
-- Java 21
+- Java 25
 - Spring Boot
 - Spring Web
 - Spring Data JPA / Hibernate
@@ -81,10 +81,11 @@ cd .\ms-catalogo\
 .\mvnw.cmd test
 ```
 
-O desde la raiz:
+O entrando al directorio (recomendado):
 
 ```powershell
-mvn -f ms-catalogo/pom.xml clean test
+cd .\ms-catalogo\
+.\mvnw.cmd clean test
 ```
 
 ## Endpoints principales

@@ -25,7 +25,7 @@ Microservicio responsable del flujo comercial de EcoMarket SPA: carrito, pedidos
 
 ## Tecnologias
 
-- Java 21
+- Java 25
 - Spring Boot
 - Spring Web
 - Spring Data JPA / Hibernate
@@ -83,10 +83,11 @@ cd .\ms-pedidos-ventas\
 .\mvnw.cmd test
 ```
 
-O desde la raiz:
+O entrando al directorio (recomendado):
 
 ```powershell
-mvn -f ms-pedidos-ventas/pom.xml clean test
+cd .\ms-pedidos-ventas\
+.\mvnw.cmd clean test
 ```
 
 ## Endpoints principales

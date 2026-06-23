@@ -12,17 +12,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 /**
  * Controller de productos del catalogo.
@@ -47,25 +41,21 @@ public class ProductoController {
             @ApiResponse(responseCode = "409", description = "SKU duplicado", content = @Content)
     })
     @PostMapping
-    public ResponseEntity<EntityModel<ProductoResponseDTO>> crear(
-            @Valid @RequestBody ProductoRequestDTO dto) {
+    public ResponseEntity<ProductoResponseDTO> crear(@Valid @RequestBody ProductoRequestDTO dto) {
         ProductoResponseDTO creado = catalogoService.crearProducto(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ensamblarResource(creado));
+        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @Operation(
             summary = "Listar todos los productos",
-            description = "Retorna la coleccion completa de productos del catalogo con enlaces HATEOAS."
+            description = "Retorna la coleccion completa de productos del catalogo."
     )
     @ApiResponse(responseCode = "200", description = "Listado de productos",
             content = @Content(schema = @Schema(implementation = ProductoResponseDTO.class)))
     @GetMapping
-    public ResponseEntity<CollectionModel<EntityModel<ProductoResponseDTO>>> listarTodos() {
-        List<EntityModel<ProductoResponseDTO>> productos = catalogoService.obtenerTodosProductos().stream()
-                .map(this::ensamblarResource)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(CollectionModel.of(productos,
-                linkTo(methodOn(ProductoController.class).listarTodos()).withSelfRel()));
+    public ResponseEntity<List<ProductoResponseDTO>> listarTodos() {
+        List<ProductoResponseDTO> productos = catalogoService.obtenerTodosProductos();
+        return ResponseEntity.ok(productos);
     }
 
     @Operation(
@@ -78,11 +68,11 @@ public class ProductoController {
             @ApiResponse(responseCode = "404", description = "Producto no encontrado", content = @Content)
     })
     @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<ProductoResponseDTO>> buscarPorId(
+    public ResponseEntity<ProductoResponseDTO> buscarPorId(
             @Parameter(description = "ID del producto", example = "1", required = true)
             @PathVariable Long id) {
         ProductoResponseDTO producto = catalogoService.obtenerProductoPorId(id);
-        return ResponseEntity.ok(ensamblarResource(producto));
+        return ResponseEntity.ok(producto);
     }
 
     @Operation(
@@ -97,12 +87,12 @@ public class ProductoController {
             @ApiResponse(responseCode = "409", description = "Conflicto con SKU duplicado", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<EntityModel<ProductoResponseDTO>> actualizar(
+    public ResponseEntity<ProductoResponseDTO> actualizar(
             @Parameter(description = "ID del producto", example = "1", required = true)
             @PathVariable Long id,
             @Valid @RequestBody ProductoRequestDTO dto) {
         ProductoResponseDTO actualizado = catalogoService.actualizarProducto(id, dto);
-        return ResponseEntity.ok(ensamblarResource(actualizado));
+        return ResponseEntity.ok(actualizado);
     }
 
     @Operation(
@@ -129,7 +119,7 @@ public class ProductoController {
     @ApiResponse(responseCode = "200", description = "Resultados de la busqueda",
             content = @Content(schema = @Schema(implementation = ProductoResponseDTO.class)))
     @GetMapping("/buscar")
-    public ResponseEntity<CollectionModel<EntityModel<ProductoResponseDTO>>> buscar(
+    public ResponseEntity<List<ProductoResponseDTO>> buscar(
             @Parameter(description = "Palabra clave a buscar en nombre o descripcion", example = "biodegradable")
             @RequestParam(required = false) String palabraClave,
             @Parameter(description = "ID de la categoria a filtrar", example = "2")
@@ -150,10 +140,7 @@ public class ProductoController {
             resultados = catalogoService.obtenerTodosProductos();
         }
 
-        List<EntityModel<ProductoResponseDTO>> recursos = resultados.stream()
-                .map(this::ensamblarResource).collect(Collectors.toList());
-        return ResponseEntity.ok(CollectionModel.of(recursos,
-                linkTo(methodOn(ProductoController.class).listarTodos()).withRel("productos")));
+        return ResponseEntity.ok(resultados);
     }
 
     @Operation(
@@ -163,18 +150,10 @@ public class ProductoController {
     @ApiResponse(responseCode = "200", description = "Productos ecologicos encontrados",
             content = @Content(schema = @Schema(implementation = ProductoResponseDTO.class)))
     @GetMapping("/ecologicos")
-    public ResponseEntity<CollectionModel<EntityModel<ProductoResponseDTO>>> buscarEcologicos(
+    public ResponseEntity<List<ProductoResponseDTO>> buscarEcologicos(
             @Parameter(description = "Atributo ecologico a buscar", example = "biodegradable")
             @RequestParam(defaultValue = "biodegradable") String atributoEcologico) {
-        List<EntityModel<ProductoResponseDTO>> recursos = catalogoService.buscarEcologicos(atributoEcologico)
-                .stream().map(this::ensamblarResource).collect(Collectors.toList());
-        return ResponseEntity.ok(CollectionModel.of(recursos,
-                linkTo(methodOn(ProductoController.class).listarTodos()).withRel("productos")));
-    }
-
-    private EntityModel<ProductoResponseDTO> ensamblarResource(ProductoResponseDTO dto) {
-        return EntityModel.of(dto,
-                linkTo(methodOn(ProductoController.class).buscarPorId(dto.getIdProducto())).withSelfRel(),
-                linkTo(methodOn(ProductoController.class).listarTodos()).withRel("productos"));
+        List<ProductoResponseDTO> resultados = catalogoService.buscarEcologicos(atributoEcologico);
+        return ResponseEntity.ok(resultados);
     }
 }

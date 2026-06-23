@@ -14,17 +14,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/envios")
@@ -37,14 +31,6 @@ public class EnvioController {
         this.logisticaService = logisticaService;
     }
 
-    private EntityModel<Envio> ensamblar(Envio envio) {
-        return EntityModel.of(envio,
-                linkTo(methodOn(EnvioController.class).obtenerPorId(envio.getId())).withSelfRel(),
-                linkTo(methodOn(EnvioController.class).obtenerTodos()).withRel("envios"),
-                linkTo(methodOn(EnvioController.class).obtenerSeguimiento(envio.getId())).withRel("seguimiento")
-        );
-    }
-
     @Operation(summary = "Crear un nuevo envio")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Envio creado",
@@ -52,20 +38,17 @@ public class EnvioController {
             @ApiResponse(responseCode = "400", description = "Datos invalidos", content = @Content)
     })
     @PostMapping
-    public ResponseEntity<EntityModel<Envio>> crear(@Valid @RequestBody EnvioDTO dto) {
+    public ResponseEntity<Envio> crear(@Valid @RequestBody EnvioDTO dto) {
         Envio creado = logisticaService.crearEnvio(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(ensamblar(creado));
+        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @Operation(summary = "Listar todos los envios")
     @ApiResponse(responseCode = "200", description = "Listado de envios",
             content = @Content(schema = @Schema(implementation = Envio.class)))
     @GetMapping
-    public ResponseEntity<CollectionModel<EntityModel<Envio>>> obtenerTodos() {
-        List<EntityModel<Envio>> envios = logisticaService.obtenerEnvios().stream()
-                .map(this::ensamblar)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(CollectionModel.of(envios, linkTo(methodOn(EnvioController.class).obtenerTodos()).withSelfRel()));
+    public ResponseEntity<List<Envio>> obtenerTodos() {
+        return ResponseEntity.ok(logisticaService.obtenerEnvios());
     }
 
     @Operation(summary = "Obtener un envio por ID")
@@ -75,9 +58,9 @@ public class EnvioController {
             @ApiResponse(responseCode = "404", description = "Envio no encontrado", content = @Content)
     })
     @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<Envio>> obtenerPorId(
+    public ResponseEntity<Envio> obtenerPorId(
             @Parameter(description = "ID del envio", example = "1", required = true) @PathVariable Long id) {
-        return ResponseEntity.ok(ensamblar(logisticaService.obtenerEnvioPorId(id)));
+        return ResponseEntity.ok(logisticaService.obtenerEnvioPorId(id));
     }
 
     @Operation(summary = "Actualizar un envio existente")
@@ -88,10 +71,10 @@ public class EnvioController {
             @ApiResponse(responseCode = "404", description = "Envio no encontrado", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<EntityModel<Envio>> actualizar(
+    public ResponseEntity<Envio> actualizar(
             @Parameter(description = "ID del envio", example = "1", required = true) @PathVariable Long id,
             @Valid @RequestBody EnvioDTO dto) {
-        return ResponseEntity.ok(ensamblar(logisticaService.actualizarEnvio(id, dto)));
+        return ResponseEntity.ok(logisticaService.actualizarEnvio(id, dto));
     }
 
     @Operation(summary = "Eliminar un envio")
@@ -110,12 +93,9 @@ public class EnvioController {
     @ApiResponse(responseCode = "200", description = "Envios del pedido",
             content = @Content(schema = @Schema(implementation = Envio.class)))
     @GetMapping("/pedido/{idPedido}")
-    public ResponseEntity<CollectionModel<EntityModel<Envio>>> obtenerPorPedido(
+    public ResponseEntity<List<Envio>> obtenerPorPedido(
             @Parameter(description = "ID del pedido", example = "1", required = true) @PathVariable Long idPedido) {
-        List<EntityModel<Envio>> envios = logisticaService.obtenerEnviosPorPedido(idPedido).stream()
-                .map(this::ensamblar)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(CollectionModel.of(envios));
+        return ResponseEntity.ok(logisticaService.obtenerEnviosPorPedido(idPedido));
     }
 
     @Operation(summary = "Cambiar el estado de un envio",
@@ -128,10 +108,10 @@ public class EnvioController {
             @ApiResponse(responseCode = "409", description = "Conflicto con el estado actual", content = @Content)
     })
     @PatchMapping("/{id}/estado")
-    public ResponseEntity<EntityModel<Envio>> cambiarEstado(
+    public ResponseEntity<Envio> cambiarEstado(
             @Parameter(description = "ID del envio", example = "1", required = true) @PathVariable Long id,
             @Valid @RequestBody CambioEstadoRequestDTO dto) {
-        return ResponseEntity.ok(ensamblar(logisticaService.cambiarEstadoEnvio(id, dto)));
+        return ResponseEntity.ok(logisticaService.cambiarEstadoEnvio(id, dto));
     }
 
     @Operation(summary = "Registrar una incidencia en un envio")
@@ -141,32 +121,18 @@ public class EnvioController {
             @ApiResponse(responseCode = "404", description = "Envio no encontrado", content = @Content)
     })
     @PatchMapping("/{id}/incidencia")
-    public ResponseEntity<EntityModel<Envio>> registrarIncidencia(
+    public ResponseEntity<Envio> registrarIncidencia(
             @Parameter(description = "ID del envio", example = "1", required = true) @PathVariable Long id,
             @Valid @RequestBody IncidenciaRequestDTO dto) {
-        return ResponseEntity.ok(ensamblar(logisticaService.registrarIncidencia(id, dto)));
+        return ResponseEntity.ok(logisticaService.registrarIncidencia(id, dto));
     }
 
     @Operation(summary = "Obtener el seguimiento de un envio")
     @ApiResponse(responseCode = "200", description = "Trazabilidad del envio",
             content = @Content(schema = @Schema(implementation = SeguimientoEnvio.class)))
     @GetMapping("/{id}/seguimiento")
-    public ResponseEntity<CollectionModel<EntityModel<SeguimientoEnvio>>> obtenerSeguimiento(
+    public ResponseEntity<List<SeguimientoEnvio>> obtenerSeguimiento(
             @Parameter(description = "ID del envio", example = "1", required = true) @PathVariable Long id) {
-
-        List<EntityModel<SeguimientoEnvio>> seguimiento = logisticaService.obtenerSeguimiento(id)
-                .stream()
-                .map(s -> EntityModel.of(s,
-                        linkTo(methodOn(EnvioController.class).obtenerSeguimiento(id)).withRel("seguimiento"),
-                        linkTo(methodOn(EnvioController.class).obtenerPorId(id)).withRel("envio")))
-                .collect(Collectors.toList());
-
-        CollectionModel<EntityModel<SeguimientoEnvio>> collection = CollectionModel.of(
-                seguimiento,
-                linkTo(methodOn(EnvioController.class).obtenerSeguimiento(id)).withSelfRel(),
-                linkTo(methodOn(EnvioController.class).obtenerPorId(id)).withRel("envio")
-        );
-
-        return ResponseEntity.ok(collection);
+        return ResponseEntity.ok(logisticaService.obtenerSeguimiento(id));
     }
 }

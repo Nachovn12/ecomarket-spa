@@ -23,10 +23,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+import org.springframework.test.context.ActiveProfiles;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
+@ActiveProfiles("test")
 class MsLogisticaEnviosApplicationTests {
 
     @Autowired
@@ -43,6 +46,12 @@ class MsLogisticaEnviosApplicationTests {
 
     @Test
     void contextLoads() {
+    }
+
+    // SE AGREGA PARA EL 100%
+    @Test
+    void mainEjecutaAplicacion() {
+        MsLogisticaEnviosApplication.main(new String[] {"--spring.profiles.active=test"});
     }
 
     @Test
