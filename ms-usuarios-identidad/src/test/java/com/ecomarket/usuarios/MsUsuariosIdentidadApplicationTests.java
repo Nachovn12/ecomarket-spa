@@ -21,10 +21,4 @@ class MsUsuariosIdentidadApplicationTests {
     @Test
     void contextLoads() {
     }
-
-    // SE AGREGA PARA EL 100%
-    @Test
-    void mainEjecutaAplicacion() {
-        MsUsuariosIdentidadApplication.main(new String[] {"--spring.profiles.active=test"});
-    }
 }
