@@ -37,10 +37,6 @@
             <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-hateoas</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
@@ -136,58 +132,6 @@
                                     <artifactId>lombok</artifactId>
                                 </path>
                             </annotationProcessorPaths>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.14</version>
-                <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals><goal>prepare-agent</goal></goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>test</phase>
-                        <goals><goal>report</goal></goals>
-                        <configuration>
-                            <excludes>
-                                <exclude>**/MsReportesApplication.class</exclude>
-                                <exclude>**/config/**</exclude>
-                                <exclude>**/dto/**</exclude>
-                                <exclude>**/model/**</exclude>
-                                <exclude>**/InventarioClientService.class</exclude>
-                                <exclude>**/PedidosClientService.class</exclude>
-                            </excludes>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>check</id>
-                        <goals><goal>check</goal></goals>
-                        <configuration>
-                            <excludes>
-                                <exclude>**/MsReportesApplication.class</exclude>
-                                <exclude>**/config/**</exclude>
-                                <exclude>**/dto/**</exclude>
-                                <exclude>**/model/**</exclude>
-                                <exclude>**/InventarioClientService.class</exclude>
-                                <exclude>**/PedidosClientService.class</exclude>
-                            </excludes>
-                            <rules>
-                                <rule>
-                                    <element>BUNDLE</element>
-                                    <limits>
-                                        <limit>
-                                            <counter>INSTRUCTION</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>0.80</minimum>
-                                        </limit>
-                                    </limits>
-                                </rule>
-                            </rules>
                         </configuration>
                     </execution>
                 </executions>

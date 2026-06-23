@@ -15,16 +15,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/v1/reportes")
@@ -41,15 +36,8 @@ public class ReporteController {
     @ApiResponse(responseCode = "200", description = "Listado de reportes",
             content = @Content(schema = @Schema(implementation = Reporte.class)))
     @GetMapping
-    public ResponseEntity<CollectionModel<EntityModel<Reporte>>> listarReportes() {
-        List<EntityModel<Reporte>> reportes = reporteService.listarReportes().stream()
-                .map(r -> EntityModel.of(r,
-                        linkTo(methodOn(ReporteController.class).obtenerReportePorId(r.getId())).withSelfRel(),
-                        linkTo(methodOn(ReporteController.class).listarReportes()).withRel("reportes")))
-                .toList();
-        CollectionModel<EntityModel<Reporte>> collection = CollectionModel.of(reportes,
-                linkTo(methodOn(ReporteController.class).listarReportes()).withSelfRel());
-        return ResponseEntity.ok(collection);
+    public ResponseEntity<List<Reporte>> listarReportes() {
+        return ResponseEntity.ok(reporteService.listarReportes());
     }
 
     @Operation(summary = "Obtener un reporte por ID")
@@ -59,14 +47,9 @@ public class ReporteController {
             @ApiResponse(responseCode = "404", description = "Reporte no encontrado", content = @Content)
     })
     @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<Reporte>> obtenerReportePorId(
+    public ResponseEntity<Reporte> obtenerReportePorId(
             @Parameter(description = "ID del reporte", example = "1", required = true) @PathVariable Long id) {
-        Reporte reporte = reporteService.obtenerReportePorId(id);
-        EntityModel<Reporte> model = EntityModel.of(reporte,
-                linkTo(methodOn(ReporteController.class).obtenerReportePorId(id)).withSelfRel(),
-                linkTo(methodOn(ReporteController.class).listarReportes()).withRel("reportes"),
-                linkTo(methodOn(ReporteController.class).listarPorTipo(reporte.getTipo())).withRel("por-tipo"));
-        return ResponseEntity.ok(model);
+        return ResponseEntity.ok(reporteService.obtenerReportePorId(id));
     }
 
     @Operation(summary = "Registrar un reporte")
@@ -76,12 +59,9 @@ public class ReporteController {
             @ApiResponse(responseCode = "400", description = "Datos invalidos", content = @Content)
     })
     @PostMapping
-    public ResponseEntity<EntityModel<Reporte>> crearReporte(@Valid @RequestBody Reporte reporte) {
+    public ResponseEntity<Reporte> crearReporte(@Valid @RequestBody Reporte reporte) {
         Reporte creado = reporteService.crearReporte(reporte);
-        EntityModel<Reporte> model = EntityModel.of(creado,
-                linkTo(methodOn(ReporteController.class).obtenerReportePorId(creado.getId())).withSelfRel(),
-                linkTo(methodOn(ReporteController.class).listarReportes()).withRel("reportes"));
-        return ResponseEntity.status(HttpStatus.CREATED).body(model);
+        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
     }
 
     @Operation(summary = "Eliminar un reporte")
@@ -100,32 +80,18 @@ public class ReporteController {
     @ApiResponse(responseCode = "200", description = "Reportes del tipo indicado",
             content = @Content(schema = @Schema(implementation = Reporte.class)))
     @GetMapping("/tipo/{tipo}")
-    public ResponseEntity<CollectionModel<EntityModel<Reporte>>> listarPorTipo(
+    public ResponseEntity<List<Reporte>> listarPorTipo(
             @Parameter(description = "Tipo de reporte", example = "VENTAS", required = true) @PathVariable TipoReporte tipo) {
-        List<EntityModel<Reporte>> reportes = reporteService.listarPorTipo(tipo).stream()
-                .map(r -> EntityModel.of(r,
-                        linkTo(methodOn(ReporteController.class).obtenerReportePorId(r.getId())).withSelfRel()))
-                .toList();
-        CollectionModel<EntityModel<Reporte>> collection = CollectionModel.of(reportes,
-                linkTo(methodOn(ReporteController.class).listarPorTipo(tipo)).withSelfRel(),
-                linkTo(methodOn(ReporteController.class).listarReportes()).withRel("reportes"));
-        return ResponseEntity.ok(collection);
+        return ResponseEntity.ok(reporteService.listarPorTipo(tipo));
     }
 
     @Operation(summary = "Listar reportes por tienda")
     @ApiResponse(responseCode = "200", description = "Reportes de la tienda",
             content = @Content(schema = @Schema(implementation = Reporte.class)))
     @GetMapping("/tienda/{idTienda}")
-    public ResponseEntity<CollectionModel<EntityModel<Reporte>>> listarPorTienda(
+    public ResponseEntity<List<Reporte>> listarPorTienda(
             @Parameter(description = "ID de la tienda", example = "1", required = true) @PathVariable Long idTienda) {
-        List<EntityModel<Reporte>> reportes = reporteService.listarPorTienda(idTienda).stream()
-                .map(r -> EntityModel.of(r,
-                        linkTo(methodOn(ReporteController.class).obtenerReportePorId(r.getId())).withSelfRel()))
-                .toList();
-        CollectionModel<EntityModel<Reporte>> collection = CollectionModel.of(reportes,
-                linkTo(methodOn(ReporteController.class).listarPorTienda(idTienda)).withSelfRel(),
-                linkTo(methodOn(ReporteController.class).listarReportes()).withRel("reportes"));
-        return ResponseEntity.ok(collection);
+        return ResponseEntity.ok(reporteService.listarPorTienda(idTienda));
     }
 
     @Operation(summary = "Generar reporte de ventas",
@@ -136,13 +102,10 @@ public class ReporteController {
             @ApiResponse(responseCode = "400", description = "Filtro invalido", content = @Content)
     })
     @PostMapping("/ventas")
-    public ResponseEntity<EntityModel<ReporteVentasDTO>> generarReporteVentas(
+    public ResponseEntity<ReporteVentasDTO> generarReporteVentas(
             @Valid @RequestBody ReporteFiltroRequestDTO filtro) {
         ReporteVentasDTO dto = reporteService.generarReporteVentas(filtro);
-        EntityModel<ReporteVentasDTO> model = EntityModel.of(dto,
-                linkTo(methodOn(ReporteController.class).generarReporteVentas(filtro)).withSelfRel(),
-                linkTo(methodOn(ReporteController.class).listarReportes()).withRel("reportes"));
-        return ResponseEntity.status(HttpStatus.CREATED).body(model);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     @Operation(summary = "Generar reporte de inventario para una tienda",
@@ -153,13 +116,10 @@ public class ReporteController {
             @ApiResponse(responseCode = "404", description = "Tienda no encontrada", content = @Content)
     })
     @PostMapping("/inventario/{idTienda}")
-    public ResponseEntity<EntityModel<ReporteInventarioDTO>> generarReporteInventario(
+    public ResponseEntity<ReporteInventarioDTO> generarReporteInventario(
             @Parameter(description = "ID de la tienda", example = "1", required = true) @PathVariable Long idTienda) {
         ReporteInventarioDTO dto = reporteService.generarReporteInventario(idTienda);
-        EntityModel<ReporteInventarioDTO> model = EntityModel.of(dto,
-                linkTo(methodOn(ReporteController.class).generarReporteInventario(idTienda)).withSelfRel(),
-                linkTo(methodOn(ReporteController.class).listarReportes()).withRel("reportes"));
-        return ResponseEntity.status(HttpStatus.CREATED).body(model);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     @Operation(summary = "Generar reporte de rendimiento de tienda",
@@ -170,13 +130,9 @@ public class ReporteController {
             @ApiResponse(responseCode = "400", description = "Filtro invalido", content = @Content)
     })
     @PostMapping("/rendimiento")
-    public ResponseEntity<EntityModel<ReporteRendimientoDTO>> generarReporteRendimiento(
+    public ResponseEntity<ReporteRendimientoDTO> generarReporteRendimiento(
             @Valid @RequestBody ReporteFiltroRequestDTO filtro) {
         ReporteRendimientoDTO dto = reporteService.generarReporteRendimiento(filtro);
-        EntityModel<ReporteRendimientoDTO> model = EntityModel.of(dto,
-                linkTo(methodOn(ReporteController.class).generarReporteRendimiento(filtro)).withSelfRel(),
-                linkTo(methodOn(ReporteController.class).listarReportes()).withRel("reportes"));
-        return ResponseEntity.status(HttpStatus.CREATED).body(model);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 }
-

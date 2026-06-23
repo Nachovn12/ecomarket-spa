@@ -11,17 +11,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/v1/kpis")
@@ -38,18 +33,11 @@ public class KpiController {
     @ApiResponse(responseCode = "200", description = "Listado de KPIs",
             content = @Content(schema = @Schema(implementation = IndicadorKPIResponseDTO.class)))
     @GetMapping
-    public ResponseEntity<CollectionModel<EntityModel<IndicadorKPIResponseDTO>>> listarKPIs() {
-        List<EntityModel<IndicadorKPIResponseDTO>> kpis = reporteService.listarKPIs().stream()
-                .map(k -> {
-                    IndicadorKPIResponseDTO dto = reporteService.toDTO(k);
-                    return EntityModel.of(dto,
-                            linkTo(methodOn(KpiController.class).obtenerKPIPorId(dto.getId())).withSelfRel(),
-                            linkTo(methodOn(KpiController.class).listarKPIs()).withRel("kpis"));
-                })
+    public ResponseEntity<List<IndicadorKPIResponseDTO>> listarKPIs() {
+        List<IndicadorKPIResponseDTO> kpis = reporteService.listarKPIs().stream()
+                .map(reporteService::toDTO)
                 .toList();
-        CollectionModel<EntityModel<IndicadorKPIResponseDTO>> collection = CollectionModel.of(kpis,
-                linkTo(methodOn(KpiController.class).listarKPIs()).withSelfRel());
-        return ResponseEntity.ok(collection);
+        return ResponseEntity.ok(kpis);
     }
 
     @Operation(summary = "Obtener un KPI por ID")
@@ -59,15 +47,10 @@ public class KpiController {
             @ApiResponse(responseCode = "404", description = "KPI no encontrado", content = @Content)
     })
     @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<IndicadorKPIResponseDTO>> obtenerKPIPorId(
+    public ResponseEntity<IndicadorKPIResponseDTO> obtenerKPIPorId(
             @Parameter(description = "ID del KPI", example = "1", required = true) @PathVariable Long id) {
         IndicadorKPI kpi = reporteService.obtenerKPIPorId(id);
-        IndicadorKPIResponseDTO dto = reporteService.toDTO(kpi);
-        EntityModel<IndicadorKPIResponseDTO> model = EntityModel.of(dto,
-                linkTo(methodOn(KpiController.class).obtenerKPIPorId(id)).withSelfRel(),
-                linkTo(methodOn(KpiController.class).listarKPIs()).withRel("kpis"),
-                linkTo(methodOn(KpiController.class).listarPorTipo(kpi.getTipo())).withRel("por-tipo"));
-        return ResponseEntity.ok(model);
+        return ResponseEntity.ok(reporteService.toDTO(kpi));
     }
 
     @Operation(summary = "Registrar un nuevo KPI")
@@ -77,13 +60,9 @@ public class KpiController {
             @ApiResponse(responseCode = "400", description = "Datos invalidos", content = @Content)
     })
     @PostMapping
-    public ResponseEntity<EntityModel<IndicadorKPIResponseDTO>> crearKPI(@Valid @RequestBody IndicadorKPI kpi) {
+    public ResponseEntity<IndicadorKPIResponseDTO> crearKPI(@Valid @RequestBody IndicadorKPI kpi) {
         IndicadorKPI creado = reporteService.crearKPI(kpi);
-        IndicadorKPIResponseDTO dto = reporteService.toDTO(creado);
-        EntityModel<IndicadorKPIResponseDTO> model = EntityModel.of(dto,
-                linkTo(methodOn(KpiController.class).obtenerKPIPorId(dto.getId())).withSelfRel(),
-                linkTo(methodOn(KpiController.class).listarKPIs()).withRel("kpis"));
-        return ResponseEntity.status(HttpStatus.CREATED).body(model);
+        return ResponseEntity.status(HttpStatus.CREATED).body(reporteService.toDTO(creado));
     }
 
     @Operation(summary = "Eliminar un KPI")
@@ -103,18 +82,11 @@ public class KpiController {
     @ApiResponse(responseCode = "200", description = "Listado filtrado por tipo",
             content = @Content(schema = @Schema(implementation = IndicadorKPIResponseDTO.class)))
     @GetMapping("/tipo/{tipo}")
-    public ResponseEntity<CollectionModel<EntityModel<IndicadorKPIResponseDTO>>> listarPorTipo(
+    public ResponseEntity<List<IndicadorKPIResponseDTO>> listarPorTipo(
             @Parameter(description = "Tipo de KPI", example = "VENTAS", required = true) @PathVariable TipoKPI tipo) {
-        List<EntityModel<IndicadorKPIResponseDTO>> kpis = reporteService.listarKPIsPorTipo(tipo).stream()
-                .map(k -> {
-                    IndicadorKPIResponseDTO dto = reporteService.toDTO(k);
-                    return EntityModel.of(dto,
-                            linkTo(methodOn(KpiController.class).obtenerKPIPorId(dto.getId())).withSelfRel());
-                })
+        List<IndicadorKPIResponseDTO> kpis = reporteService.listarKPIsPorTipo(tipo).stream()
+                .map(reporteService::toDTO)
                 .toList();
-        CollectionModel<EntityModel<IndicadorKPIResponseDTO>> collection = CollectionModel.of(kpis,
-                linkTo(methodOn(KpiController.class).listarPorTipo(tipo)).withSelfRel(),
-                linkTo(methodOn(KpiController.class).listarKPIs()).withRel("kpis"));
-        return ResponseEntity.ok(collection);
+        return ResponseEntity.ok(kpis);
     }
 }
