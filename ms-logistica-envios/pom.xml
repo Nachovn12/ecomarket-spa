@@ -169,6 +169,7 @@
                         <exclude>**/model/**</exclude>
                         <exclude>**/exception/**</exclude>
                         <exclude>**/config/**</exclude>
+                        <exclude>**/service/*ClientService*</exclude>
                     </excludes>
                 </configuration>
             </plugin>
