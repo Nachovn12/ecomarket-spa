@@ -350,4 +350,15 @@ class ReporteServiceTest {
         assertEquals(TipoKPI.STOCK_BAJO, resultado.get(0).getTipo());
         verify(indicadorKPIRepository).findByTipo(TipoKPI.STOCK_BAJO);
     }
+
+    @Test
+    void generarReporteVentas_conFechaFinNula_lanzaReporteException() {
+        ReporteFiltroRequestDTO filtro = new ReporteFiltroRequestDTO();
+        filtro.setIdTienda(1L);
+        filtro.setFechaInicio(LocalDate.of(2026, 6, 1));
+        filtro.setFechaFin(null);
+
+        assertThrows(ReporteException.class, () -> reporteService.generarReporteVentas(filtro));
+        verify(reporteRepository, never()).save(any());
+    }
 }
