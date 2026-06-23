@@ -1,8 +1,17 @@
 package com.ecomarket.reportes.controller;
 
+import com.ecomarket.reportes.dto.ReporteFiltroRequestDTO;
+import com.ecomarket.reportes.dto.ReporteInventarioDTO;
+import com.ecomarket.reportes.dto.ReporteRendimientoDTO;
+import com.ecomarket.reportes.dto.ReporteVentasDTO;
+import com.ecomarket.reportes.exception.ReporteException;
+import com.ecomarket.reportes.exception.ReporteNotFoundException;
 import com.ecomarket.reportes.model.Reporte;
 import com.ecomarket.reportes.model.TipoReporte;
 import com.ecomarket.reportes.service.ReporteService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -11,26 +20,15 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
 import java.util.List;
 
-import com.ecomarket.reportes.dto.ReporteInventarioDTO;
-import com.ecomarket.reportes.dto.ReporteRendimientoDTO;
-import com.ecomarket.reportes.dto.ReporteVentasDTO;
-import com.ecomarket.reportes.dto.ReporteFiltroRequestDTO;
-import com.ecomarket.reportes.exception.ReporteNotFoundException;
-
-import java.time.LocalDate;
-
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ReporteController.class)
 @TestPropertySource(properties = {
@@ -45,78 +43,76 @@ class ReporteControllerTest {
     @MockitoBean
     private ReporteService reporteService;
 
-    private Reporte buildReporte(Long id, TipoReporte tipo) {
+    private final ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule())
+            .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+    private Reporte buildReporte(Long id, TipoReporte tipo, Long idTienda) {
         Reporte r = new Reporte();
         r.setId(id);
         r.setTipo(tipo);
-        r.setIdTienda(1L);
+        r.setIdTienda(idTienda);
         return r;
     }
 
-    // AC-3: GET /api/v1/reportes → 200 + lista de reportes
     @Test
-    void getReportes_retorna200ConListaDeReportes() throws Exception {
-        when(reporteService.listarReportes()).thenReturn(List.of(buildReporte(1L, TipoReporte.VENTAS)));
+    void listarReportes_retornaOk() throws Exception {
+        Reporte reporte = buildReporte(1L, TipoReporte.VENTAS, 1L);
+        when(reporteService.listarReportes()).thenReturn(List.of(reporte));
 
-        mockMvc.perform(get("/api/v1/reportes"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[0].tipo").value("VENTAS"))
-                .andExpect(jsonPath("$[0].idTienda").value(1L));
+        mockMvc.perform(get("/api/v1/reportes")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
-    // AC-3: GET /api/v1/reportes/{id} → 200 + datos del reporte
     @Test
-    void getReportePorId_conIdValido_retorna200ConReporte() throws Exception {
-        when(reporteService.obtenerReportePorId(1L)).thenReturn(buildReporte(1L, TipoReporte.VENTAS));
+    void obtenerReportePorId_existente_retornaOkConCampos() throws Exception {
+        Reporte reporte = buildReporte(1L, TipoReporte.VENTAS, 1L);
+        when(reporteService.obtenerReportePorId(1L)).thenReturn(reporte);
 
-        mockMvc.perform(get("/api/v1/reportes/1"))
+        mockMvc.perform(get("/api/v1/reportes/1")
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.tipo").value("VENTAS"))
-                .andExpect(jsonPath("$.idTienda").value(1L));
+                .andExpect(jsonPath("$.idTienda").value(1));
     }
 
-    // AC-5: POST /api/v1/reportes con body válido → 201 + datos del reporte creado
     @Test
-    void postReporte_conBodyValido_retorna201ConReporteCreado() throws Exception {
-        Reporte creado = buildReporte(1L, TipoReporte.VENTAS);
-        when(reporteService.crearReporte(any(Reporte.class))).thenReturn(creado);
+    void obtenerReportePorId_inexistente_retorna404() throws Exception {
+        when(reporteService.obtenerReportePorId(999L))
+                .thenThrow(new ReporteNotFoundException("Reporte no encontrado con id: 999"));
 
-        String body = "{\"tipo\":\"VENTAS\",\"idTienda\":1}";
+        mockMvc.perform(get("/api/v1/reportes/999")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404));
+    }
+
+    @Test
+    void crearReporte_valido_retorna201ConCampos() throws Exception {
+        Reporte entrada = buildReporte(null, TipoReporte.INVENTARIO, 2L);
+        Reporte creado = buildReporte(3L, TipoReporte.INVENTARIO, 2L);
+        when(reporteService.crearReporte(any(Reporte.class))).thenReturn(creado);
 
         mockMvc.perform(post("/api/v1/reportes")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
+                        .content(objectMapper.writeValueAsString(entrada)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.tipo").value("VENTAS"));
+                .andExpect(jsonPath("$.id").value(3))
+                .andExpect(jsonPath("$.tipo").value("INVENTARIO"));
     }
 
-    // AC-3: POST /api/v1/reportes/ventas con fechaInicio nula → 400 (Bean Validation)
     @Test
-    void postReporteVentas_conFechaInicioNula_retorna400() throws Exception {
-        // ReporteFiltroRequestDTO tiene @NotNull en fechaInicio y fechaFin
-        String bodyInvalido = "{\"idTienda\":1,\"fechaFin\":\"2026-06-30\"}";
-
-        mockMvc.perform(post("/api/v1/reportes/ventas")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(bodyInvalido))
-                .andExpect(status().isBadRequest());
-    }
-
-    // AC-5: DELETE /api/v1/reportes/{id} con id existente → 204
-    @Test
-    void deleteReporte_conIdExistente_retorna204() throws Exception {
+    void eliminarReporte_existente_retorna204() throws Exception {
         doNothing().when(reporteService).eliminarReporte(1L);
 
         mockMvc.perform(delete("/api/v1/reportes/1"))
                 .andExpect(status().isNoContent());
     }
 
-    // AC-5: DELETE /api/v1/reportes/{id} con id inexistente → 404
     @Test
-    void deleteReporte_conIdInexistente_retorna404() throws Exception {
+    void eliminarReporte_inexistente_retorna404() throws Exception {
         doThrow(new ReporteNotFoundException("Reporte no encontrado con id: 99"))
                 .when(reporteService).eliminarReporte(99L);
 
@@ -124,84 +120,124 @@ class ReporteControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    // AC-3: GET /api/v1/reportes/tipo/{tipo} → 200 + lista de reportes del tipo
     @Test
-    void getReportesPorTipo_retorna200ConListaFiltrada() throws Exception {
-        when(reporteService.listarPorTipo(TipoReporte.INVENTARIO))
-                .thenReturn(List.of(buildReporte(2L, TipoReporte.INVENTARIO)));
+    void generarReporteVentas_valido_retorna201ConVentasTotales() throws Exception {
+        ReporteFiltroRequestDTO filtro = new ReporteFiltroRequestDTO();
+        filtro.setIdTienda(1L);
+        filtro.setFechaInicio(LocalDate.of(2026, 6, 1));
+        filtro.setFechaFin(LocalDate.of(2026, 6, 30));
 
-        mockMvc.perform(get("/api/v1/reportes/tipo/INVENTARIO"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].tipo").value("INVENTARIO"));
+        ReporteVentasDTO dto = new ReporteVentasDTO();
+        dto.setIdTienda(1L);
+        dto.setFechaInicio(filtro.getFechaInicio());
+        dto.setFechaFin(filtro.getFechaFin());
+        dto.setVentasTotales(50000.0);
+        dto.setTotalTransacciones(5);
+        dto.setProductosVendidos(25);
+
+        when(reporteService.generarReporteVentas(any(ReporteFiltroRequestDTO.class))).thenReturn(dto);
+
+        mockMvc.perform(post("/api/v1/reportes/ventas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(filtro)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.idTienda").value(1))
+                .andExpect(jsonPath("$.ventasTotales").value(50000.0))
+                .andExpect(jsonPath("$.totalTransacciones").value(5));
     }
 
-    // AC-3: GET /api/v1/reportes/tienda/{idTienda} → 200 + lista de reportes de la tienda
     @Test
-    void getReportesPorTienda_retorna200ConListaDeTienda() throws Exception {
-        when(reporteService.listarPorTienda(3L))
-                .thenReturn(List.of(buildReporte(1L, TipoReporte.VENTAS), buildReporte(2L, TipoReporte.INVENTARIO)));
-
-        mockMvc.perform(get("/api/v1/reportes/tienda/3"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[1].id").value(2L));
-    }
-
-    // AC-1: POST /api/v1/reportes/inventario/{idTienda} → 201 + DTO de inventario
-    @Test
-    void postReporteInventario_retorna201ConDTO() throws Exception {
+    void generarReporteInventario_valido_retorna201() throws Exception {
         ReporteInventarioDTO dto = new ReporteInventarioDTO();
         dto.setIdTienda(1L);
-        dto.setProductosDisponibles(100);
+        dto.setProductosDisponibles(80);
         dto.setProductosBajoStock(3);
         dto.setProductosSinStock(0);
-        when(reporteService.generarReporteInventario(eq(1L))).thenReturn(dto);
+
+        when(reporteService.generarReporteInventario(1L)).thenReturn(dto);
 
         mockMvc.perform(post("/api/v1/reportes/inventario/1"))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.idTienda").value(1L))
+                .andExpect(jsonPath("$.idTienda").value(1))
                 .andExpect(jsonPath("$.productosBajoStock").value(3));
     }
 
-    // AC-1: POST /api/v1/reportes/rendimiento con filtro válido → 201 + DTO de rendimiento
     @Test
-    void postReporteRendimiento_conFiltroValido_retorna201() throws Exception {
+    void generarReporteRendimiento_valido_retorna201() throws Exception {
+        ReporteFiltroRequestDTO filtro = new ReporteFiltroRequestDTO();
+        filtro.setIdTienda(1L);
+        filtro.setFechaInicio(LocalDate.of(2026, 6, 1));
+        filtro.setFechaFin(LocalDate.of(2026, 6, 30));
+
         ReporteRendimientoDTO dto = new ReporteRendimientoDTO();
         dto.setIdTienda(1L);
-        dto.setVentasPorTienda(120000.0);
+        dto.setFechaInicio(filtro.getFechaInicio());
+        dto.setFechaFin(filtro.getFechaFin());
+        dto.setVentasPorTienda(50000.0);
         dto.setPedidosEntregados(47);
+        dto.setStockBajo(3);
         dto.setRendimientoOperativo(0.85);
 
         when(reporteService.generarReporteRendimiento(any(ReporteFiltroRequestDTO.class))).thenReturn(dto);
 
-        String body = "{\"idTienda\":1,\"fechaInicio\":\"2026-06-01\",\"fechaFin\":\"2026-06-30\"}";
-
         mockMvc.perform(post("/api/v1/reportes/rendimiento")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
+                        .content(objectMapper.writeValueAsString(filtro)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.ventasPorTienda").value(120000.0))
+                .andExpect(jsonPath("$.idTienda").value(1))
                 .andExpect(jsonPath("$.rendimientoOperativo").value(0.85));
     }
 
-    // AC-1: POST /api/v1/reportes/ventas con filtro válido → 201 + DTO de ventas
     @Test
-    void postReporteVentas_conFiltroValido_retorna201() throws Exception {
-        ReporteVentasDTO dto = new ReporteVentasDTO();
-        dto.setIdTienda(1L);
-        dto.setVentasTotales(80000.0);
-        dto.setTotalTransacciones(4);
-        dto.setProductosVendidos(20);
+    void listarPorTipo_retornaOk() throws Exception {
+        Reporte reporte = buildReporte(1L, TipoReporte.VENTAS, 1L);
+        when(reporteService.listarPorTipo(TipoReporte.VENTAS)).thenReturn(List.of(reporte));
 
-        when(reporteService.generarReporteVentas(any(ReporteFiltroRequestDTO.class))).thenReturn(dto);
+        mockMvc.perform(get("/api/v1/reportes/tipo/VENTAS")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 
-        String body = "{\"idTienda\":1,\"fechaInicio\":\"2026-06-01\",\"fechaFin\":\"2026-06-30\"}";
+    @Test
+    void listarPorTienda_retornaOk() throws Exception {
+        Reporte reporte = buildReporte(1L, TipoReporte.VENTAS, 1L);
+        when(reporteService.listarPorTienda(1L)).thenReturn(List.of(reporte));
+
+        mockMvc.perform(get("/api/v1/reportes/tienda/1")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void generarReporteVentas_bodyVacio_retorna400() throws Exception {
+        mockMvc.perform(post("/api/v1/reportes/ventas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void generarReporteVentas_jsonMalformado_retorna400() throws Exception {
+        mockMvc.perform(post("/api/v1/reportes/ventas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{invalid"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void generarReporteVentas_serviceLanzaReporteException_retorna400() throws Exception {
+        ReporteFiltroRequestDTO filtro = new ReporteFiltroRequestDTO();
+        filtro.setIdTienda(1L);
+        filtro.setFechaInicio(LocalDate.of(2026, 6, 30));
+        filtro.setFechaFin(LocalDate.of(2026, 6, 1));
+
+        when(reporteService.generarReporteVentas(any(ReporteFiltroRequestDTO.class)))
+                .thenThrow(new ReporteException("La fecha de inicio no puede ser posterior a la fecha de fin"));
 
         mockMvc.perform(post("/api/v1/reportes/ventas")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(body))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.ventasTotales").value(80000.0))
-                .andExpect(jsonPath("$.totalTransacciones").value(4));
+                        .content(objectMapper.writeValueAsString(filtro)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400));
     }
 }

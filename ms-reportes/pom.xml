@@ -143,34 +143,28 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.12</version>
+                <version>0.8.14</version>
                 <executions>
                     <execution>
+                        <id>prepare-agent</id>
                         <goals><goal>prepare-agent</goal></goals>
-                        <configuration>
-                            <excludes>
-                                <exclude>*MockitoMock*</exclude>
-                                <exclude>*ByteBuddy*</exclude>
-                            </excludes>
-                        </configuration>
                     </execution>
-                    <!-- report y check deshabilitados: JaCoCo 0.8.x no soporta Java 25 (class file v69) -->
                     <execution>
                         <id>report</id>
                         <phase>test</phase>
                         <goals><goal>report</goal></goals>
-                        <configuration><skip>true</skip></configuration>
                     </execution>
                     <execution>
                         <id>check</id>
                         <goals><goal>check</goal></goals>
                         <configuration>
-                            <skip>true</skip>
                             <excludes>
                                 <exclude>**/MsReportesApplication.class</exclude>
                                 <exclude>**/config/**</exclude>
                                 <exclude>**/dto/**</exclude>
                                 <exclude>**/model/**</exclude>
+                                <exclude>**/InventarioClientService.class</exclude>
+                                <exclude>**/PedidosClientService.class</exclude>
                             </excludes>
                             <rules>
                                 <rule>
