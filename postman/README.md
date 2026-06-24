@@ -3,6 +3,10 @@
 ## Descripción
 Colección Postman que cubre los endpoints clave de los 7 microservicios para validación end-to-end durante la defensa técnica EP3.
 
+**HU-97:** Flujo de Usuarios & Catálogo  
+**HU-98:** Flujo de Pedidos, Inventario & Logística  
+**Épica transversal:** HU-67
+
 ## Cómo importar
 1. Abrir Postman
 2. Click en **Import** (esquina superior izquierda)
@@ -15,20 +19,33 @@ Colección Postman que cubre los endpoints clave de los 7 microservicios para va
 |---|---|---|
 | `base_url_gateway` | `http://localhost:8081` | URL del API Gateway |
 | `token_jwt` | (vacío) | Se llena automáticamente al ejecutar login |
-| `runCliente` | `12345678-5` | RUN del cliente de prueba |
+| `runCliente` | `12345678-5` | RUN del cliente de prueba (formato chileno) |
 | `idPedido` | `1` | ID del pedido para consultas |
-| `idCarrito` | `1` | ID del carrito de compras |
-| `idProducto` | `1` | ID del producto |
+| `idCarrito` | `1` | ID del carrito (se captura dinámicamente al crear carrito) |
+| `idProducto` | `1` | ID del producto (se captura dinámicamente de GET productos) |
+| `idEnvio` | `1` | ID del envío (se captura dinámicamente de GET envíos) |
 
 ## Orden de ejecución sugerido (flujo E2E)
-1. **Login** (`ms-usuarios / POST login`) — obtiene el token JWT
-2. **Buscar productos** (`ms-catalogo / GET productos`)
-3. **Crear carrito** (`ms-pedidos-ventas / POST carritos`)
-4. **Consultar pedido** (`ms-pedidos-ventas / GET pedido por ID`)
-5. **Consultar stock** (`ms-inventario / GET inventario`)
-6. **Consultar envío** (`ms-logistica / GET envíos`)
-7. **Crear ticket** (`ms-administracion / POST tickets`)
-8. **Consultar reportes** (`ms-reportes / GET reportes`)
+1. **Login** (`ms-usuarios / POST login`) — obtiene el token JWT y lo inyecta automáticamente
+2. **Buscar productos** (`ms-catalogo / GET productos`) — captura `idProducto` dinámicamente
+3. **Ver categorías** (`ms-catalogo / GET categorias`)
+4. **Consultar stock** (`ms-inventario / GET inventario`)
+5. **Crear carrito** (`ms-pedidos-ventas / POST carritos`) — captura `idCarrito` dinámicamente
+6. **Consultar pedido** (`ms-pedidos-ventas / GET pedido por ID`)
+7. **Listar envíos** (`ms-logistica / GET envíos`) — captura `idEnvio` dinámicamente
+8. **Seguimiento de envío** (`ms-logistica / GET seguimiento`) — usa `{{idEnvio}}` capturado
+9. **Ver tiendas** (`ms-administracion / GET tiendas`)
+10. **Crear ticket** (`ms-administracion / POST tickets`)
+11. **Consultar reportes** (`ms-reportes / GET reportes`)
+12. **Consultar KPIs** (`ms-reportes / GET KPIs`)
+
+## Assertions incluidas por endpoint
+
+Cada request valida:
+- ✅ **Status code** correcto (200 o 201 según corresponda)
+- ✅ **Estructura de respuesta** — propiedades obligatorias del DTO
+- ✅ **Tipo de dato** — arrays, strings, números según el campo
+- ✅ **Captura dinámica** — IDs se propagan automáticamente entre requests
 
 ## Prerequisitos
 - Los 7 microservicios deben estar corriendo en sus puertos respectivos (8083-8089)
