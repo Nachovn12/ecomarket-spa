@@ -20,22 +20,22 @@ Microservicio responsable de gestionar productos de inventario, stock por tienda
 - Realiza ajustes manuales de stock con motivo.
 - Gestiona pedidos de reabastecimiento.
 - Registra recepciones de mercancia y actualiza stock.
-- Expone respuestas REST con validaciones, manejo de errores y enlaces HATEOAS.
+- Expone respuestas REST con validaciones, manejo de errores.
 
 ## Tecnologias
 
-- Java 21
+- Java 25
 - Spring Boot
 - Spring Web
 - Spring Data JPA / Hibernate
-- Spring HATEOAS
+
 - MySQL
 - Maven
 - JUnit
 
 ## Estructura CSR
 
-- `controller`: expone endpoints REST y respuestas HATEOAS.
+- `controller`: expone endpoints REST.
 - `service`: concentra reglas de negocio y validaciones del dominio.
 - `repository`: encapsula el acceso a datos con Spring Data JPA.
 - `model`: contiene las clases persistentes JPA (`@Entity`, `@Table`, `@Id`).
@@ -82,10 +82,11 @@ cd .\ms-inventario-abastecimiento\
 .\mvnw.cmd test
 ```
 
-O desde la raiz:
+O entrando al directorio (recomendado):
 
 ```powershell
-mvn -f ms-inventario-abastecimiento/pom.xml clean test
+cd .\ms-inventario-abastecimiento\
+.\mvnw.cmd clean test
 ```
 
 ## Endpoints principales

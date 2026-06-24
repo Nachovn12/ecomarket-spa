@@ -147,6 +147,27 @@ public class LogisticaService {
         seguimientoEnvioRepository.save(seguimiento);
     }
 
+    public Proveedor asignarMejorProveedor(Envio envio, List<Proveedor> proveedores) {
+        if (proveedores == null || proveedores.isEmpty()) {
+            throw new IllegalArgumentException("La lista de proveedores no puede estar vacia");
+        }
+        Proveedor mejorProveedor = null;
+        java.time.LocalDateTime mejorEta = null;
+        java.time.LocalDateTime ahora = java.time.LocalDateTime.now();
+
+        for (Proveedor prov : proveedores) {
+            java.time.LocalDateTime eta = EtaCalculator.calcular(envio.getOrigen(), envio.getDestino(), prov, ahora);
+            if (mejorEta == null || eta.isBefore(mejorEta)) {
+                mejorEta = eta;
+                mejorProveedor = prov;
+            }
+        }
+        
+        envio.setProveedor(mejorProveedor);
+        envio.setFechaEstimadaEntrega(mejorEta);
+        return mejorProveedor;
+    }
+
     // Logica de proveedores
     @Transactional
     public Proveedor crearProveedor(ProveedorDTO dto) {

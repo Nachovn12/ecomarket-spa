@@ -3,6 +3,8 @@ package com.ecomarket.logistica.util;
 import com.ecomarket.logistica.model.Proveedor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Calculador de fecha estimada de entrega (ETA) para envios.
@@ -61,5 +63,60 @@ public final class EtaCalculator {
         int len = Math.min(3, Math.min(o.length(), d.length()));
         if (len > 0 && o.substring(0, len).equals(d.substring(0, len))) return 50.0;
         return 300.0;
+    }
+
+    public static class RutaResult {
+        public double distanciaTotalKm;
+        public double tiempoTotalHoras;
+        public List<String> ordenParadas;
+
+        public RutaResult(double distanciaTotalKm, double tiempoTotalHoras, List<String> ordenParadas) {
+            this.distanciaTotalKm = distanciaTotalKm;
+            this.tiempoTotalHoras = tiempoTotalHoras;
+            this.ordenParadas = ordenParadas;
+        }
+    }
+
+    /**
+     * Calcula la ruta óptima minimizando la distancia (algoritmo del vecino más cercano).
+     *
+     * @param paradas lista de paradas a visitar
+     * @return resultado con la distancia total, tiempo y orden
+     */
+    public static RutaResult calcularRutaOptima(List<String> paradas) {
+        if (paradas == null || paradas.isEmpty()) {
+            throw new IllegalArgumentException("La lista de paradas no puede estar vacia");
+        }
+        if (paradas.size() == 1) {
+            return new RutaResult(0.0, 0.0, new ArrayList<>(paradas));
+        }
+
+        List<String> pendientes = new ArrayList<>(paradas);
+        List<String> orden = new ArrayList<>();
+        double distanciaTotal = 0.0;
+
+        String actual = pendientes.remove(0);
+        orden.add(actual);
+
+        while (!pendientes.isEmpty()) {
+            String masCercano = null;
+            double menorDistancia = Double.MAX_VALUE;
+
+            for (String candidato : pendientes) {
+                double dist = estimarDistancia(actual, candidato);
+                if (dist < menorDistancia) {
+                    menorDistancia = dist;
+                    masCercano = candidato;
+                }
+            }
+
+            distanciaTotal += menorDistancia;
+            orden.add(masCercano);
+            pendientes.remove(masCercano);
+            actual = masCercano;
+        }
+
+        double tiempoTotal = distanciaTotal * HORAS_POR_KM;
+        return new RutaResult(distanciaTotal, tiempoTotal, orden);
     }
 }

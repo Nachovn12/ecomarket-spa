@@ -19,22 +19,22 @@ Microservicio responsable de administrar productos ecologicos, categorias, busqu
 - Permite buscar productos por palabra clave, categoria y rango de precio.
 - Permite consultar productos por atributo ecologico.
 - Registra resenas de productos comprados.
-- Expone respuestas REST con validaciones, manejo de errores y enlaces HATEOAS.
+- Expone respuestas REST con validaciones, manejo de errores.
 
 ## Tecnologias
 
-- Java 21
+- Java 25
 - Spring Boot
 - Spring Web
 - Spring Data JPA / Hibernate
-- Spring HATEOAS
+
 - MySQL
 - Maven
 - JUnit
 
 ## Estructura CSR
 
-- `controller`: expone endpoints REST y respuestas HATEOAS.
+- `controller`: expone endpoints REST.
 - `service`: concentra reglas de negocio y validaciones del dominio.
 - `repository`: encapsula el acceso a datos con Spring Data JPA.
 - `model`: contiene las clases persistentes JPA (`@Entity`, `@Table`, `@Id`).
@@ -81,10 +81,11 @@ cd .\ms-catalogo\
 .\mvnw.cmd test
 ```
 
-O desde la raiz:
+O entrando al directorio (recomendado):
 
 ```powershell
-mvn -f ms-catalogo/pom.xml clean test
+cd .\ms-catalogo\
+.\mvnw.cmd clean test
 ```
 
 ## Endpoints principales

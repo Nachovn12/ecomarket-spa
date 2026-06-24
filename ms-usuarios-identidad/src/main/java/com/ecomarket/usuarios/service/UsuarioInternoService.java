@@ -35,6 +35,8 @@ public class UsuarioInternoService {
             throw new UsuarioYaExisteException("Ya existe una cuenta registrada con este correo");
         }
 
+        com.ecomarket.usuarios.util.PasswordValidador.validar(request.getPassword());
+
         Usuario usuario = Usuario.builder()
                 .nombre(request.getNombre().trim())
                 .correo(correoNormalizado)
@@ -84,6 +86,7 @@ public class UsuarioInternoService {
         }
 
         if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            com.ecomarket.usuarios.util.PasswordValidador.validar(request.getPassword());
             usuario.setPassword(request.getPassword());
         }
 
