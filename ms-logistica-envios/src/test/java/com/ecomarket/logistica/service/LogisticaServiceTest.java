@@ -301,6 +301,23 @@ class LogisticaServiceTest {
         assertEquals("Robo", res.getMotivoIncidencia());
     }
 
+    // Cubre la rama else del ternario en línea 130: request.getObservacion() == null → ""
+    @Test
+    void registrarIncidencia_SinObservacion_CubreTernario() {
+        Envio e = new Envio();
+        e.setEstado(EstadoEnvio.EN_CAMINO);
+        when(envioRepository.findById(1L)).thenReturn(Optional.of(e));
+        when(envioRepository.save(any(Envio.class))).thenAnswer(i -> i.getArgument(0));
+
+        com.ecomarket.logistica.dto.IncidenciaRequestDTO req = new com.ecomarket.logistica.dto.IncidenciaRequestDTO();
+        req.setMotivoIncidencia("Accidente");
+        // observacion queda null -> ternario usa ""
+        req.setActualizadoPor("Admin");
+
+        Envio res = logisticaService.registrarIncidencia(1L, req);
+        assertEquals(EstadoEnvio.CON_INCIDENCIA, res.getEstado());
+    }
+
     @Test
     void obtenerProveedores_Exito() {
         Proveedor p = new Proveedor();
@@ -633,6 +650,48 @@ class LogisticaServiceTest {
         assertNotNull(r);
         assertEquals(5L, r.getId());
         assertNull(r.getIdEnvio()); // cubre rama: envio == null → null
+    }
+
+    @Test
+    void crearEnvio_SinFechaEstimada_ProveedorNoExisteEnCalculo_LanzaExcepcion() {
+        // Cubre línea 57: en el bloque else (sin fechaEstimada), proveedorId existe pero no en BD
+        EnvioDTO dto = new EnvioDTO();
+        dto.setIdPedido(100L);
+        dto.setOrigen("Arica");
+        dto.setDestino("Iquique");
+        dto.setProveedorId(99L);
+        // NO seteamos fechaEstimadaEntrega -> entra por el else
+
+        when(proveedorRepository.findById(99L)).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () -> logisticaService.crearEnvio(dto));
+    }
+
+    @Test
+    void crearEnvio_ConFechaEstimada_ProveedorNoExiste_LanzaExcepcion() {
+        // Cubre línea 64: tiene fechaEstimada (no entra al else), pero proveedorId no existe en BD
+        EnvioDTO dto = new EnvioDTO();
+        dto.setIdPedido(100L);
+        dto.setOrigen("Arica");
+        dto.setDestino("Iquique");
+        dto.setFechaEstimadaEntrega(java.time.LocalDateTime.now().plusDays(2));
+        dto.setProveedorId(99L);
+
+        when(proveedorRepository.findById(99L)).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () -> logisticaService.crearEnvio(dto));
+    }
+
+    @Test
+    void obtenerProveedorPorId_NoExiste_LanzaExcepcion() {
+        // Cubre línea 190: proveedor no encontrado
+        when(proveedorRepository.findById(99L)).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () -> logisticaService.obtenerProveedorPorId(99L));
+    }
+
+    @Test
+    void obtenerRutaPorId_NoExiste_LanzaExcepcion() {
+        // Cubre línea 245: ruta no encontrada
+        when(rutaEntregaRepository.findById(99L)).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () -> logisticaService.obtenerRutaPorId(99L));
     }
 }
 

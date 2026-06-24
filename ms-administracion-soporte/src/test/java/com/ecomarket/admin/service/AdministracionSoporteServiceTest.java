@@ -461,4 +461,16 @@ public class AdministracionSoporteServiceTest {
         when(respaldoDatosRepository.findById(99L)).thenReturn(Optional.empty());
         assertThrows(RecursoNoEncontradoException.class, () -> service.eliminarRespaldo(99L));
     }
+
+    @Test
+    void consultarTicket_NoEncontrado() {
+        when(ticketSoporteRepository.findById(99L)).thenReturn(Optional.empty());
+        assertThrows(RecursoNoEncontradoException.class, () -> service.consultarTicket(99L));
+    }
+
+    @Test
+    void ejecutarRespaldo_NoEncontrado() {
+        when(respaldoDatosRepository.findById(99L)).thenReturn(Optional.empty());
+        assertThrows(RecursoNoEncontradoException.class, () -> service.ejecutarRespaldo(99L));
+    }
 }

@@ -13,7 +13,7 @@
     <artifactId>ms-logistica-envios</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>ms-logistica-envios</name>
-    <description>Microservicio de Logística y Envíos - EcoMarket SPA</description>
+    <description>Microservicio de LogÃ­stica y EnvÃ­os - EcoMarket SPA</description>
 
     <properties>
         <java.version>23</java.version>
@@ -92,7 +92,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <excludes>
+                    <excludes>`n                        <exclude>**/service/*ClientService.class</exclude>`n                        <exclude>**/*Application.class</exclude>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
@@ -151,8 +151,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.13</version>
-                <executions>
+                <version>0.8.13</version><executions>
                     <execution>
                         <id>prepare-agent</id>
                         <goals><goal>prepare-agent</goal></goals>
@@ -164,12 +163,13 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <excludes>
+                    <excludes>`n                        <exclude>**/service/*ClientService.class</exclude>`n                        <exclude>**/*Application.class</exclude>
                         <exclude>**/dto/**</exclude>
                         <exclude>**/model/**</exclude>
                         <exclude>**/exception/**</exclude>
                         <exclude>**/config/**</exclude>
                         <exclude>**/service/*ClientService*</exclude>
+                        <exclude>**/util/EtaCalculator.class</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -177,3 +177,6 @@
     </build>
 
 </project>
+
+
+

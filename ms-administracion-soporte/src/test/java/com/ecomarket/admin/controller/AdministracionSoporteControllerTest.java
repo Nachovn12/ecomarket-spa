@@ -231,4 +231,238 @@ class AdministracionSoporteControllerTest {
                 .andExpect(jsonPath("$[0].estado").value("EJECUTADO"))
                 .andExpect(jsonPath("$._links").doesNotExist());
     }
+
+    @Test
+    @DisplayName("AC-2: PUT /api/admin/tiendas/{id} retorna 200")
+    void actualizarTienda_retorna200() throws Exception {
+        TiendaRequestDTO req = new TiendaRequestDTO();
+        req.setNombre("Tienda Actualizada");
+        req.setCiudad("Santiago");
+        req.setHorarioApertura(LocalTime.of(9, 0));
+        req.setHorarioCierre(LocalTime.of(21, 0));
+
+        TiendaResponseDTO resp = TiendaResponseDTO.builder()
+                .idTienda(1L)
+                .nombre("Tienda Actualizada")
+                .activa(true)
+                .build();
+
+        when(administracionSoporteService.actualizarTienda(any(), any())).thenReturn(resp);
+
+        mockMvc.perform(put("/api/admin/tiendas/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombre").value("Tienda Actualizada"));
+    }
+
+    @Test
+    @DisplayName("AC-2: DELETE /api/admin/tiendas/{id} retorna 204")
+    void eliminarTienda_retorna204() throws Exception {
+        mockMvc.perform(delete("/api/admin/tiendas/1"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("AC-2: POST /api/admin/tiendas/{id}/personal retorna 201")
+    void asignarPersonal_retorna201() throws Exception {
+        AsignacionPersonalRequestDTO req = new AsignacionPersonalRequestDTO();
+        req.setIdUsuarioInterno(10L);
+        req.setIdTienda(1L);
+        req.setCargo("Cajero");
+
+        AsignacionPersonalResponseDTO resp = AsignacionPersonalResponseDTO.builder()
+                .idAsignacion(1L)
+                .idTienda(1L)
+                .idUsuarioInterno(10L)
+                .cargo("Cajero")
+                .build();
+
+        when(administracionSoporteService.asignarPersonal(any())).thenReturn(resp);
+
+        mockMvc.perform(post("/api/admin/tiendas/1/personal")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.cargo").value("Cajero"));
+    }
+
+    @Test
+    @DisplayName("AC-2: GET /api/admin/tiendas/{id}/personal retorna 200")
+    void listarPersonal_retorna200() throws Exception {
+        AsignacionPersonalResponseDTO resp = AsignacionPersonalResponseDTO.builder()
+                .idAsignacion(1L)
+                .cargo("Gerente")
+                .build();
+
+        when(administracionSoporteService.listarPersonalPorTienda(1L)).thenReturn(List.of(resp));
+
+        mockMvc.perform(get("/api/admin/tiendas/1/personal"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].cargo").value("Gerente"));
+    }
+
+    @Test
+    @DisplayName("AC-2: GET /api/soporte/tickets/{id} retorna 200")
+    void consultarTicket_retorna200() throws Exception {
+        TicketSoporteResponseDTO resp = TicketSoporteResponseDTO.builder()
+                .idTicket(1L)
+                .asunto("Asunto Test")
+                .build();
+
+        when(administracionSoporteService.consultarTicket(1L)).thenReturn(resp);
+
+        mockMvc.perform(get("/api/soporte/tickets/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.asunto").value("Asunto Test"));
+    }
+
+    @Test
+    @DisplayName("AC-2: PATCH /api/soporte/tickets/{id}/estado retorna 200")
+    void actualizarEstadoTicket_retorna200() throws Exception {
+        TicketSoporteResponseDTO resp = TicketSoporteResponseDTO.builder()
+                .idTicket(1L)
+                .estado(EstadoTicket.CERRADO)
+                .build();
+
+        when(administracionSoporteService.actualizarEstadoTicket(any(), any())).thenReturn(resp);
+
+        mockMvc.perform(patch("/api/soporte/tickets/1/estado")
+                        .param("estado", "CERRADO"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("CERRADO"));
+    }
+
+    @Test
+    @DisplayName("AC-2: DELETE /api/soporte/tickets/{id} retorna 204")
+    void eliminarTicket_retorna204() throws Exception {
+        mockMvc.perform(delete("/api/soporte/tickets/1"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("AC-2: POST /api/soporte/tickets/{id}/respuestas retorna 201")
+    void responderTicket_retorna201() throws Exception {
+        RespuestaSoporteRequestDTO req = new RespuestaSoporteRequestDTO();
+        req.setIdTicket(1L);
+        req.setMensaje("Solucionado");
+        req.setRespondidoPor("Admin");
+
+        RespuestaSoporteResponseDTO resp = RespuestaSoporteResponseDTO.builder()
+                .idRespuesta(1L)
+                .mensaje("Solucionado")
+                .build();
+
+        when(administracionSoporteService.responderTicket(any(), any())).thenReturn(resp);
+
+        mockMvc.perform(post("/api/soporte/tickets/1/respuestas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.mensaje").value("Solucionado"));
+    }
+
+    @Test
+    @DisplayName("AC-2: GET /api/soporte/tickets/{id}/respuestas retorna 200")
+    void listarRespuestasTicket_retorna200() throws Exception {
+        RespuestaSoporteResponseDTO resp = RespuestaSoporteResponseDTO.builder()
+                .idRespuesta(1L)
+                .mensaje("Hola")
+                .build();
+
+        when(administracionSoporteService.listarRespuestasTicket(1L)).thenReturn(List.of(resp));
+
+        mockMvc.perform(get("/api/soporte/tickets/1/respuestas"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].mensaje").value("Hola"));
+    }
+
+    @Test
+    @DisplayName("AC-2: POST /api/admin/metricas retorna 201")
+    void registrarMetrica_retorna201() throws Exception {
+        MetricaSistemaRequestDTO req = new MetricaSistemaRequestDTO();
+        req.setMicroservicio("ms-inventario");
+        req.setDisponible(true);
+        req.setErroresDetectados(0);
+        req.setTiempoRespuestaMs(120L);
+
+        MetricaSistemaResponseDTO resp = MetricaSistemaResponseDTO.builder()
+                .idMetrica(1L)
+                .microservicio("ms-inventario")
+                .build();
+
+        when(administracionSoporteService.registrarMetrica(any())).thenReturn(resp);
+
+        mockMvc.perform(post("/api/admin/metricas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.microservicio").value("ms-inventario"));
+    }
+
+    @Test
+    @DisplayName("AC-2: GET /api/admin/metricas retorna 200")
+    void listarMetricas_retorna200() throws Exception {
+        MetricaSistemaResponseDTO resp = MetricaSistemaResponseDTO.builder()
+                .idMetrica(1L)
+                .build();
+
+        when(administracionSoporteService.listarMetricas()).thenReturn(List.of(resp));
+
+        mockMvc.perform(get("/api/admin/metricas"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].idMetrica").value(1));
+    }
+
+    @Test
+    @DisplayName("AC-2: PATCH /api/admin/alertas/{id}/resolver retorna 200")
+    void resolverAlerta_retorna200() throws Exception {
+        AlertaSistemaResponseDTO resp = AlertaSistemaResponseDTO.builder()
+                .idAlerta(1L)
+                .resuelta(true)
+                .build();
+
+        when(administracionSoporteService.resolverAlerta(1L)).thenReturn(resp);
+
+        mockMvc.perform(patch("/api/admin/alertas/1/resolver"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.resuelta").value(true));
+    }
+
+    @Test
+    @DisplayName("AC-2: PATCH /api/admin/respaldos/{id}/ejecutar retorna 200")
+    void ejecutarRespaldo_retorna200() throws Exception {
+        RespaldoDatosResponseDTO resp = RespaldoDatosResponseDTO.builder()
+                .idRespaldo(1L)
+                .estado("EJECUTADO")
+                .build();
+
+        when(administracionSoporteService.ejecutarRespaldo(1L)).thenReturn(resp);
+
+        mockMvc.perform(patch("/api/admin/respaldos/1/ejecutar"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("EJECUTADO"));
+    }
+
+    @Test
+    @DisplayName("AC-2: PATCH /api/admin/respaldos/{id}/restaurar retorna 200")
+    void restaurarRespaldo_retorna200() throws Exception {
+        RespaldoDatosResponseDTO resp = RespaldoDatosResponseDTO.builder()
+                .idRespaldo(1L)
+                .estado("RESTAURADO")
+                .build();
+
+        when(administracionSoporteService.restaurarRespaldo(1L)).thenReturn(resp);
+
+        mockMvc.perform(patch("/api/admin/respaldos/1/restaurar"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("RESTAURADO"));
+    }
+
+    @Test
+    @DisplayName("AC-2: DELETE /api/admin/respaldos/{id} retorna 204")
+    void eliminarRespaldo_retorna204() throws Exception {
+        mockMvc.perform(delete("/api/admin/respaldos/1"))
+                .andExpect(status().isNoContent());
+    }
 }
