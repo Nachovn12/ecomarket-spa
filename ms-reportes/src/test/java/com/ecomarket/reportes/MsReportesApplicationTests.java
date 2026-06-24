@@ -50,16 +50,22 @@ class MsReportesApplicationTests {
     }
 
     @Test
+    void mainClassLoads() {
+        MsReportesApplication.main(new String[]{"--spring.profiles.active=test", "--spring.sql.init.mode=never", "--spring.jpa.hibernate.ddl-auto=create-drop", "--spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL", "--spring.datasource.driver-class-name=org.h2.Driver"});
+        assertTrue(true, "Application main loaded successfully");
+    }
+
+    @Test
     void testCrearIndicadorKPI() {
         IndicadorKPI kpi = new IndicadorKPI();
         kpi.setTipo(TipoKPI.VENTAS_TOTALES);
-        kpi.setValor(15000.0);
-        kpi.setDescripcion("Ventas totales del mes");
+        kpi.setValor(15500000.0);
+        kpi.setDescripcion("Ventas totales mes de Junio Sucursal Alameda");
         indicadorKPIRepository.save(kpi);
 
         var encontrado = indicadorKPIRepository.findByTipo(TipoKPI.VENTAS_TOTALES);
         assertFalse(encontrado.isEmpty());
-        assertEquals(15000.0, encontrado.get(0).getValor());
+        assertEquals(15500000.0, encontrado.get(0).getValor());
     }
 
     @Test
@@ -82,8 +88,8 @@ class MsReportesApplicationTests {
     void testKpiStockBajo() {
         IndicadorKPI kpi = new IndicadorKPI();
         kpi.setTipo(TipoKPI.STOCK_BAJO);
-        kpi.setValor(5.0);
-        kpi.setDescripcion("Productos con stock bajo");
+        kpi.setValor(14.0);
+        kpi.setDescripcion("Alerta: Harina Panadera 1KG bajo stock de seguridad");
         indicadorKPIRepository.save(kpi);
 
         var resultado = indicadorKPIRepository.findByTipo(TipoKPI.STOCK_BAJO);
@@ -94,8 +100,8 @@ class MsReportesApplicationTests {
     void testListarKpisPorTipo() {
         IndicadorKPI kpi = new IndicadorKPI();
         kpi.setTipo(TipoKPI.RENDIMIENTO_TIENDA);
-        kpi.setValor(85.0);
-        kpi.setDescripcion("Rendimiento tienda");
+        kpi.setValor(0.92);
+        kpi.setDescripcion("Eficiencia general Sucursal La Florida");
         indicadorKPIRepository.save(kpi);
 
         var resultado = indicadorKPIRepository.findByTipo(TipoKPI.RENDIMIENTO_TIENDA);

@@ -16,7 +16,6 @@ scripts/jira/*.log
 # Local env files (API tokens, secrets)
 .env.local
 scripts/jira/.env.local
-
 # Archivos de la asignatura y negocio que deben quedar en local
 CASO_ESTUDIO_EcoMarket_SPA.md
 Rubrica_EP3_EcoMarket.md
