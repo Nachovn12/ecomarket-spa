@@ -55,4 +55,25 @@ public class PedidosClientService {
             throw new IllegalStateException("No se pudo comunicar con MS Pedidos y Ventas.");
         }
     }
+
+    /**
+     * Verifica si un cliente ha comprado un producto especifico.
+     * Regla critica: Solo clientes que compraron el producto pueden dejar resena.
+     */
+    public boolean verificarCompra(Long idCliente, Long idProducto) {
+        String url = msPedidosUrl + "/api/pedidos/verificar-compra?idCliente=" + idCliente + "&idProducto=" + idProducto;
+        log.info("Verificando compra del cliente {} para el producto {}. url={}", idCliente, idProducto, url);
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("X-Rol-Usuario", "SISTEMA");
+            HttpEntity<Void> entity = new HttpEntity<>(headers);
+            
+            // Suponemos que MS Pedidos expone un endpoint booleano para esto
+            Boolean compro = restTemplate.exchange(url, HttpMethod.GET, entity, Boolean.class).getBody();
+            return Boolean.TRUE.equals(compro);
+        } catch (Exception e) {
+            log.error("Error al verificar compra en MS Pedidos. error={}", e.getMessage());
+            return false;
+        }
+    }
 }

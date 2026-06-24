@@ -43,6 +43,12 @@ class MsReportesApplicationTests {
     void contextLoads() {
     }
 
+    // SE AGREGA PARA EL 100%
+    @Test
+    void mainEjecutaAplicacion() {
+        MsReportesApplication.main(new String[] {"--spring.profiles.active=test"});
+    }
+
     @Test
     void mainClassLoads() {
         MsReportesApplication.main(new String[]{"--spring.profiles.active=test", "--spring.sql.init.mode=never", "--spring.jpa.hibernate.ddl-auto=create-drop", "--spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL", "--spring.datasource.driver-class-name=org.h2.Driver"});

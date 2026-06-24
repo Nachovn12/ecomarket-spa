@@ -35,6 +35,8 @@ public class UsuarioService {
             log.info("RUN validado correctamente: {}", runNormalizado);
         }
 
+        com.ecomarket.usuarios.util.PasswordValidador.validar(request.getPassword());
+
         if (usuarioRepository.existsByCorreo(correoNormalizado)) {
             log.warn("Intento de registro con correo ya existente: {}", correoNormalizado);
             throw new UsuarioYaExisteException("Ya existe una cuenta registrada con este correo");

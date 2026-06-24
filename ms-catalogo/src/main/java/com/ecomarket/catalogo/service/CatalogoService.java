@@ -35,6 +35,9 @@ public class CatalogoService {
     @Autowired
     private ResenaRepository resenaRepository;
 
+    @Autowired
+    private PedidosClientService pedidosClientService;
+
     // Productos
 
     @Transactional
@@ -236,6 +239,12 @@ public class CatalogoService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Producto no encontrado con ID: " + dto.getIdProducto()));
 
+        // Regla de negocio: Solo clientes que compraron el producto pueden dejar reseña
+        if (!pedidosClientService.verificarCompra(dto.getIdCliente(), dto.getIdProducto())) {
+            log.warn("El cliente {} intentó reseñar el producto {} sin haberlo comprado.", dto.getIdCliente(), dto.getIdProducto());
+            throw new ConflictException("No puedes reseñar un producto que no has comprado.");
+        }
+
         Resena resena = new Resena();
         resena.setIdCliente(dto.getIdCliente());
         resena.setProducto(producto);
@@ -271,6 +280,18 @@ public class CatalogoService {
         }
         resenaRepository.deleteById(id);
         log.info("Reseña eliminada correctamente. idResena={}", id);
+    }
+
+    @Transactional(readOnly = true)
+    public Double calcularPromedioCalificaciones(Long idProducto) {
+        log.info("Calculando promedio de calificaciones para el producto ID: {}", idProducto);
+        List<Resena> resenas = resenaRepository.findByProductoIdProducto(idProducto);
+        if (resenas.isEmpty()) {
+            return 0.0;
+        }
+        double suma = resenas.stream().mapToInt(Resena::getCalificacion).sum();
+        double promedio = suma / resenas.size();
+        return new java.math.BigDecimal(promedio).setScale(1, java.math.RoundingMode.HALF_UP).doubleValue();
     }
 
     // Métodos privados de mapeo entity → DTO
