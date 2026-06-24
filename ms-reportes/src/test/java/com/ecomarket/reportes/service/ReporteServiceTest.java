@@ -42,11 +42,12 @@ class ReporteServiceTest {
     @InjectMocks
     private ReporteService reporteService;
 
-    private IndicadorKPI buildKpi(Long id, TipoKPI tipo, double valor) {
+    private IndicadorKPI buildKpi(Long id, TipoKPI tipo, double valor, String descripcion) {
         IndicadorKPI kpi = new IndicadorKPI();
         kpi.setId(id);
         kpi.setTipo(tipo);
         kpi.setValor(valor);
+        kpi.setDescripcion(descripcion);
         return kpi;
     }
 
@@ -64,14 +65,14 @@ class ReporteServiceTest {
         ReporteFiltroRequestDTO filtro = buildFiltro(1L,
                 LocalDate.of(2026, 6, 1), LocalDate.of(2026, 6, 30));
         List<IndicadorKPI> kpis = List.of(
-                buildKpi(1L, TipoKPI.VENTAS_TOTALES, 100.0),
-                buildKpi(2L, TipoKPI.VENTAS_TOTALES, 150.0));
+                buildKpi(101L, TipoKPI.VENTAS_TOTALES, 1500000.0, "Ventas semana 1 - Sucursal Santiago Centro"),
+                buildKpi(102L, TipoKPI.VENTAS_TOTALES, 2350000.0, "Ventas semana 2 - Sucursal Santiago Centro"));
         when(reporteRepository.save(any(Reporte.class))).thenAnswer(inv -> inv.getArgument(0));
         when(indicadorKPIRepository.findByTipo(TipoKPI.VENTAS_TOTALES)).thenReturn(kpis);
 
         ReporteVentasDTO dto = reporteService.generarReporteVentas(filtro);
 
-        assertThat(dto.getVentasTotales()).isEqualTo(250.0);
+        assertThat(dto.getVentasTotales()).isEqualTo(3850000.0);
         assertThat(dto.getTotalTransacciones()).isEqualTo(2);
         assertThat(dto.getIdTienda()).isEqualTo(1L);
         verify(reporteRepository).save(any(Reporte.class));
@@ -83,13 +84,13 @@ class ReporteServiceTest {
         when(reporteRepository.save(any(Reporte.class))).thenAnswer(inv -> inv.getArgument(0));
         when(indicadorKPIRepository.findByTipo(TipoKPI.STOCK_BAJO))
                 .thenReturn(List.of(
-                        buildKpi(1L, TipoKPI.STOCK_BAJO, 3.0),
-                        buildKpi(2L, TipoKPI.STOCK_BAJO, 2.0),
-                        buildKpi(3L, TipoKPI.STOCK_BAJO, 1.0)));
+                        buildKpi(201L, TipoKPI.STOCK_BAJO, 12.0, "Alerta: Harina Panadera 1KG bajo stock crítico"),
+                        buildKpi(202L, TipoKPI.STOCK_BAJO, 5.0, "Alerta: Leche Entera 1L bajo stock de seguridad"),
+                        buildKpi(203L, TipoKPI.STOCK_BAJO, 2.0, "Alerta: Huevos Blancos bandeja 30un quiebre inminente")));
         when(indicadorKPIRepository.findByTipo(TipoKPI.ROTACION_INVENTARIO))
                 .thenReturn(List.of(
-                        buildKpi(4L, TipoKPI.ROTACION_INVENTARIO, 1.0),
-                        buildKpi(5L, TipoKPI.ROTACION_INVENTARIO, 1.0)));
+                        buildKpi(301L, TipoKPI.ROTACION_INVENTARIO, 85.5, "Alta rotación en abarrotes esenciales"),
+                        buildKpi(302L, TipoKPI.ROTACION_INVENTARIO, 60.2, "Rotación media en productos lácteos")));
 
         ReporteInventarioDTO dto = reporteService.generarReporteInventario(1L);
 
@@ -223,23 +224,23 @@ class ReporteServiceTest {
 
         when(reporteRepository.save(any(Reporte.class))).thenAnswer(inv -> inv.getArgument(0));
         when(indicadorKPIRepository.findByTipo(TipoKPI.VENTAS_TOTALES))
-                .thenReturn(List.of(buildKpi(1L, TipoKPI.VENTAS_TOTALES, 120000.0)));
+                .thenReturn(List.of(buildKpi(1L, TipoKPI.VENTAS_TOTALES, 8500000.0, "Ventas Sucursal Viña del Mar")));
         when(indicadorKPIRepository.findByTipo(TipoKPI.PEDIDOS_ENTREGADOS))
-                .thenReturn(List.of(buildKpi(2L, TipoKPI.PEDIDOS_ENTREGADOS, 1.0),
-                                    buildKpi(3L, TipoKPI.PEDIDOS_ENTREGADOS, 1.0)));
+                .thenReturn(List.of(buildKpi(2L, TipoKPI.PEDIDOS_ENTREGADOS, 450.0, "Pedidos online despachados exitosamente"),
+                                    buildKpi(3L, TipoKPI.PEDIDOS_ENTREGADOS, 120.0, "Pedidos Pickup en tienda")));
         when(indicadorKPIRepository.findByTipo(TipoKPI.STOCK_BAJO))
-                .thenReturn(List.of(buildKpi(4L, TipoKPI.STOCK_BAJO, 2.0)));
+                .thenReturn(List.of(buildKpi(4L, TipoKPI.STOCK_BAJO, 15.0, "SKUs con inventario bajo el mínimo")));
         when(indicadorKPIRepository.findByTipo(TipoKPI.RENDIMIENTO_TIENDA))
-                .thenReturn(List.of(buildKpi(5L, TipoKPI.RENDIMIENTO_TIENDA, 0.9),
-                                    buildKpi(6L, TipoKPI.RENDIMIENTO_TIENDA, 0.8)));
+                .thenReturn(List.of(buildKpi(5L, TipoKPI.RENDIMIENTO_TIENDA, 0.95, "KPI Rendimiento primer quincena"),
+                                    buildKpi(6L, TipoKPI.RENDIMIENTO_TIENDA, 0.88, "KPI Rendimiento segunda quincena")));
 
         ReporteRendimientoDTO result = reporteService.generarReporteRendimiento(filtro);
 
         assertThat(result.getIdTienda()).isEqualTo(2L);
-        assertThat(result.getVentasPorTienda()).isEqualTo(120000.0);
+        assertThat(result.getVentasPorTienda()).isEqualTo(8500000.0);
         assertThat(result.getPedidosEntregados()).isEqualTo(2);
         assertThat(result.getStockBajo()).isEqualTo(1);
-        assertThat(result.getRendimientoOperativo()).isEqualTo(0.85, org.assertj.core.data.Offset.offset(0.001));
+        assertThat(result.getRendimientoOperativo()).isEqualTo(0.915, org.assertj.core.data.Offset.offset(0.001));
     }
 
     // AC-3: fechaInicio posterior a fechaFin lanza ReporteException

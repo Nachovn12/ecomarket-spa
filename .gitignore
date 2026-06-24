@@ -16,3 +16,10 @@ scripts/jira/*.log
 # Local env files (API tokens, secrets)
 .env.local
 scripts/jira/.env.local
+
+# Archivos locales del curso — NO subir nunca
+CASO_ESTUDIO_EcoMarket_SPA.md
+Rubrica_EP3_EcoMarket.md
+docs/JIRA_HU_EP3_EcoMarket.md
+docs/defensa/
+prompt-HU-*.md

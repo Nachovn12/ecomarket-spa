@@ -41,8 +41,18 @@ class KpiControllerTest {
         kpi.setId(id);
         kpi.setTipo(tipo);
         kpi.setValor(valor);
-        kpi.setDescripcion("KPI de prueba");
+        kpi.setDescripcion(descripcionPorTipo(tipo));
         return kpi;
+    }
+
+    private String descripcionPorTipo(TipoKPI tipo) {
+        return switch (tipo) {
+            case VENTAS_TOTALES -> "Ventas totales mes de Junio - Sucursal Alameda";
+            case STOCK_BAJO -> "Alerta: Harina Panadera 1KG bajo stock critico";
+            case RENDIMIENTO_TIENDA -> "Eficiencia operativa Sucursal La Florida";
+            case ROTACION_INVENTARIO -> "Tasa de rotacion mensual abarrotes";
+            case PEDIDOS_ENTREGADOS -> "Pedidos online despachados exitosamente";
+        };
     }
 
     private IndicadorKPIResponseDTO buildDTO(Long id, String tipo, double valor) {
@@ -50,15 +60,15 @@ class KpiControllerTest {
         dto.setId(id);
         dto.setTipo(tipo);
         dto.setValor(valor);
-        dto.setDescripcion("KPI de prueba");
+        dto.setDescripcion("Ventas totales mes de Junio - Sucursal Alameda");
         dto.setFechaCalculo(LocalDateTime.of(2026, 6, 22, 10, 0));
         return dto;
     }
 
     @Test
     void listarKpis_retornaOk() throws Exception {
-        IndicadorKPI kpi = buildKpi(1L, TipoKPI.VENTAS_TOTALES, 50000.0);
-        IndicadorKPIResponseDTO dto = buildDTO(1L, "VENTAS_TOTALES", 50000.0);
+        IndicadorKPI kpi = buildKpi(1L, TipoKPI.VENTAS_TOTALES, 15500000.0);
+        IndicadorKPIResponseDTO dto = buildDTO(1L, "VENTAS_TOTALES", 15500000.0);
         when(reporteService.listarKPIs()).thenReturn(List.of(kpi));
         when(reporteService.toDTO(kpi)).thenReturn(dto);
 
@@ -69,8 +79,8 @@ class KpiControllerTest {
 
     @Test
     void obtenerKpiPorId_existente_retornaOkConCampos() throws Exception {
-        IndicadorKPI kpi = buildKpi(1L, TipoKPI.VENTAS_TOTALES, 50000.0);
-        IndicadorKPIResponseDTO dto = buildDTO(1L, "VENTAS_TOTALES", 50000.0);
+        IndicadorKPI kpi = buildKpi(1L, TipoKPI.VENTAS_TOTALES, 15500000.0);
+        IndicadorKPIResponseDTO dto = buildDTO(1L, "VENTAS_TOTALES", 15500000.0);
         when(reporteService.obtenerKPIPorId(1L)).thenReturn(kpi);
         when(reporteService.toDTO(kpi)).thenReturn(dto);
 
@@ -79,7 +89,7 @@ class KpiControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.tipo").value("VENTAS_TOTALES"))
-                .andExpect(jsonPath("$.valor").value(50000.0));
+                .andExpect(jsonPath("$.valor").value(15500000.0));
     }
 
     @Test
@@ -95,12 +105,12 @@ class KpiControllerTest {
 
     @Test
     void crearKpi_valido_retorna201ConCampos() throws Exception {
-        IndicadorKPI creado = buildKpi(1L, TipoKPI.STOCK_BAJO, 10.0);
-        IndicadorKPIResponseDTO dto = buildDTO(1L, "STOCK_BAJO", 10.0);
+        IndicadorKPI creado = buildKpi(1L, TipoKPI.STOCK_BAJO, 14.0);
+        IndicadorKPIResponseDTO dto = buildDTO(1L, "STOCK_BAJO", 14.0);
         when(reporteService.crearKPI(any(IndicadorKPI.class))).thenReturn(creado);
         when(reporteService.toDTO(creado)).thenReturn(dto);
 
-        String body = "{\"tipo\":\"STOCK_BAJO\",\"valor\":10.0,\"descripcion\":\"KPI de prueba\"}";
+        String body = "{\"tipo\":\"STOCK_BAJO\",\"valor\":14.0,\"descripcion\":\"Alerta: Harina Panadera 1KG bajo stock critico\"}";
 
         mockMvc.perform(post("/api/v1/kpis")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -108,7 +118,7 @@ class KpiControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.tipo").value("STOCK_BAJO"))
-                .andExpect(jsonPath("$.valor").value(10.0));
+                .andExpect(jsonPath("$.valor").value(14.0));
     }
 
     @Test
@@ -130,8 +140,8 @@ class KpiControllerTest {
 
     @Test
     void listarKpisPorTipo_retornaOk() throws Exception {
-        IndicadorKPI kpi = buildKpi(1L, TipoKPI.STOCK_BAJO, 5.0);
-        IndicadorKPIResponseDTO dto = buildDTO(1L, "STOCK_BAJO", 5.0);
+        IndicadorKPI kpi = buildKpi(1L, TipoKPI.STOCK_BAJO, 14.0);
+        IndicadorKPIResponseDTO dto = buildDTO(1L, "STOCK_BAJO", 14.0);
         when(reporteService.listarKPIsPorTipo(TipoKPI.STOCK_BAJO)).thenReturn(List.of(kpi));
         when(reporteService.toDTO(kpi)).thenReturn(dto);
 

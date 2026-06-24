@@ -131,9 +131,9 @@ class ReporteControllerTest {
         dto.setIdTienda(1L);
         dto.setFechaInicio(filtro.getFechaInicio());
         dto.setFechaFin(filtro.getFechaFin());
-        dto.setVentasTotales(50000.0);
-        dto.setTotalTransacciones(5);
-        dto.setProductosVendidos(25);
+        dto.setVentasTotales(8500000.0);
+        dto.setTotalTransacciones(47);
+        dto.setProductosVendidos(235);
 
         when(reporteService.generarReporteVentas(any(ReporteFiltroRequestDTO.class))).thenReturn(dto);
 
@@ -142,8 +142,8 @@ class ReporteControllerTest {
                         .content(objectMapper.writeValueAsString(filtro)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.idTienda").value(1))
-                .andExpect(jsonPath("$.ventasTotales").value(50000.0))
-                .andExpect(jsonPath("$.totalTransacciones").value(5));
+                .andExpect(jsonPath("$.ventasTotales").value(8500000.0))
+                .andExpect(jsonPath("$.totalTransacciones").value(47));
     }
 
     @Test
@@ -173,10 +173,10 @@ class ReporteControllerTest {
         dto.setIdTienda(1L);
         dto.setFechaInicio(filtro.getFechaInicio());
         dto.setFechaFin(filtro.getFechaFin());
-        dto.setVentasPorTienda(50000.0);
+        dto.setVentasPorTienda(8500000.0);
         dto.setPedidosEntregados(47);
-        dto.setStockBajo(3);
-        dto.setRendimientoOperativo(0.85);
+        dto.setStockBajo(14);
+        dto.setRendimientoOperativo(0.92);
 
         when(reporteService.generarReporteRendimiento(any(ReporteFiltroRequestDTO.class))).thenReturn(dto);
 
@@ -185,7 +185,7 @@ class ReporteControllerTest {
                         .content(objectMapper.writeValueAsString(filtro)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.idTienda").value(1))
-                .andExpect(jsonPath("$.rendimientoOperativo").value(0.85));
+                .andExpect(jsonPath("$.rendimientoOperativo").value(0.92));
     }
 
     @Test
