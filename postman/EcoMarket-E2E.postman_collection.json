@@ -1,0 +1,633 @@
+{
+    "info": {
+        "name": "EcoMarket SPA - Colección E2E",
+        "description": "Colección Postman E2E que cubre los 7 microservicios de EcoMarket SPA para validación durante la defensa técnica EP3. Flujo: login → buscar productos → carrito → pedido → factura → envío → reporte.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "ms-usuarios",
+            "description": "Microservicio de Usuarios e Identidad (puerto 8083). Gestiona autenticación, registro y administración de usuarios del sistema.",
+            "item": [
+                {
+                    "name": "POST login",
+                    "description": "Autentica al usuario y guarda el JWT en la variable token_jwt para los siguientes requests.",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"correo\": \"admin@ecomarket.cl\",\n    \"password\": \"Password1\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url_gateway}}/api/auth/login",
+                            "host": ["{{base_url_gateway}}"],
+                            "path": ["api", "auth", "login"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Status 200 - Login exitoso\", function () { pm.response.to.have.status(200); });",
+                                    "pm.test(\"Respuesta contiene rol del usuario\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('rol');",
+                                    "});",
+                                    "pm.test(\"Respuesta contiene funcionalidades disponibles\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('funcionalidadesDisponibles');",
+                                    "    pm.expect(jsonData.funcionalidadesDisponibles).to.be.an('array').that.is.not.empty;",
+                                    "});",
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData.token) { pm.collectionVariables.set(\"token_jwt\", jsonData.token); }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "GET usuarios",
+                    "description": "Lista todos los usuarios registrados en el sistema. Solo accesible por ADMINISTRADOR.",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token_jwt}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url_gateway}}/api/usuarios",
+                            "host": ["{{base_url_gateway}}"],
+                            "path": ["api", "usuarios"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Status 200 - Lista de usuarios obtenida\", function () { pm.response.to.have.status(200); });",
+                                    "pm.test(\"Respuesta es un array de usuarios\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.be.an('array');",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "ms-catalogo",
+            "description": "Microservicio de Catálogo (puerto 8084). Gestiona productos eco-friendly y categorías del marketplace.",
+            "item": [
+                {
+                    "name": "GET productos",
+                    "description": "Obtiene el listado completo de productos eco-friendly del catálogo. El cliente puede navegar y buscar productos según el caso de estudio.",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token_jwt}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url_gateway}}/api/productos",
+                            "host": ["{{base_url_gateway}}"],
+                            "path": ["api", "productos"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Status 200 - Catálogo de productos disponible\", function () { pm.response.to.have.status(200); });",
+                                    "pm.test(\"Respuesta es un array de productos\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.be.an('array');",
+                                    "});",
+                                    "pm.test(\"Cada producto tiene SKU y nombre\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    if (jsonData.length > 0) {",
+                                    "        pm.expect(jsonData[0]).to.have.property('sku');",
+                                    "        pm.expect(jsonData[0]).to.have.property('nombre');",
+                                    "        pm.collectionVariables.set(\"idProducto\", jsonData[0].idProducto);",
+                                    "    }",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "GET categorias",
+                    "description": "Obtiene las categorías de productos disponibles en EcoMarket (ej: Biodegradables, Reutilizables, Orgánicos).",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token_jwt}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url_gateway}}/api/categorias",
+                            "host": ["{{base_url_gateway}}"],
+                            "path": ["api", "categorias"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Status 200 - Categorías del catálogo disponibles\", function () { pm.response.to.have.status(200); });",
+                                    "pm.test(\"Respuesta es un array de categorías\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.be.an('array');",
+                                    "});",
+                                    "pm.test(\"Cada categoría tiene nombre y estado\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    if (jsonData.length > 0) {",
+                                    "        pm.expect(jsonData[0]).to.have.property('nombre');",
+                                    "        pm.expect(jsonData[0]).to.have.property('estado');",
+                                    "    }",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "ms-inventario",
+            "description": "Microservicio de Inventario y Abastecimiento (puerto 8085). Gestiona el stock de productos por tienda y los ajustes de inventario.",
+            "item": [
+                {
+                    "name": "GET inventario",
+                    "description": "Consulta el inventario actual de productos con stock disponible por tienda. El Empleado de Ventas puede consultar disponibilidad en tiempo real.",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token_jwt}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url_gateway}}/api/inventario",
+                            "host": ["{{base_url_gateway}}"],
+                            "path": ["api", "inventario"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Status 200 - Inventario consultado correctamente\", function () { pm.response.to.have.status(200); });",
+                                    "pm.test(\"Respuesta es un array de registros de inventario\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.be.an('array');",
+                                    "});",
+                                    "pm.test(\"Cada registro tiene cantidadDisponible\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    if (jsonData.length > 0) {",
+                                    "        pm.expect(jsonData[0]).to.have.property('cantidadDisponible');",
+                                    "    }",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "POST ajuste de stock",
+                    "description": "Registra un ajuste de stock (entrada o salida) para un producto. El Gerente de Tienda gestiona el inventario según el caso de estudio.",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token_jwt}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"idInventario\": {{idProducto}},\n    \"cantidadAjuste\": 50,\n    \"tipo\": \"ENTRADA\",\n    \"motivo\": \"Ingreso de stock por reabastecimiento desde proveedor\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url_gateway}}/api/inventario/ajustes",
+                            "host": ["{{base_url_gateway}}"],
+                            "path": ["api", "inventario", "ajustes"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Status 201 - Ajuste de stock registrado\", function () { pm.response.to.have.status(201); });",
+                                    "pm.test(\"Respuesta contiene tipo de ajuste\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('tipo');",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "ms-pedidos-ventas",
+            "description": "Microservicio de Pedidos y Ventas (puerto 8086). Gestiona el ciclo de vida de los pedidos: carrito, checkout, pago y facturación.",
+            "item": [
+                {
+                    "name": "POST crear carrito",
+                    "description": "Crea un nuevo carrito de compras para el cliente. Acción del Cliente vía Web: 'Agregar Productos al Carrito'.",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token_jwt}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"idCliente\": 1\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url_gateway}}/api/pedidos/carritos",
+                            "host": ["{{base_url_gateway}}"],
+                            "path": ["api", "pedidos", "carritos"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Status 201 - Carrito creado correctamente\", function () { pm.response.to.have.status(201); });",
+                                    "pm.test(\"Carrito tiene estado ACTIVO\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('estado');",
+                                    "    pm.expect(jsonData.estado).to.eql('ACTIVO');",
+                                    "});",
+                                    "pm.test(\"Carrito tiene idCliente correcto\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('idCliente');",
+                                    "});",
+                                    "var jsonData = pm.response.json();",
+                                    "if (jsonData.idCarrito) { pm.collectionVariables.set(\"idCarrito\", jsonData.idCarrito); }"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "GET pedido por ID",
+                    "description": "Consulta el detalle de un pedido específico. Acción del Cliente: 'Consultar Historial de Pedidos'.",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token_jwt}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url_gateway}}/api/pedidos/{{idPedido}}",
+                            "host": ["{{base_url_gateway}}"],
+                            "path": ["api", "pedidos", "{{idPedido}}"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Status 200 - Pedido encontrado\", function () { pm.response.to.have.status(200); });",
+                                    "pm.test(\"Pedido tiene idPedido e idCliente\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('idPedido');",
+                                    "    pm.expect(jsonData).to.have.property('idCliente');",
+                                    "});",
+                                    "pm.test(\"Pedido tiene estado definido\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('estado');",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "ms-logistica",
+            "description": "Microservicio de Logística y Envíos (puerto 8087). Gestiona el despacho, seguimiento y entrega de pedidos.",
+            "item": [
+                {
+                    "name": "GET envios",
+                    "description": "Lista todos los envíos registrados. El equipo de Logística gestiona y actualiza el estado de los pedidos según el caso de estudio.",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token_jwt}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url_gateway}}/api/envios",
+                            "host": ["{{base_url_gateway}}"],
+                            "path": ["api", "envios"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Status 200 - Envíos listados correctamente\", function () { pm.response.to.have.status(200); });",
+                                    "pm.test(\"Respuesta es un array de envíos\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.be.an('array');",
+                                    "});",
+                                    "pm.test(\"Cada envío tiene estado y origen/destino\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    if (jsonData.length > 0) {",
+                                    "        pm.expect(jsonData[0]).to.have.property('estado');",
+                                    "        pm.expect(jsonData[0]).to.have.property('origen');",
+                                    "        pm.expect(jsonData[0]).to.have.property('destino');",
+                                    "        pm.collectionVariables.set(\"idEnvio\", jsonData[0].id);",
+                                    "    }",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "GET seguimiento de envio",
+                    "description": "Consulta el tracking de un envío específico usando el ID capturado dinámicamente del request anterior.",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token_jwt}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url_gateway}}/api/envios/{{idEnvio}}/seguimiento",
+                            "host": ["{{base_url_gateway}}"],
+                            "path": ["api", "envios", "{{idEnvio}}", "seguimiento"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Status 200 - Seguimiento de envío disponible\", function () { pm.response.to.have.status(200); });",
+                                    "pm.test(\"Seguimiento es un array de eventos\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.be.an('array');",
+                                    "});",
+                                    "pm.test(\"Cada evento de seguimiento tiene estado y fecha\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    if (jsonData.length > 0) {",
+                                    "        pm.expect(jsonData[0]).to.have.property('estadoEnvio');",
+                                    "        pm.expect(jsonData[0]).to.have.property('fechaEvento');",
+                                    "    }",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "ms-administracion",
+            "description": "Microservicio de Administración y Soporte (puerto 8088). Gestiona tiendas, métricas administrativas y tickets de soporte.",
+            "item": [
+                {
+                    "name": "GET tiendas",
+                    "description": "Lista todas las tiendas eco-friendly registradas (Lastarria, Valdivia, Antofagasta). El Gerente de Tienda gestiona sus sucursales.",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token_jwt}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url_gateway}}/api/administracion/tiendas",
+                            "host": ["{{base_url_gateway}}"],
+                            "path": ["api", "administracion", "tiendas"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Status 200 - Tiendas listadas correctamente\", function () { pm.response.to.have.status(200); });",
+                                    "pm.test(\"Respuesta es un array de tiendas\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.be.an('array');",
+                                    "});",
+                                    "pm.test(\"Cada tienda tiene nombre y ciudad\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    if (jsonData.length > 0) {",
+                                    "        pm.expect(jsonData[0]).to.have.property('nombre');",
+                                    "        pm.expect(jsonData[0]).to.have.property('ciudad');",
+                                    "    }",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "POST crear ticket de soporte",
+                    "description": "Crea un ticket de soporte. Acción del Cliente: 'Solicitar Soporte' según el caso de estudio EcoMarket SPA.",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token_jwt}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"asunto\": \"Problema con stock de bolsas biodegradables\",\n    \"descripcion\": \"El stock no se actualiza correctamente tras recepción de mercancía en tienda Lastarria\",\n    \"nombreContacto\": \"Juan Pérez\",\n    \"correoContacto\": \"juan.perez@ecomarket.cl\",\n    \"prioridad\": \"ALTA\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url_gateway}}/api/administracion/tickets",
+                            "host": ["{{base_url_gateway}}"],
+                            "path": ["api", "administracion", "tickets"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Status 201 - Ticket de soporte creado\", function () { pm.response.to.have.status(201); });",
+                                    "pm.test(\"Ticket tiene estado ABIERTO\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('estado');",
+                                    "    pm.expect(jsonData.estado).to.eql('ABIERTO');",
+                                    "});",
+                                    "pm.test(\"Ticket tiene prioridad definida\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('prioridad');",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "ms-reportes",
+            "description": "Microservicio de Reportes y KPIs (puerto 8089). Genera reportes de ventas, inventario y logística, y expone indicadores clave del negocio.",
+            "item": [
+                {
+                    "name": "GET reportes",
+                    "description": "Obtiene los reportes generados. El Gerente de Tienda genera reportes de ventas, inventario y rendimiento según el caso de estudio.",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token_jwt}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url_gateway}}/api/reportes",
+                            "host": ["{{base_url_gateway}}"],
+                            "path": ["api", "reportes"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Status 200 - Reportes disponibles\", function () { pm.response.to.have.status(200); });",
+                                    "pm.test(\"Respuesta es un array de reportes\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.be.an('array');",
+                                    "});",
+                                    "pm.test(\"Cada reporte tiene tipo y fecha de generación\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    if (jsonData.length > 0) {",
+                                    "        pm.expect(jsonData[0]).to.have.property('tipoReporte');",
+                                    "        pm.expect(jsonData[0]).to.have.property('fechaGeneracion');",
+                                    "    }",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "GET KPIs",
+                    "description": "Consulta los KPIs del marketplace: ventas totales, productos más vendidos, tiempos de entrega. Acción del Gerente de Tienda: 'Generar Reportes'.",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token_jwt}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url_gateway}}/api/kpis",
+                            "host": ["{{base_url_gateway}}"],
+                            "path": ["api", "kpis"]
+                        }
+                    },
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"Status 200 - KPIs del marketplace disponibles\", function () { pm.response.to.have.status(200); });",
+                                    "pm.test(\"Respuesta es un array de indicadores KPI\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.be.an('array');",
+                                    "});",
+                                    "pm.test(\"Cada KPI tiene tipo y valor numérico\", function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    if (jsonData.length > 0) {",
+                                    "        pm.expect(jsonData[0]).to.have.property('tipo');",
+                                    "        pm.expect(jsonData[0]).to.have.property('valor');",
+                                    "        pm.expect(jsonData[0].valor).to.be.a('number');",
+                                    "    }",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "variable": [
+        { "key": "base_url_gateway", "value": "http://localhost:8081", "type": "string" },
+        { "key": "token_jwt", "value": "", "type": "string" },
+        { "key": "runCliente", "value": "12345678-5", "type": "string" },
+        { "key": "idPedido", "value": "1", "type": "string" },
+        { "key": "idCarrito", "value": "1", "type": "string" },
+        { "key": "idProducto", "value": "1", "type": "string" },
+        { "key": "idEnvio", "value": "1", "type": "string" }
+    ]
+}
