@@ -52,6 +52,26 @@ class EtaCalculatorTest {
     }
 
     @Test
+    void calcular_SinProveedor_ConDestinos_UsaDefault() {
+        // Cubre la rama: proveedor == null en el ternario -> usa KILOMETROS_POR_HORA_HABIL
+        LocalDateTime ahora = LocalDateTime.now();
+        LocalDateTime eta = EtaCalculator.calcular("Santiago", "Concepcion", null, ahora);
+        // 300km + 8h (defecto) -> (300/60 + 8) = 13h -> ceil(13) = 13
+        assertTrue(eta.isAfter(ahora.plusHours(12)));
+    }
+
+    @Test
+    void calcular_ConProveedor_SinPlazoDespacho_UsaDefault() {
+        // Cubre la rama: proveedor != null pero plazoDespachoHoras == null -> usa KILOMETROS_POR_HORA_HABIL
+        Proveedor prov = new Proveedor();
+        // plazoDespachoHoras queda null por defecto
+        LocalDateTime ahora = LocalDateTime.now();
+        LocalDateTime eta = EtaCalculator.calcular("Santiago", "Concepcion", prov, ahora);
+        // Debe usar 8.0h como horasProveedor (KILOMETROS_POR_HORA_HABIL)
+        assertTrue(eta.isAfter(ahora));
+    }
+
+    @Test
     void calcularRutaOptima_ParadasVacias_LanzaExcepcion() {
         assertThrows(IllegalArgumentException.class, () -> EtaCalculator.calcularRutaOptima(new ArrayList<>()));
     }
